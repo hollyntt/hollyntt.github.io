@@ -139,6 +139,53 @@
       100% { transform: translateX(0); }
     }
 
+    /* Entry Screen */
+    #entry-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(15px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: opacity 0.8s ease, visibility 0.8s;
+    }
+
+    #entry-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .entry-content {
+      text-align: center;
+    }
+
+    .entry-title {
+      font-family: var(--font-serif);
+      font-size: 5rem;
+      font-style: italic;
+      font-weight: 900;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      letter-spacing: -2px;
+    }
+
+    .entry-prompt {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5em;
+      color: var(--text-primary);
+      opacity: 0.5;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.7; }
+    }
+
     /* Main Content */
     .main-content {
       width: 100%;
@@ -149,7 +196,6 @@
       align-items: center;
       text-align: center;
       z-index: 10;
-      transition: transform 0.1s ease-out;
     }
 
     .profile-section {
@@ -464,7 +510,7 @@
       border: none;
       color: var(--text-primary);
       font-size: 18px;
-      cursor: none;
+      cursor: pointer;
       opacity: 0.8;
       transition: all 0.2s;
       display: flex;
@@ -557,7 +603,7 @@
       border: none;
       color: white;
       font-size: 24px;
-      cursor: none;
+      cursor: pointer;
       opacity: 0.7;
       transition: opacity 0.2s;
     }
@@ -585,7 +631,7 @@
       color: white;
       padding: 8px 16px;
       border-radius: 20px;
-      cursor: none;
+      cursor: pointer;
       font-family: var(--font-sans);
       font-size: 12px;
       font-weight: 600;
@@ -668,7 +714,7 @@
       overflow: hidden;
       background: rgba(255, 255, 255, 0.05);
       border: 2px solid rgba(255, 255, 255, 0.1);
-      cursor: none;
+      cursor: pointer;
       transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       display: flex;
       align-items: center;
@@ -726,7 +772,7 @@
       border-radius: 30px;
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      cursor: none;
+      cursor: pointer;
       transition: all 0.3s ease;
       font-weight: 600;
       letter-spacing: 1px;
@@ -784,7 +830,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: none;
+      cursor: pointer;
       transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s, border-color 0.4s;
       position: relative;
     }
@@ -821,7 +867,7 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.4s ease;
-      cursor: none;
+      cursor: default;
     }
 
     .full-image-overlay.active {
@@ -933,7 +979,7 @@
       font-family: var(--font-sans);
       font-weight: 700;
       font-size: 14px;
-      cursor: none;
+      cursor: pointer;
       transition: all 0.3s ease;
     }
 
@@ -969,6 +1015,13 @@
 
 <div class="custom-cursor" id="cursor"></div>
 <div class="custom-cursor-follower" id="cursor-follower"></div>
+
+<div id="entry-screen">
+  <div class="entry-content">
+    <h1 class="entry-title">runeskate</h1>
+    <p class="entry-prompt">Click to enter</p>
+  </div>
+</div>
 
 <div class="main-content">
   <div class="profile-section">
@@ -1074,6 +1127,40 @@
 </div>
 
 <script>
+  // Music Player Logic (Moved up for early access)
+  const widgetIframe = document.getElementById('sc-widget');
+  const widget = SC.Widget(widgetIframe);
+
+  // Entry Screen Logic
+  const entryScreen = document.getElementById('entry-screen');
+  const entryPrompt = entryScreen.querySelector('.entry-prompt');
+
+  function fadeVolume(target, duration) {
+    widget.getVolume((current) => {
+      const steps = 30;
+      const stepTime = duration / steps;
+      const stepAmount = (target - current) / steps;
+      let count = 0;
+      const interval = setInterval(() => {
+        count++;
+        const nextVolume = current + stepAmount * count;
+        widget.setVolume(Math.max(0, Math.min(100, nextVolume)));
+        if (count >= steps) clearInterval(interval);
+      }, stepTime);
+    });
+  }
+
+  entryScreen.addEventListener('click', () => {
+    widget.play();
+    widget.setVolume(15); // Start muffled
+    entryScreen.classList.add('hidden');
+
+    // Smoothly unmuffle the music as the user enters
+    setTimeout(() => {
+      fadeVolume(100, 2500);
+    }, 200);
+  });
+
   // Background Text
   const bgTextContainer = document.getElementById('bg-text');
   const nameText = "Hollyn ";
@@ -1296,8 +1383,6 @@
   });
 
   // Music Player Logic
-  const widgetIframe = document.getElementById('sc-widget');
-  const widget = SC.Widget(widgetIframe);
   const musicPlayerContainer = document.getElementById('music-player');
   const playerToggle = document.getElementById('player-toggle');
   const playerCoverArt = document.getElementById('player-cover-art');
@@ -1326,18 +1411,13 @@
         trackArtist.textContent = "runeskate";
       }
     });
+    // Set initial muffled volume
+    widget.setVolume(15);
     // Attempt to play automatically (browsers may block this until user interaction)
     widget.play();
   });
 
-  // Fallback: Start playing on first user interaction if autoplay was blocked
-  const startAudioOnInteraction = () => {
-    if (!isPlaying) {
-      widget.play();
-    }
-    document.removeEventListener('click', startAudioOnInteraction);
-  };
-  document.addEventListener('click', startAudioOnInteraction);
+  // Removed startAudioOnInteraction as it's now handled by entryScreen logic
 
   widget.bind(SC.Widget.Events.PLAY, () => {
     isPlaying = true;
@@ -1607,15 +1687,6 @@
         renderEraList(ocName);
       });
 
-      bubble.addEventListener('mouseenter', () => {
-        cursor.classList.add('hovering');
-        follower.classList.add('hovering');
-      });
-      bubble.addEventListener('mouseleave', () => {
-        cursor.classList.remove('hovering');
-        follower.classList.remove('hovering');
-      });
-
       wrapper.appendChild(bubble);
       bubblesDiv.appendChild(wrapper);
     });
@@ -1623,7 +1694,7 @@
     ocFoldersContainer.appendChild(bubblesDiv);
 
     setTimeout(() => {
-      magneticElements = document.querySelectorAll('.social-icons a, .grid-card, .profile-img-container, .music-player, .ref-image-card, .era-bubble, .oc-bubble-slideshow, .ref-modal-content');
+      // Update elements list (if needed for other logic)
     }, 100);
   }
 
@@ -1668,15 +1739,6 @@
         loadImages(era.path);
       });
 
-      bubble.addEventListener('mouseenter', () => {
-        cursor.classList.add('hovering');
-        follower.classList.add('hovering');
-      });
-      bubble.addEventListener('mouseleave', () => {
-        cursor.classList.remove('hovering');
-        follower.classList.remove('hovering');
-      });
-
       wrapper.appendChild(bubble);
       bubblesDiv.appendChild(wrapper);
     });
@@ -1690,7 +1752,7 @@
     }
 
     setTimeout(() => {
-      magneticElements = document.querySelectorAll('.social-icons a, .grid-card, .profile-img-container, .music-player, .ref-image-card, .era-bubble, .ref-modal-content');
+      // Update magnetic elements list (if needed for other logic)
     }, 100);
   }
 
@@ -1753,22 +1815,13 @@
         fullImageOverlay.classList.add('active');
       });
 
-      card.addEventListener('mouseenter', () => {
-        cursor.classList.add('hovering');
-        follower.classList.add('hovering');
-      });
-      card.addEventListener('mouseleave', () => {
-        cursor.classList.remove('hovering');
-        follower.classList.remove('hovering');
-      });
-
       wrapper.appendChild(card);
       refImagesContainer.appendChild(wrapper);
     });
 
     // Update magnetic elements list to include the newly created bubbles
     setTimeout(() => {
-      magneticElements = document.querySelectorAll('.social-icons a, .grid-card, .profile-img-container, .music-player, .ref-image-card, .era-bubble');
+      // Update magnetic elements list (if needed for other logic)
     }, 100);
   }
 

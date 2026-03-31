@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>runeskate</title>
+  <link rel="icon" type="image/png" href="https://media.bio.site/sites/236dd1f6-0640-47ed-a55b-bdaac973cf03/Uc5gHtkVtx8SvZwAbBhQxF.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Playfair+Display:wght@900&family=JetBrains+Mono&display=swap" rel="stylesheet">
   <style>
@@ -300,7 +301,73 @@
       0% { bottom: 100%; }
       100% { bottom: -100px; }
     }
+
+    /* Music Player */
+    .music-player {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 100;
+      color: white;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .music-player:hover {
+      transform: translateY(-5px);
+    }
+
+    .music-player button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 14px;
+      cursor: none; /* Use custom cursor */
+      opacity: 0.8;
+      transition: opacity 0.3s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .music-player button:hover {
+      opacity: 1;
+      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .track-info {
+      display: flex;
+      flex-direction: column;
+      font-size: 12px;
+      max-width: 150px;
+    }
+
+    #track-title {
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #track-artist {
+      font-size: 10px;
+      opacity: 0.6;
+    }
   </style>
+  <script src="https://w.soundcloud.com/player/api.js"></script>
 </head>
 <body>
 
@@ -346,6 +413,20 @@
       </a>
       <span class="grid-label">Boundaries</span>
     </div>
+  </div>
+</div>
+
+<!-- Hidden SoundCloud Player -->
+<iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/runeskate/tracks&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" style="display:none;"></iframe>
+
+<!-- Custom Music Player UI -->
+<div class="music-player" id="music-player">
+  <button id="play-pause-btn" title="Play/Pause"><i class="fa fa-play"></i></button>
+  <button id="shuffle-btn" title="Shuffle (SoundCloud)"><i class="fa fa-random"></i></button>
+  <a href="https://runeskate.bandcamp.com/" target="_blank" title="Listen on Bandcamp (Default)" style="color: white; opacity: 0.8; transition: opacity 0.3s; margin-left: 5px;"><i class="fa fa-bandcamp" style="font-size: 18px;"></i></a>
+  <div class="track-info">
+    <span id="track-title">Ready to Play</span>
+    <span id="track-artist">SoundCloud</span>
   </div>
 </div>
 
@@ -549,7 +630,7 @@
   });
 
   // Cursor interaction with elements
-  const interactables = document.querySelectorAll('a, .profile-img-container, .grid-card');
+  const interactables = document.querySelectorAll('a, .profile-img-container, .grid-card, .music-player button, .music-player a');
   interactables.forEach(el => {
     el.addEventListener('mouseenter', () => {
       cursor.classList.add('hovering');
@@ -560,6 +641,77 @@
       follower.classList.remove('hovering');
     });
   });
+
+  // Music Player Logic
+  const widgetIframe = document.getElementById('sc-widget');
+  const widget = SC.Widget(widgetIframe);
+  const playPauseBtn = document.getElementById('play-pause-btn');
+  const shuffleBtn = document.getElementById('shuffle-btn');
+  const trackTitle = document.getElementById('track-title');
+  const trackArtist = document.getElementById('track-artist');
+  let isPlaying = false;
+  let isShuffled = false;
+
+  widget.bind(SC.Widget.Events.READY, () => {
+    widget.getSounds((sounds) => {
+      if (sounds && sounds.length > 0) {
+        trackTitle.textContent = "Click Play to Start";
+        trackArtist.textContent = "runeskate";
+      }
+    });
+    // Attempt to play automatically (browsers may block this until user interaction)
+    widget.play();
+  });
+
+  // Fallback: Start playing on first user interaction if autoplay was blocked
+  const startAudioOnInteraction = () => {
+    if (!isPlaying) {
+      widget.play();
+    }
+    document.removeEventListener('click', startAudioOnInteraction);
+  };
+  document.addEventListener('click', startAudioOnInteraction);
+
+  widget.bind(SC.Widget.Events.PLAY, () => {
+    isPlaying = true;
+    playPauseBtn.innerHTML = '<i class="fa fa-pause"></i>';
+    widget.getCurrentSound((sound) => {
+      if (sound) {
+        trackTitle.textContent = sound.title;
+        trackArtist.textContent = sound.user.username;
+      }
+    });
+  });
+
+  widget.bind(SC.Widget.Events.PAUSE, () => {
+    isPlaying = false;
+    playPauseBtn.innerHTML = '<i class="fa fa-play"></i>';
+  });
+
+  widget.bind(SC.Widget.Events.FINISH, () => {
+    if (isShuffled) {
+      widget.getSounds((sounds) => {
+        const randomIndex = Math.floor(Math.random() * sounds.length);
+        widget.skip(randomIndex);
+      });
+    }
+  });
+
+  playPauseBtn.addEventListener('click', () => {
+    widget.toggle();
+  });
+
+  shuffleBtn.addEventListener('click', () => {
+    isShuffled = !isShuffled;
+    shuffleBtn.style.color = isShuffled ? '#4ade80' : 'white';
+    if (isShuffled && isPlaying) {
+      widget.getSounds((sounds) => {
+        const randomIndex = Math.floor(Math.random() * sounds.length);
+        widget.skip(randomIndex);
+      });
+    }
+  });
+
 </script>
 </body>
 </html>

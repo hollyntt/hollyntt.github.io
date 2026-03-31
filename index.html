@@ -1122,7 +1122,7 @@
       if (!response.ok) throw new Error('Not found');
       const data = await response.json();
 
-      const images = data.filter(item => item.type === 'file' && item.name.match(/\.(jpg|jpeg|png|gif|webp)$/i));
+      const images = data.filter(item => item.type === 'file' && item.name.match(/\.(jpg|jpeg|png|gif|webp|svg|bmp|ico|tiff|tif|avif|apng|heic|heif|jxl|jfif|pjpeg|pjp)$/i));
 
       refImagesContainer.innerHTML = '';
       if (images.length === 0) {

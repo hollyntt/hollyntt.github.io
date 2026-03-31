@@ -55,6 +55,12 @@
       z-index: 9999;
       mix-blend-mode: difference;
       transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background-color 0.2s;
+    }
+
+    .custom-cursor.hovering {
+      width: 4px;
+      height: 4px;
     }
 
     .custom-cursor-follower {
@@ -66,8 +72,15 @@
       pointer-events: none;
       z-index: 9998;
       transform: translate(-50%, -50%);
-      transition: transform 0.1s ease-out;
+      transition: transform 0.1s ease-out, width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
       opacity: 0.5;
+    }
+
+    .custom-cursor-follower.hovering {
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.15);
+      border-color: transparent;
     }
 
     /* Background Text Overlay */
@@ -92,6 +105,15 @@
       white-space: nowrap;
       line-height: 0.8;
       letter-spacing: -0.02em;
+      pointer-events: auto;
+      transition: opacity 0.3s, color 0.3s, filter 0.3s;
+    }
+
+    .bg-text-item:hover {
+      opacity: 0.5;
+      color: white;
+      animation-play-state: paused;
+      filter: drop-shadow(0 0 10px white);
     }
 
     .bg-text-item.scroll-left {
@@ -122,6 +144,7 @@
       align-items: center;
       text-align: center;
       z-index: 10;
+      transition: transform 0.1s ease-out;
     }
 
     .profile-section {
@@ -135,11 +158,12 @@
       border-radius: 1rem;
       overflow: hidden;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease;
+      will-change: transform;
     }
 
     .profile-img-container:hover {
-      transform: scale(1.05) rotate(2deg);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
     }
 
     .profile-img {
@@ -168,7 +192,9 @@
       color: var(--text-primary);
       font-size: 18px;
       opacity: 0.7;
-      transition: all 0.3s ease;
+      transition: color 0.3s ease, opacity 0.3s ease, transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+      display: inline-block;
+      will-change: transform;
     }
 
     .social-icons a:hover {
@@ -202,8 +228,9 @@
       justify-content: center;
       overflow: hidden;
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
+      transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease;
       text-decoration: none;
+      will-change: transform;
     }
 
     .grid-card:hover {
@@ -223,6 +250,13 @@
       letter-spacing: 0.1em;
       opacity: 0.6;
       font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .grid-item:hover .grid-label {
+      opacity: 1;
+      letter-spacing: 0.2em;
+      color: white;
     }
 
     .boundaries-container {
@@ -330,7 +364,20 @@
   const canvas = document.getElementById('visual');
   const ctx = canvas.getContext('2d');
   let particles = [];
-  const particleCount = 60;
+  const particleCount = 80;
+  let mouse = { x: null, y: null, radius: 150 };
+  const symbols = ['˚', '⋆', '✦', '☁', '✩', '☾', '✧'];
+
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+
+  window.addEventListener('mousedown', (e) => {
+    for (let i = 0; i < 15; i++) {
+      particles.push(new Particle(e.clientX, e.clientY, true));
+    }
+  });
 
   function resize() {
     canvas.width = window.innerWidth;
@@ -338,30 +385,79 @@
   }
 
   class Particle {
-    constructor() {
-      this.init();
+    constructor(x, y, isTemporary = false) {
+      this.isTemporary = isTemporary;
+      this.life = isTemporary ? 100 : Infinity;
+      this.symbol = symbols[Math.floor(Math.random() * symbols.length)];
+      this.init(x, y);
     }
-    init() {
-      this.x = Math.random() * canvas.width;
-      this.y = Math.random() * canvas.height;
-      this.size = Math.random() * 1.5 + 0.5;
+    init(x, y) {
+      this.x = x || Math.random() * canvas.width;
+      this.y = y || Math.random() * canvas.height;
+      this.size = Math.random() * 15 + 5;
+      this.baseX = this.x;
+      this.baseY = this.y;
+      this.density = (Math.random() * 30) + 1;
       this.speedX = (Math.random() - 0.5) * 1;
       this.speedY = (Math.random() - 0.5) * 1;
-      this.color = '#ffffff';
+      this.rotation = Math.random() * Math.PI * 2;
+      this.rotationSpeed = (Math.random() - 0.5) * 0.02;
     }
     update() {
+      // Basic movement
       this.x += this.speedX;
       this.y += this.speedY;
-      if (this.x > canvas.width) this.x = 0;
-      else if (this.x < 0) this.x = canvas.width;
-      if (this.y > canvas.height) this.y = 0;
-      else if (this.y < 0) this.y = canvas.height;
+      this.rotation += this.rotationSpeed;
+
+      // Wrap around
+      if (this.x > canvas.width + 50) this.x = -50;
+      else if (this.x < -50) this.x = canvas.width + 50;
+      if (this.y > canvas.height + 50) this.y = -50;
+      else if (this.y < -50) this.y = canvas.height + 50;
+
+      // Mouse interaction (repulsion)
+      if (mouse.x != null && mouse.y != null) {
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance < mouse.radius) {
+          const forceDirectionX = dx / distance;
+          const forceDirectionY = dy / distance;
+          const maxDistance = mouse.radius;
+          const force = (maxDistance - distance) / maxDistance;
+          const directionX = forceDirectionX * force * this.density;
+          const directionY = forceDirectionY * force * this.density;
+          this.x -= directionX;
+          this.y -= directionY;
+        }
+      }
+
+      if (this.isTemporary) {
+        this.life -= 1;
+      }
     }
     draw() {
-      ctx.fillStyle = this.color;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fill();
+      let opacity = this.isTemporary ? this.life / 100 : 0.4;
+
+      // Glow near mouse
+      if (mouse.x != null && mouse.y != null) {
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance < 150) {
+          opacity = Math.min(0.8, opacity + (1 - distance / 150) * 0.4);
+        }
+      }
+
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+      ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+      ctx.font = `${this.size}px serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(this.symbol, 0, 0);
+      ctx.restore();
     }
   }
 
@@ -374,25 +470,16 @@
 
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Filter out dead temporary particles
+    particles = particles.filter(p => !p.isTemporary || p.life > 0);
+
     particles.forEach(p => {
       p.update();
       p.draw();
     });
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance < 150) {
-          ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 * (1 - distance / 150)})`;
-          ctx.lineWidth = 0.5;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.stroke();
-        }
-      }
-    }
+
+    // Removed line drawing between particles for a cleaner celestial look
     requestAnimationFrame(animate);
   }
 
@@ -404,13 +491,74 @@
   // Custom Cursor
   const cursor = document.getElementById('cursor');
   const follower = document.getElementById('cursor-follower');
+  const mainContent = document.querySelector('.main-content');
+  const magneticElements = document.querySelectorAll('.social-icons a, .grid-card, .profile-img-container');
+
   document.addEventListener('mousemove', (e) => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
+    const x = e.clientX;
+    const y = e.clientY;
+
+    cursor.style.left = x + 'px';
+    cursor.style.top = y + 'px';
+
     setTimeout(() => {
-      follower.style.left = e.clientX + 'px';
-      follower.style.top = e.clientY + 'px';
+      follower.style.left = x + 'px';
+      follower.style.top = y + 'px';
     }, 50);
+
+    // Parallax effect for main content
+    const moveX = (x - window.innerWidth / 2) / 50;
+    const moveY = (y - window.innerHeight / 2) / 50;
+    mainContent.style.transform = `translate(${moveX}px, ${moveY}px)`;
+
+    // Background text reaction
+    const bgItems = document.querySelectorAll('.bg-text-item');
+    bgItems.forEach((item, index) => {
+      const depth = (index % 5 + 1) * 2;
+      const shiftX = (x - window.innerWidth / 2) / (100 / depth);
+      item.style.transform = `translateX(${shiftX}px)`;
+    });
+
+    // Magnetic and Tilt effects
+    magneticElements.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const dx = x - centerX;
+      const dy = y - centerY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < 150) {
+        const strength = 15;
+        const magX = (dx / distance) * strength * (1 - distance / 150);
+        const magY = (dy / distance) * strength * (1 - distance / 150);
+
+        let transform = `translate(${magX}px, ${magY}px)`;
+
+        if (el.classList.contains('grid-card') || el.classList.contains('profile-img-container')) {
+          const tiltX = (dy / 75) * 15;
+          const tiltY = -(dx / 75) * 15;
+          transform += ` perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.05)`;
+        }
+
+        el.style.transform = transform;
+      } else {
+        el.style.transform = '';
+      }
+    });
+  });
+
+  // Cursor interaction with elements
+  const interactables = document.querySelectorAll('a, .profile-img-container, .grid-card');
+  interactables.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.classList.add('hovering');
+      follower.classList.add('hovering');
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.classList.remove('hovering');
+      follower.classList.remove('hovering');
+    });
   });
 </script>
 </body>

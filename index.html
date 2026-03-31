@@ -1359,6 +1359,29 @@
   const entryPrompt = document.getElementById('entry-prompt');
   const introLoader = document.getElementById('intro-loader');
 
+  function enterSite() {
+    if (entryScreen.classList.contains('hidden')) return; // Already entered
+    widget.play();
+    widget.setVolume(15); // Start muffled
+    entryScreen.classList.add('hidden');
+    document.body.classList.add('entered');
+
+    // Burst effect for plasma particles
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    for (let i = 0; i < 50; i++) {
+      const p = new Particle(centerX, centerY, true);
+      p.speedX = (Math.random() - 0.5) * 15;
+      p.speedY = (Math.random() - 0.5) * 15;
+      particles.push(p);
+    }
+
+    // Smoothly unmuffle the music as the user enters
+    setTimeout(() => {
+      fadeVolume(100, 2500);
+    }, 200);
+  }
+
   // Intro Sequence Timing
   setTimeout(() => {
     if (introLoader) {
@@ -1366,6 +1389,8 @@
       setTimeout(() => {
         introLoader.style.display = 'none';
         entryPrompt.classList.add('ready');
+        // Automatic entry
+        enterSite();
       }, 500);
     }
   }, 2800);
@@ -1393,27 +1418,7 @@
     });
   }
 
-  entryScreen.addEventListener('click', () => {
-    widget.play();
-    widget.setVolume(15); // Start muffled
-    entryScreen.classList.add('hidden');
-    document.body.classList.add('entered');
-
-    // Burst effect for plasma particles
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-    for (let i = 0; i < 50; i++) {
-      const p = new Particle(centerX, centerY, true);
-      p.speedX = (Math.random() - 0.5) * 15;
-      p.speedY = (Math.random() - 0.5) * 15;
-      particles.push(p);
-    }
-
-    // Smoothly unmuffle the music as the user enters
-    setTimeout(() => {
-      fadeVolume(100, 2500);
-    }, 200);
-  });
+  entryScreen.addEventListener('click', enterSite);
 
   // Background Text
   const bgTextContainer = document.getElementById('bg-text');

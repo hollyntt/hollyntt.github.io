@@ -521,7 +521,7 @@
       justify-content: center;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.4s ease;
     }
 
     .ref-modal.active {
@@ -541,6 +541,12 @@
       gap: 30px;
       overflow-y: auto;
       align-items: center;
+      transform: scale(0.85) translateY(20px);
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .ref-modal.active .ref-modal-content {
+      transform: scale(1) translateY(0);
     }
 
     .close-modal {
@@ -565,7 +571,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
+      width: 100%;
+      min-height: 60px;
+      padding: 0 80px;
     }
 
     .back-btn {
@@ -586,6 +595,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      z-index: 10;
     }
 
     .back-btn:hover {
@@ -746,6 +756,16 @@
     .bubble-wrapper {
       opacity: 0;
       animation: popInBubble 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      will-change: transform, opacity;
+    }
+
+    .view-transition-zoom {
+      animation: viewZoomIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes viewZoomIn {
+      0% { opacity: 0; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1); }
     }
 
     @keyframes popInBubble {
@@ -800,7 +820,7 @@
       justify-content: center;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s;
+      transition: opacity 0.4s ease;
       cursor: none;
     }
 
@@ -814,6 +834,12 @@
       max-height: 90%;
       object-fit: contain;
       border-radius: 8px;
+      transform: scale(0.8);
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .full-image-overlay.active img {
+      transform: scale(1);
     }
 
     /* NSFW & Age Verification */
@@ -855,7 +881,7 @@
       justify-content: center;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.4s ease;
     }
 
     .age-verification-overlay.active {
@@ -872,6 +898,12 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
+      transform: scale(0.8);
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .age-verification-overlay.active .age-verification-modal {
+      transform: scale(1);
     }
 
     .age-verification-modal h2 {
@@ -1184,7 +1216,7 @@
   const cursor = document.getElementById('cursor');
   const follower = document.getElementById('cursor-follower');
   const mainContent = document.querySelector('.main-content');
-  let magneticElements = document.querySelectorAll('.social-icons a, .grid-card, .profile-img-container, .music-player');
+  let magneticElements = document.querySelectorAll('.social-icons a, .grid-card, .profile-img-container, .music-player, .ref-modal-content');
 
   document.addEventListener('mousemove', (e) => {
     const x = e.clientX;
@@ -1229,16 +1261,18 @@
 
         let transform = `translate(${magX}px, ${magY}px)`;
 
-        if (el.classList.contains('grid-card') || el.classList.contains('profile-img-container') || el.classList.contains('music-player') || el.classList.contains('ref-image-card')) {
+        if (el.classList.contains('grid-card') || el.classList.contains('profile-img-container') || el.classList.contains('music-player') || el.classList.contains('ref-image-card') || el.classList.contains('ref-modal-content')) {
           // Calculate tilt based on element dimensions to prevent extreme angles on wide elements
-          const tiltX = (dy / (rect.height / 2)) * 10;
-          const tiltY = -(dx / (rect.width / 2)) * 10;
+          const tiltX = (dy / (rect.height / 2)) * (el.classList.contains('ref-modal-content') ? 2 : 10);
+          const tiltY = -(dx / (rect.width / 2)) * (el.classList.contains('ref-modal-content') ? 2 : 10);
 
           // Cap the tilt to prevent it from flipping or looking broken
-          const cappedTiltX = Math.max(-15, Math.min(15, tiltX));
-          const cappedTiltY = Math.max(-15, Math.min(15, tiltY));
+          const maxTilt = el.classList.contains('ref-modal-content') ? 5 : 15;
+          const cappedTiltX = Math.max(-maxTilt, Math.min(maxTilt, tiltX));
+          const cappedTiltY = Math.max(-maxTilt, Math.min(maxTilt, tiltY));
 
-          transform += ` perspective(1000px) rotateX(${cappedTiltX}deg) rotateY(${cappedTiltY}deg) scale(1.02)`;
+          const scale = el.classList.contains('ref-modal-content') ? 1.01 : 1.02;
+          transform += ` perspective(1000px) rotateX(${cappedTiltX}deg) rotateY(${cappedTiltY}deg) scale(${scale})`;
         }
 
         el.style.transform = transform;
@@ -1508,6 +1542,11 @@
     refImagesContainer.style.display = 'none';
     ocFoldersContainer.style.display = 'flex';
 
+    // Add zoom animation
+    ocFoldersContainer.classList.remove('view-transition-zoom');
+    void ocFoldersContainer.offsetWidth; // Trigger reflow
+    ocFoldersContainer.classList.add('view-transition-zoom');
+
     ocFoldersContainer.innerHTML = '';
     clearSlideshows();
 
@@ -1584,7 +1623,7 @@
     ocFoldersContainer.appendChild(bubblesDiv);
 
     setTimeout(() => {
-      magneticElements = document.querySelectorAll('.social-icons a, .grid-card, .profile-img-container, .music-player, .ref-image-card, .era-bubble, .oc-bubble-slideshow');
+      magneticElements = document.querySelectorAll('.social-icons a, .grid-card, .profile-img-container, .music-player, .ref-image-card, .era-bubble, .oc-bubble-slideshow, .ref-modal-content');
     }, 100);
   }
 
@@ -1594,6 +1633,13 @@
     ocFoldersContainer.style.display = 'none';
     eraFoldersContainer.style.display = 'flex';
     refImagesContainer.style.display = 'flex';
+
+    // Add zoom animation
+    eraFoldersContainer.classList.remove('view-transition-zoom');
+    refImagesContainer.classList.remove('view-transition-zoom');
+    void eraFoldersContainer.offsetWidth; // Trigger reflow
+    eraFoldersContainer.classList.add('view-transition-zoom');
+    refImagesContainer.classList.add('view-transition-zoom');
 
     eraFoldersContainer.innerHTML = '';
 
@@ -1644,12 +1690,18 @@
     }
 
     setTimeout(() => {
-      magneticElements = document.querySelectorAll('.social-icons a, .grid-card, .profile-img-container, .music-player, .ref-image-card, .era-bubble');
+      magneticElements = document.querySelectorAll('.social-icons a, .grid-card, .profile-img-container, .music-player, .ref-image-card, .era-bubble, .ref-modal-content');
     }, 100);
   }
 
   function loadImages(path) {
     refImagesContainer.innerHTML = '';
+
+    // Add zoom animation
+    refImagesContainer.classList.remove('view-transition-zoom');
+    void refImagesContainer.offsetWidth; // Trigger reflow
+    refImagesContainer.classList.add('view-transition-zoom');
+
     const images = allImageFiles.filter(file => {
       const lastSlash = file.path.lastIndexOf('/');
       return file.path.substring(0, lastSlash) === path;

@@ -7,13 +7,15 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const VIEWS_FILE = path.join(__dirname, "views.json");
+// Use process.cwd() to ensure we are in the project root
+const VIEWS_FILE = path.join(process.cwd(), "views.json");
 
 function getViews() {
     try {
         if (fs.existsSync(VIEWS_FILE)) {
             const data = fs.readFileSync(VIEWS_FILE, "utf-8");
-            return JSON.parse(data).count || 0;
+            const parsed = JSON.parse(data);
+            return typeof parsed.count === 'number' ? parsed.count : 0;
         }
     } catch (e) {
         console.error("Error reading views file:", e);
@@ -35,10 +37,25 @@ async function startServer() {
     const app = express();
     const PORT = 3000;
 
+    // Initialize views.json if it doesn't exist
+    if (!fs.existsSync(VIEWS_FILE)) {
+        try {
+            fs.writeFileSync(VIEWS_FILE, JSON.stringify({ count: 1337 }), "utf-8");
+            console.log("Initialized views.json with 1337");
+        } catch (e) {
+            console.error("Error initializing views file:", e);
+        }
+    }
+
     // API to get and increment views
     app.get("/api/views", (req, res) => {
-        const count = incrementViews();
-        res.json({ count });
+        try {
+            const count = incrementViews();
+            res.json({ count });
+        } catch (e) {
+            console.error("API error:", e);
+            res.status(500).json({ error: "Internal server error" });
+        }
     });
 
     // Vite middleware for development

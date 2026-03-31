@@ -1,80 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plasma</title>
-  <link href="code/TypeWriter.css" rel="stylesheet" type="text/css"/>
-  <link href="code/style.css" rel="stylesheet" type="text/css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <audio src="audio/Dead.mp3" autoplay loop></audio>
-  <img src="favicon.ico" alt="Logo" hidden>
-</head>
-
-<body>
-
-  <canvas id="visual"></canvas>
-
-  <!-- This new wrapper is the key to centering everything together -->
-  <div class="main-content">
-
-    <!-- TypeWriter text Anim -->
-    <div class="container">
-      <h1><span class="auto-type"></span></h1>
-    </div>
-
-    <!-- The navigation bar -->
-    <div class="navbar">
-      <div data-role="navbar">
-        <center><img src="images/PlasmaLogo.png" alt="what image shows"></center>
-        <!-- This is the modified link -->
-        <a href="krakenreborn.html" onclick="startDownload()"><i class="fa fa-fw fa-user"></i> Crakcocain</a>
-        <a href="mtracker.html" onclick="startDownload()"><i class="fa fa-fw fa-user"></i> Myrient EOL Tracker</a>
-        <a href="https://plasmaware.myspreadshop.com/"><i class="fa fa-fw fa-user"></i> Merch</a>
-      </div>
-    </div>
-
-  </div> <!-- The closing tag for the new wrapper -->
-
-
-  <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
-  <script>
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
-
-    var stringsArray = ["Money twerk $$$$", "hycological/warfare", "Schizophrenic black cat", "Boo!"];
-    shuffleArray(stringsArray);
-
-    var typed = new Typed(".auto-type", {
-      strings: stringsArray,
-      typeSpeed: 100,
-      backSpeed: 100,
-      loop: true
-    });
-  </script>
-
-  <!-- This is the new JavaScript function to trigger the download -->
-  <script>
-    function startDownload() {
-      // Create a temporary, invisible link element
-      const downloadLink = document.createElement('a');
-      downloadLink.href = 'https://catnip.at.ua/krackern/Crack2k24_QuickInstaller.exe';
-      
-      // Set the download attribute to suggest a filename
-      downloadLink.setAttribute('download', 'Crack2k24_QuickInstaller.exe');
-      
-      // Add the link to the page, click it to trigger the download, and then remove it
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-    }
-  </script>
-
-  <script src="script.js"></script>
-
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Google AI Studio App</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/mtracksrc/main.tsx"></script>
+  </body>
 </html>
+

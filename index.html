@@ -14,6 +14,9 @@
       --font-serif: 'Playfair Display', serif;
       --font-sans: 'Inter', sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
+      --glass-bg: rgba(255, 255, 255, 0.15);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --accent: #f5e6d3;
     }
 
     * {
@@ -55,6 +58,7 @@
       pointer-events: none;
       z-index: 9999;
       mix-blend-mode: difference;
+      box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8), 0 0 20px 5px rgba(255, 100, 100, 0.6), 0 0 30px 10px rgba(100, 255, 100, 0.4);
       transform: translate(-50%, -50%);
       transition: width 0.2s, height 0.2s, background-color 0.2s;
     }
@@ -153,14 +157,19 @@
     }
 
     .profile-img-container {
-      width: 200px;
-      height: 200px;
-      margin-bottom: 20px;
-      border-radius: 1rem;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
       overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05), 0 12px 40px rgba(0, 0, 0, 0.2);
       transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease;
       will-change: transform;
+      cursor: pointer;
     }
 
     .profile-img-container:hover {
@@ -182,67 +191,78 @@
       font-weight: 600;
     }
 
+    /* Dock */
     .social-icons {
       display: flex;
+      gap: 24px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05), 0 12px 40px rgba(0, 0, 0, 0.2);
+      padding: 20px 32px;
+      border-radius: 40px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
       justify-content: center;
-      gap: 25px;
-      margin-bottom: 40px;
     }
 
     .social-icons a {
       color: var(--text-primary);
-      font-size: 18px;
-      opacity: 0.7;
-      transition: color 0.3s ease, opacity 0.3s ease, transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
-      display: inline-block;
-      will-change: transform;
+      font-size: 26px;
+      transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s;
+      opacity: 0.8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .social-icons a:hover {
+      transform: scale(1.2) translateY(-4px);
       opacity: 1;
-      transform: translateY(-3px);
     }
 
-    /* Bottom Grid Cards */
+    /* Widgets (Grid) */
     .bottom-grid {
       display: flex;
-      justify-content: center;
-      gap: 40px;
+      gap: 24px;
       width: 100%;
-      max-width: 600px;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
     .grid-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .grid-card {
-      width: 120px;
-      height: 120px;
-      border-radius: 1rem;
-      background: rgba(255, 255, 255, 0.9);
+      width: 160px;
+      height: 160px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05), 0 12px 40px rgba(0, 0, 0, 0.2);
+      border-radius: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease;
       text-decoration: none;
-      will-change: transform;
+      transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
     .grid-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+      transform: scale(1.04);
     }
 
     .grid-card img {
-      max-width: 70%;
-      max-height: 70%;
+      max-width: 60%;
+      max-height: 60%;
       object-fit: contain;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
     }
 
     .grid-label {
@@ -262,27 +282,24 @@
 
     .boundaries-container {
       display: flex;
-      gap: 10px;
+      gap: 12px;
     }
 
     .circle {
-      width: 45px;
-      height: 45px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 10px;
-      font-weight: 900;
+      font-size: 11px;
+      font-weight: 700;
       color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
     .circle.yes { background: #4ade80; }
     .circle.no { background: #f87171; }
-
-    .age-icon {
-      opacity: 0.8;
-    }
 
     /* Scanline effect */
     .scanline {
@@ -302,69 +319,328 @@
       100% { bottom: -100px; }
     }
 
-    /* Music Player */
+    /* Music Player (Dynamic Island / Lock Screen Style) */
     .music-player {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(10px);
+      bottom: 40px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 30px;
-      padding: 10px 20px;
+      box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05), 0 12px 40px rgba(0, 0, 0, 0.2);
+      border-radius: 40px;
       display: flex;
       align-items: center;
-      gap: 15px;
+      transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
       z-index: 100;
+      overflow: hidden;
+    }
+
+    .music-player.collapsed {
+      width: 60px;
+      height: 60px;
+      padding: 0;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .music-player:not(.collapsed) {
+      padding: 16px 20px;
+      width: 380px;
+      height: auto;
+    }
+
+    .player-toggle {
+      display: none;
+      font-size: 24px;
       color: white;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      transition: transform 0.3s ease;
     }
 
-    .music-player:hover {
-      transform: translateY(-5px);
+    .music-player.collapsed .player-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
     }
 
-    .music-player button {
+    .music-player.collapsed .player-content {
+      display: none;
+    }
+
+    .player-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+    }
+
+    .music-player:not(.collapsed):hover {
+      transform: scale(1.02) translateY(-5px);
+    }
+
+    .music-player.collapsed:hover {
+      transform: scale(1.1);
+    }
+
+    .cover-art {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .cover-art img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .music-player.playing .cover-art img {
+      transform: scale(1.05);
+    }
+
+    .player-body {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      gap: 8px;
+      overflow: hidden;
+    }
+
+    .track-info {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    #track-title {
+      font-size: 16px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      letter-spacing: -0.4px;
+    }
+
+    #track-artist {
+      font-size: 14px;
+      opacity: 0.6;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      letter-spacing: -0.2px;
+    }
+
+    .progress-bg {
+      width: 100%;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #4ade80;
+      border-radius: 3px;
+      transition: width 0.1s linear;
+    }
+
+    .player-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .player-controls button {
       background: none;
       border: none;
-      color: white;
-      font-size: 14px;
-      cursor: none; /* Use custom cursor */
+      color: var(--text-primary);
+      font-size: 18px;
+      cursor: none;
       opacity: 0.8;
-      transition: opacity 0.3s, transform 0.2s;
+      transition: all 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.1);
     }
 
-    .music-player button:hover {
+    .player-controls button:hover {
       opacity: 1;
-      transform: scale(1.1);
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.16);
     }
 
-    .track-info {
+    .bandcamp-link {
+      color: var(--text-primary);
+      opacity: 0.6;
+      transition: all 0.2s;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .bandcamp-link:hover {
+      opacity: 1;
+      color: var(--accent);
+    }
+
+    /* Liquid Glass Class */
+    .liquid-glass {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05), 0 12px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Ref Modal */
+    .ref-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .ref-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .ref-modal-content {
+      width: 90%;
+      max-width: 1000px;
+      height: 80vh;
+      border-radius: 30px;
+      padding: 40px;
+      position: relative;
       display: flex;
       flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: none;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .close-modal:hover {
+      opacity: 1;
+    }
+
+    .era-folders {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .era-bubble {
+      padding: 12px 24px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      cursor: none;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
       font-size: 12px;
-      max-width: 150px;
+      color: white;
     }
 
-    #track-title {
-      font-weight: 700;
-      white-space: nowrap;
+    .era-bubble:hover, .era-bubble.active {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .ref-images {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      overflow-y: auto;
+      padding-bottom: 20px;
+    }
+
+    .ref-image-card {
+      border-radius: 16px;
       overflow: hidden;
-      text-overflow: ellipsis;
+      background: rgba(0,0,0,0.2);
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+      transition: transform 0.3s;
     }
 
-    #track-artist {
-      font-size: 10px;
-      opacity: 0.6;
+    .ref-image-card:hover {
+      transform: scale(1.05);
+    }
+
+    .ref-image-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .full-image-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      z-index: 3000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      cursor: none;
+    }
+
+    .full-image-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .full-image-overlay img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      border-radius: 8px;
     }
   </style>
   <script src="https://w.soundcloud.com/player/api.js"></script>
@@ -381,10 +657,12 @@
 
 <div class="main-content">
   <div class="profile-section">
-    <div class="profile-img-container">
+    <div class="profile-img-container" id="pfp-btn" title="View OC Reference Sheets">
       <img src="https://media.bio.site/sites/236dd1f6-0640-47ed-a55b-bdaac973cf03/Uc5gHtkVtx8SvZwAbBhQxF.png" alt="runeskate" class="profile-img">
     </div>
   </div>
+
+  <div class="aka-text">runeskate</div>
 
   <div class="social-icons">
     <a href="https://bsky.app/profile/runeskate.bsky.social" target="_blank" title="BlueSky"><i class="fa fa-cloud"></i></a>
@@ -420,14 +698,46 @@
 <iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/runeskate/tracks&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" style="display:none;"></iframe>
 
 <!-- Custom Music Player UI -->
-<div class="music-player" id="music-player">
-  <button id="play-pause-btn" title="Play/Pause"><i class="fa fa-play"></i></button>
-  <button id="shuffle-btn" title="Shuffle (SoundCloud)"><i class="fa fa-random"></i></button>
-  <a href="https://runeskate.bandcamp.com/" target="_blank" title="Listen on Bandcamp (Default)" style="color: white; opacity: 0.8; transition: opacity 0.3s; margin-left: 5px;"><i class="fa fa-bandcamp" style="font-size: 18px;"></i></a>
-  <div class="track-info">
-    <span id="track-title">Ready to Play</span>
-    <span id="track-artist">SoundCloud</span>
+<div class="music-player collapsed" id="music-player">
+  <div class="player-toggle" id="player-toggle">
+    <i class="fa fa-music"></i>
   </div>
+  <div class="player-content">
+    <div class="cover-art" id="player-cover-art">
+      <img id="track-cover" src="https://media.bio.site/sites/236dd1f6-0640-47ed-a55b-bdaac973cf03/Uc5gHtkVtx8SvZwAbBhQxF.png" alt="Cover Art">
+    </div>
+    <div class="player-body">
+      <div class="track-info">
+        <span id="track-title">Ready to Play</span>
+        <span id="track-artist">SoundCloud</span>
+      </div>
+      <div class="progress-bg">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="player-controls">
+        <button id="play-pause-btn" title="Play/Pause"><i class="fa fa-play"></i></button>
+        <button id="skip-btn" title="Skip"><i class="fa fa-step-forward"></i></button>
+        <button id="shuffle-btn" title="Shuffle (SoundCloud)"><i class="fa fa-random"></i></button>
+        <a href="https://runeskate.bandcamp.com/" target="_blank" title="Listen on Bandcamp (Default)" class="bandcamp-link"><i class="fa fa-bandcamp"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ref Sheets Modal -->
+<div class="ref-modal" id="ref-modal">
+  <div class="ref-modal-content liquid-glass">
+    <button class="close-modal" id="close-modal"><i class="fa fa-times"></i></button>
+    <h2 style="text-align: center; margin-bottom: 10px; font-family: var(--font-serif); font-size: 2rem;">OC Reference Sheets</h2>
+    <div id="era-folders" class="era-folders">
+      <p style="text-align: center; width: 100%; opacity: 0.7;">Loading eras...</p>
+    </div>
+    <div id="ref-images" class="ref-images"></div>
+  </div>
+</div>
+
+<div class="full-image-overlay" id="full-image-overlay">
+  <img id="full-image" src="" alt="Full Reference">
 </div>
 
 <script>
@@ -645,12 +955,26 @@
   // Music Player Logic
   const widgetIframe = document.getElementById('sc-widget');
   const widget = SC.Widget(widgetIframe);
+  const musicPlayerContainer = document.getElementById('music-player');
+  const playerToggle = document.getElementById('player-toggle');
+  const playerCoverArt = document.getElementById('player-cover-art');
   const playPauseBtn = document.getElementById('play-pause-btn');
+  const skipBtn = document.getElementById('skip-btn');
   const shuffleBtn = document.getElementById('shuffle-btn');
   const trackTitle = document.getElementById('track-title');
   const trackArtist = document.getElementById('track-artist');
+  const trackCover = document.getElementById('track-cover');
+  const progressFill = document.getElementById('progress-fill');
   let isPlaying = false;
   let isShuffled = false;
+
+  playerToggle.addEventListener('click', () => {
+    musicPlayerContainer.classList.remove('collapsed');
+  });
+
+  playerCoverArt.addEventListener('click', () => {
+    musicPlayerContainer.classList.add('collapsed');
+  });
 
   widget.bind(SC.Widget.Events.READY, () => {
     widget.getSounds((sounds) => {
@@ -674,18 +998,31 @@
 
   widget.bind(SC.Widget.Events.PLAY, () => {
     isPlaying = true;
+    musicPlayerContainer.classList.add('playing');
     playPauseBtn.innerHTML = '<i class="fa fa-pause"></i>';
     widget.getCurrentSound((sound) => {
       if (sound) {
         trackTitle.textContent = sound.title;
         trackArtist.textContent = sound.user.username;
+        if (sound.artwork_url) {
+          trackCover.src = sound.artwork_url.replace('-large', '-t500x500');
+        } else if (sound.user && sound.user.avatar_url) {
+          trackCover.src = sound.user.avatar_url;
+        }
       }
     });
   });
 
   widget.bind(SC.Widget.Events.PAUSE, () => {
     isPlaying = false;
+    musicPlayerContainer.classList.remove('playing');
     playPauseBtn.innerHTML = '<i class="fa fa-play"></i>';
+  });
+
+  widget.bind(SC.Widget.Events.PLAY_PROGRESS, (e) => {
+    if (e.relativePosition !== undefined) {
+      progressFill.style.width = `${e.relativePosition * 100}%`;
+    }
   });
 
   widget.bind(SC.Widget.Events.FINISH, () => {
@@ -701,6 +1038,10 @@
     widget.toggle();
   });
 
+  skipBtn.addEventListener('click', () => {
+    widget.next();
+  });
+
   shuffleBtn.addEventListener('click', () => {
     isShuffled = !isShuffled;
     shuffleBtn.style.color = isShuffled ? '#4ade80' : 'white';
@@ -711,6 +1052,104 @@
       });
     }
   });
+
+  // Ref Modal Logic
+  const pfpBtn = document.getElementById('pfp-btn');
+  const refModal = document.getElementById('ref-modal');
+  const closeModal = document.getElementById('close-modal');
+  const eraFoldersContainer = document.getElementById('era-folders');
+  const refImagesContainer = document.getElementById('ref-images');
+  const fullImageOverlay = document.getElementById('full-image-overlay');
+  const fullImage = document.getElementById('full-image');
+
+  pfpBtn.addEventListener('click', () => {
+    refModal.classList.add('active');
+    loadEras();
+  });
+
+  closeModal.addEventListener('click', () => {
+    refModal.classList.remove('active');
+  });
+
+  fullImageOverlay.addEventListener('click', () => {
+    fullImageOverlay.classList.remove('active');
+  });
+
+  async function loadEras() {
+    if (eraFoldersContainer.dataset.loaded) return;
+    eraFoldersContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7;">Loading eras...</p>';
+    try {
+      const response = await fetch('https://api.github.com/repos/hollyntt/hollyntt.github.io/contents/images/ref%20sheets');
+      if (!response.ok) throw new Error('Not found');
+      const data = await response.json();
+
+      const folders = data.filter(item => item.type === 'dir');
+
+      if (folders.length === 0) {
+        eraFoldersContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7;">No era folders found.</p>';
+        return;
+      }
+
+      eraFoldersContainer.innerHTML = '';
+      folders.forEach((folder, index) => {
+        const bubble = document.createElement('div');
+        bubble.className = 'era-bubble';
+        if (index === 0) bubble.classList.add('active');
+        bubble.textContent = folder.name;
+        bubble.addEventListener('click', () => {
+          document.querySelectorAll('.era-bubble').forEach(b => b.classList.remove('active'));
+          bubble.classList.add('active');
+          loadImages(folder.path);
+        });
+        eraFoldersContainer.appendChild(bubble);
+      });
+
+      eraFoldersContainer.dataset.loaded = "true";
+      // Load first folder by default
+      if (folders.length > 0) {
+        loadImages(folders[0].path);
+      }
+    } catch (e) {
+      console.error(e);
+      eraFoldersContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7;">No reference sheets found yet. Add them to "images/ref sheets" in your repo!</p>';
+    }
+  }
+
+  async function loadImages(path) {
+    refImagesContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7;">Loading images...</p>';
+    try {
+      const response = await fetch(`https://api.github.com/repos/hollyntt/hollyntt.github.io/contents/${path}`);
+      if (!response.ok) throw new Error('Not found');
+      const data = await response.json();
+
+      const images = data.filter(item => item.type === 'file' && item.name.match(/\.(jpg|jpeg|png|gif|webp)$/i));
+
+      refImagesContainer.innerHTML = '';
+      if (images.length === 0) {
+        refImagesContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7;">No images in this folder.</p>';
+        return;
+      }
+
+      images.forEach(img => {
+        const card = document.createElement('div');
+        card.className = 'ref-image-card';
+        const imgEl = document.createElement('img');
+        imgEl.src = img.download_url;
+        imgEl.alt = img.name;
+        card.appendChild(imgEl);
+
+        card.addEventListener('click', () => {
+          fullImage.src = img.download_url;
+          fullImageOverlay.classList.add('active');
+        });
+
+        refImagesContainer.appendChild(card);
+      });
+    } catch (e) {
+      console.error(e);
+      refImagesContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7;">Error loading images.</p>';
+    }
+  }
 
 </script>
 </body>

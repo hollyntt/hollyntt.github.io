@@ -162,6 +162,17 @@
       text-align: center;
     }
 
+    /* Intro Animations */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .entry-title {
       font-family: var(--font-serif);
       font-size: 5rem;
@@ -170,6 +181,32 @@
       color: var(--text-primary);
       margin-bottom: 1rem;
       letter-spacing: -2px;
+      animation: fadeInDown 1.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+
+    .intro-loader {
+      width: 200px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 20px auto;
+      border-radius: 2px;
+      overflow: hidden;
+      transition: opacity 0.5s ease;
+    }
+
+    .loader-bar {
+      width: 0%;
+      height: 100%;
+      background: var(--text-primary);
+      box-shadow: 0 0 15px var(--text-primary);
+      animation: load 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes load {
+      0% { width: 0%; }
+      30% { width: 20%; }
+      60% { width: 70%; }
+      100% { width: 100%; }
     }
 
     .entry-prompt {
@@ -177,8 +214,13 @@
       text-transform: uppercase;
       letter-spacing: 0.5em;
       color: var(--text-primary);
-      opacity: 0.5;
-      animation: pulse 2s infinite;
+      opacity: 0;
+      display: none;
+    }
+
+    .entry-prompt.ready {
+      display: block;
+      animation: fadeInUp 1s cubic-bezier(0.23, 1, 0.32, 1) forwards, pulse 2s infinite 1s;
     }
 
     @keyframes pulse {
@@ -524,6 +566,46 @@
     .player-controls button:hover {
       opacity: 1;
       background: rgba(255, 255, 255, 0.16);
+    }
+
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: 8px;
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+
+    .volume-control:hover {
+      opacity: 1;
+    }
+
+    .volume-control i {
+      font-size: 12px;
+      width: 14px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    #volume-slider {
+      width: 50px;
+      height: 3px;
+      -webkit-appearance: none;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    #volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 10px;
+      height: 10px;
+      background: white;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
     }
 
     .bandcamp-link {
@@ -1019,7 +1101,10 @@
 <div id="entry-screen">
   <div class="entry-content">
     <h1 class="entry-title">runeskate</h1>
-    <p class="entry-prompt">Click to enter</p>
+    <div class="intro-loader" id="intro-loader">
+      <div class="loader-bar"></div>
+    </div>
+    <p class="entry-prompt" id="entry-prompt">Click to enter</p>
   </div>
 </div>
 
@@ -1082,6 +1167,10 @@
           <button id="play-pause-btn" title="Play/Pause"><i class="fa fa-play"></i></button>
           <button id="skip-btn" title="Skip"><i class="fa fa-step-forward"></i></button>
           <button id="shuffle-btn" title="Shuffle (SoundCloud)"><i class="fa fa-random"></i></button>
+          <div class="volume-control">
+            <i class="fa fa-volume-up" id="volume-icon"></i>
+            <input type="range" id="volume-slider" min="0" max="100" value="100">
+          </div>
           <a href="https://runeskate.bandcamp.com/" target="_blank" title="Listen on Bandcamp (Default)" class="bandcamp-link"><i class="fa fa-bandcamp"></i></a>
         </div>
       </div>
@@ -1130,22 +1219,55 @@
   // Music Player Logic (Moved up for early access)
   const widgetIframe = document.getElementById('sc-widget');
   const widget = SC.Widget(widgetIframe);
+  const volumeSlider = document.getElementById('volume-slider');
+  const volumeIcon = document.getElementById('volume-icon');
+  let fadeInterval = null;
+
+  function updateVolumeIcon(vol) {
+    if (vol == 0) {
+      volumeIcon.className = 'fa fa-volume-off';
+    } else if (vol < 50) {
+      volumeIcon.className = 'fa fa-volume-down';
+    } else {
+      volumeIcon.className = 'fa fa-volume-up';
+    }
+  }
 
   // Entry Screen Logic
   const entryScreen = document.getElementById('entry-screen');
-  const entryPrompt = entryScreen.querySelector('.entry-prompt');
+  const entryPrompt = document.getElementById('entry-prompt');
+  const introLoader = document.getElementById('intro-loader');
+
+  // Intro Sequence Timing
+  setTimeout(() => {
+    if (introLoader) {
+      introLoader.style.opacity = '0';
+      setTimeout(() => {
+        introLoader.style.display = 'none';
+        entryPrompt.classList.add('ready');
+      }, 500);
+    }
+  }, 2800);
 
   function fadeVolume(target, duration) {
+    if (fadeInterval) clearInterval(fadeInterval);
+
     widget.getVolume((current) => {
       const steps = 30;
       const stepTime = duration / steps;
       const stepAmount = (target - current) / steps;
       let count = 0;
-      const interval = setInterval(() => {
+      fadeInterval = setInterval(() => {
         count++;
         const nextVolume = current + stepAmount * count;
-        widget.setVolume(Math.max(0, Math.min(100, nextVolume)));
-        if (count >= steps) clearInterval(interval);
+        const finalVolume = Math.max(0, Math.min(100, nextVolume));
+        widget.setVolume(finalVolume);
+        volumeSlider.value = finalVolume;
+        updateVolumeIcon(finalVolume);
+        if (count >= steps) {
+          clearInterval(fadeInterval);
+          fadeInterval = null;
+        }
       }, stepTime);
     });
   }
@@ -1404,6 +1526,36 @@
     musicPlayerContainer.classList.add('collapsed');
   });
 
+  volumeSlider.addEventListener('input', (e) => {
+    const vol = e.target.value;
+    widget.setVolume(vol);
+    updateVolumeIcon(vol);
+    // If user manually changes volume, stop any ongoing fade
+    if (fadeInterval) {
+      clearInterval(fadeInterval);
+      fadeInterval = null;
+    }
+  });
+
+  volumeIcon.addEventListener('click', () => {
+    widget.getVolume((vol) => {
+      if (vol > 0) {
+        // Mute
+        volumeSlider.dataset.prevVol = vol;
+        widget.setVolume(0);
+        volumeSlider.value = 0;
+        updateVolumeIcon(0);
+      } else {
+        // Unmute
+        const prev = volumeSlider.dataset.prevVol || 100;
+        const targetVol = Number(prev);
+        widget.setVolume(targetVol);
+        volumeSlider.value = targetVol;
+        updateVolumeIcon(targetVol);
+      }
+    });
+  });
+
   widget.bind(SC.Widget.Events.READY, () => {
     widget.getSounds((sounds) => {
       if (sounds && sounds.length > 0) {
@@ -1413,6 +1565,8 @@
     });
     // Set initial muffled volume
     widget.setVolume(15);
+    volumeSlider.value = 15;
+    updateVolumeIcon(15);
     // Attempt to play automatically (browsers may block this until user interaction)
     widget.play();
   });

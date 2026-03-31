@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plasma</title>
+  <title>runeskate</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Playfair+Display:wght@900&family=JetBrains+Mono&display=swap" rel="stylesheet">
   <style>
     :root {
-      --plasma-bg: #000000;
-      --plasma-accent: #ffffff;
-      --plasma-secondary: #888888;
+      --bg-gradient: linear-gradient(135deg, #b07d7d 0%, #d48c5d 50%, #c46a4a 100%);
+      --text-primary: #f5e6d3;
+      --font-serif: 'Playfair Display', serif;
       --font-sans: 'Inter', sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
@@ -22,13 +22,17 @@
     }
 
     body {
-      background-color: var(--plasma-bg);
-      color: white;
+      background: var(--bg-gradient);
+      color: var(--text-primary);
       font-family: var(--font-sans);
-      overflow: hidden;
+      overflow-x: hidden;
+      min-height: 100vh;
       cursor: none;
-      height: 100vh;
-      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
     }
 
     canvas {
@@ -37,13 +41,14 @@
       left: 0;
       z-index: -1;
       pointer-events: none;
+      opacity: 0.3;
     }
 
     /* Custom Cursor */
     .custom-cursor {
       width: 8px;
       height: 8px;
-      background: var(--plasma-accent);
+      background: white;
       border-radius: 50%;
       position: fixed;
       pointer-events: none;
@@ -55,198 +60,193 @@
     .custom-cursor-follower {
       width: 30px;
       height: 30px;
-      border: 1px solid var(--plasma-accent);
+      border: 1px solid white;
       border-radius: 50%;
       position: fixed;
       pointer-events: none;
       z-index: 9998;
       transform: translate(-50%, -50%);
       transition: transform 0.1s ease-out;
+      opacity: 0.5;
     }
 
-    /* Enter Screen */
-    #enter-screen {
+    /* Background Text Overlay */
+    .bg-text-overlay {
       position: fixed;
-      inset: 0;
-      background: black;
-      z-index: 100;
+      inset: -20%;
+      pointer-events: none;
+      opacity: 0.08;
+      z-index: -1;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: opacity 0.8s ease, transform 0.8s ease;
+      gap: 20px;
+      padding: 20px;
+      transform: rotate(-5deg) scale(1.2);
+      font-family: var(--font-serif);
     }
 
-    #enter-screen.fade-out {
-      opacity: 0;
-      transform: scale(1.1);
-      pointer-events: none;
+    .bg-text-item {
+      font-size: 8rem;
+      font-weight: 900;
+      white-space: nowrap;
+      line-height: 0.8;
+      letter-spacing: -0.02em;
     }
 
-    .enter-text {
-      color: var(--plasma-accent);
-      font-family: var(--font-mono);
-      letter-spacing: 0.5em;
-      text-transform: uppercase;
-      font-size: 1.2rem;
-      animation: pulse 2s infinite;
+    .bg-text-item.scroll-left {
+      animation: scrollLeft 60s linear infinite;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 1; }
+    .bg-text-item.scroll-right {
+      animation: scrollRight 60s linear infinite;
+    }
+
+    @keyframes scrollLeft {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    @keyframes scrollRight {
+      0% { transform: translateX(-50%); }
+      100% { transform: translateX(0); }
     }
 
     /* Main Content */
     .main-content {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      opacity: 0;
-      transform: scale(0.9);
-      transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
-    }
-
-    .main-content.visible {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .glass-card {
-      background: rgba(20, 20, 20, 0.95);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 1.5rem;
-      padding: 40px;
       width: 100%;
-      max-width: 550px;
-      text-align: center;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-      position: relative;
-      transform-style: preserve-3d;
-      perspective: 1000px;
-    }
-
-    .badges {
-      position: absolute;
-      top: 25px;
-      right: 25px;
-      display: flex;
-      gap: 12px;
-      transform: translateZ(20px);
-    }
-
-    .badge {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 6px 14px;
-      border-radius: 12px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.4);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .logo-container {
-      position: relative;
-      margin-top: 10px;
-      margin-bottom: 20px;
-      display: inline-block;
-      transform: translateZ(50px);
-    }
-
-    .logo-img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      background: #000;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 5px;
-    }
-
-    .title {
-      font-size: 2.2rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      margin-bottom: 5px;
-      transform: translateZ(30px);
-    }
-
-    .verified-icons {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 25px;
-      transform: translateZ(25px);
-      opacity: 0.6;
-    }
-
-    .verified-icons i {
-      font-size: 14px;
-    }
-
-    .divider {
-      width: 100%;
-      height: 1px;
-      background: rgba(255, 255, 255, 0.05);
-      margin: 20px 0;
-    }
-
-    .bio-text {
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.5);
-      font-family: var(--font-mono);
-      margin: 15px 0;
-      transform: translateZ(20px);
-    }
-
-    .trackers-list {
+      max-width: 800px;
+      padding: 40px 20px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      margin: 20px 0;
-      transform: translateZ(35px);
-    }
-
-    .trackers-list a {
-      color: rgba(255, 255, 255, 0.4);
-      text-decoration: none;
-      font-size: 12px;
-      font-family: var(--font-mono);
-      transition: color 0.3s;
-      display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
+      text-align: center;
+      z-index: 10;
     }
 
-    .trackers-list a:hover {
-      color: white;
+    .profile-section {
+      margin-bottom: 40px;
+    }
+
+    .profile-img-container {
+      width: 200px;
+      height: 200px;
+      margin-bottom: 20px;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .profile-img-container:hover {
+      transform: scale(1.05) rotate(2deg);
+    }
+
+    .profile-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .aka-text {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      opacity: 0.6;
+      margin-bottom: 30px;
+      font-weight: 600;
     }
 
     .social-icons {
       display: flex;
       justify-content: center;
       gap: 25px;
-      margin-top: 20px;
-      transform: translateZ(30px);
+      margin-bottom: 40px;
     }
 
     .social-icons a {
-      color: white;
-      font-size: 20px;
-      opacity: 0.4;
-      transition: opacity 0.3s, transform 0.3s;
+      color: var(--text-primary);
+      font-size: 18px;
+      opacity: 0.7;
+      transition: all 0.3s ease;
     }
 
     .social-icons a:hover {
       opacity: 1;
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+    }
+
+    /* Bottom Grid Cards */
+    .bottom-grid {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .grid-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .grid-card {
+      width: 120px;
+      height: 120px;
+      border-radius: 1rem;
+      background: rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .grid-card img {
+      max-width: 70%;
+      max-height: 70%;
+      object-fit: contain;
+    }
+
+    .grid-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.6;
+      font-weight: 600;
+    }
+
+    .boundaries-container {
+      display: flex;
+      gap: 10px;
+    }
+
+    .circle {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 900;
+      color: white;
+    }
+
+    .circle.yes { background: #4ade80; }
+    .circle.no { background: #f87171; }
+
+    .age-icon {
+      opacity: 0.8;
     }
 
     /* Scanline effect */
@@ -254,30 +254,17 @@
       width: 100%;
       height: 100px;
       z-index: 10;
-      background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(0, 0, 0, 0) 100%);
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(0, 0, 0, 0) 100%);
       opacity: 0.1;
       position: absolute;
       bottom: 100%;
-      animation: scanline 8s linear infinite;
+      animation: scanline 10s linear infinite;
       pointer-events: none;
     }
 
     @keyframes scanline {
       0% { bottom: 100%; }
       100% { bottom: -100px; }
-    }
-
-    .footer {
-      margin-top: 32px;
-      padding-top: 24px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      display: flex;
-      justify-content: space-between;
-      font-family: var(--font-mono);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      color: rgba(255, 255, 255, 0.2);
     }
   </style>
 </head>
@@ -286,96 +273,64 @@
 <canvas id="visual"></canvas>
 <div class="scanline"></div>
 
+<div class="bg-text-overlay" id="bg-text"></div>
+
 <div class="custom-cursor" id="cursor"></div>
 <div class="custom-cursor-follower" id="cursor-follower"></div>
 
-<div id="enter-screen">
-  <div class="enter-text">[ Click to Enter ]</div>
-</div>
-
-<div class="main-content" id="main-content">
-  <!-- Main Profile Card -->
-  <div class="glass-card">
-    <div class="badges">
-      <div class="badge"><i class="fa fa-eye"></i> <span id="view-count">...</span></div>
+<div class="main-content">
+  <div class="profile-section">
+    <div class="profile-img-container">
+      <img src="https://media.bio.site/sites/236dd1f6-0640-47ed-a55b-bdaac973cf03/Uc5gHtkVtx8SvZwAbBhQxF.png" alt="runeskate" class="profile-img">
     </div>
+  </div>
 
-    <div class="logo-container">
-      <img src="https://8ktv.github.io/images/PlasmaLogo.png" alt="Plasma Logo" class="logo-img">
-    </div>
+  <div class="social-icons">
+    <a href="https://bsky.app/profile/runeskate.bsky.social" target="_blank" title="BlueSky"><i class="fa fa-cloud"></i></a>
+    <a href="https://www.youtube.com/@runeskatee" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+    <a href="https://x.com/@runeskate" target="_blank" title="X"><i class="fa fa-twitter"></i></a>
+    <a href="https://open.spotify.com/artist/27VTriHuDxNYlfLPa2KRx5" target="_blank" title="Spotify"><i class="fa fa-spotify"></i></a>
+    <a href="https://soundcloud.com/runeskate" target="_blank" title="SoundCloud"><i class="fa fa-soundcloud"></i></a>
+    <a href="https://discord.com/users/1280652814217117696" target="_blank" title="Discord"><i class="fa fa-comments"></i></a>
+    <a href="https://runeskate.bandcamp.com/" target="_blank" title="Bandcamp"><i class="fa fa-bandcamp"></i></a>
+    <a href="https://vrchat.com/home/user/usr_0e7cd2a2-f06d-42c2-a27c-63d96593acf0" target="_blank" title="VRChat"><i class="fa fa-gamepad"></i></a>
+  </div>
 
-    <h1 class="title">plamsa</h1>
-
-    <div class="verified-icons">
-      <i class="fa fa-check-circle"></i>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="bio-text">
-      <span id="auto-type"></span>
-    </div>
-
-    <div class="trackers-list">
-      <a href="krakenreborn.html" onclick="">
-        <i class="fa fa-user"></i> Crakcocain
+  <div class="bottom-grid">
+    <div class="grid-item">
+      <a href="https://www.thecalculatorsite.com/misc/birthday-calculator.php?birthdate=2005-01-15" target="_blank" class="grid-card">
+        <img src="https://www.thecalculatorsite.com/images/birthday-calculator/birthday-day.png" alt="Age" class="age-icon">
       </a>
-      <a href="mindex.html" onclick="">
-        <i class="fa fa-user"></i> Myrient EOL Tracker
-      </a>
-      <a href="rrtracker.html" onclick="">
-        <i class="fa fa-user"></i> RecRoom EOL Tracker
-      </a>
+      <span class="grid-label">Age</span>
     </div>
-
-    <div class="divider"></div>
-
-    <div class="social-icons">
-      <a href="https://plasmaware.myspreadshop.com/" target="_blank" rel="noopener noreferrer"><i class="fa fa-shopping-cart"></i></a>
-      <a href="https://instagram.com/plasmadoesstuff" target="_blank" rel="noopener noreferrer"><i class="fa fa-instagram"></i></a>
-      <a href="https://soundcloud.com/prodplvsmv?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing" target="_blank" rel="noopener noreferrer"><i class="fa fa-soundcloud"></i></a>
+    <div class="grid-item">
+      <a href="https://docs.google.com/document/d/1I--bXs8S9Rawt7CE7G2RQ9D1qtM3sb_e7FYvtEiUcp4/edit?tab=t.0" target="_blank" class="grid-card">
+        <div class="boundaries-container">
+          <div class="circle yes">YES</div>
+          <div class="circle no">NO</div>
+        </div>
+      </a>
+      <span class="grid-label">Boundaries</span>
     </div>
   </div>
 </div>
 
-<audio id="bg-audio" src="audio/Dead.mp3" loop></audio>
-
-<script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
 <script>
-  // Typed.js initialization
-  function initTyped() {
-    const stringsArray = ["Money twerk $$$$", "hycological/warfare", "Schizophrenic black caht", "Boo!", "Plasmaware Protocol"];
-    // Shuffle
-    for (let i = stringsArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [stringsArray[i], stringsArray[j]] = [stringsArray[j], stringsArray[i]];
-    }
-
-    new Typed("#auto-type", {
-      strings: stringsArray,
-      typeSpeed: 80,
-      backSpeed: 50,
-      loop: true,
-      cursorChar: '_'
-    });
-  }
-
-  // Initialize Tilt
-  function initTilt() {
-    VanillaTilt.init(document.querySelector(".glass-card"), {
-      max: 15,
-      speed: 400,
-      glare: true,
-      "max-glare": 0.2,
-    });
+  // Background Text
+  const bgTextContainer = document.getElementById('bg-text');
+  const nameText = "Hollyn ";
+  for (let i = 0; i < 30; i++) {
+    const div = document.createElement('div');
+    div.className = `bg-text-item ${i % 2 === 0 ? 'scroll-left' : 'scroll-right'}`;
+    div.textContent = nameText.repeat(40);
+    bgTextContainer.appendChild(div);
   }
 
   // Plasma Background
   const canvas = document.getElementById('visual');
   const ctx = canvas.getContext('2d');
   let particles = [];
-  const particleCount = 100;
+  const particleCount = 60;
 
   function resize() {
     canvas.width = window.innerWidth;
@@ -389,10 +344,10 @@
     init() {
       this.x = Math.random() * canvas.width;
       this.y = Math.random() * canvas.height;
-      this.size = Math.random() * 2 + 1;
-      this.speedX = (Math.random() - 0.5) * 2;
-      this.speedY = (Math.random() - 0.5) * 2;
-      this.color = Math.random() > 0.5 ? '#ffffff' : '#888888';
+      this.size = Math.random() * 1.5 + 0.5;
+      this.speedX = (Math.random() - 0.5) * 1;
+      this.speedY = (Math.random() - 0.5) * 1;
+      this.color = '#ffffff';
     }
     update() {
       this.x += this.speedX;
@@ -404,8 +359,6 @@
     }
     draw() {
       ctx.fillStyle = this.color;
-      ctx.shadowBlur = 10;
-      ctx.shadowColor = this.color;
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
       ctx.fill();
@@ -420,19 +373,18 @@
   }
 
   function animate() {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     particles.forEach(p => {
       p.update();
       p.draw();
     });
     for (let i = 0; i < particles.length; i++) {
-      for (let j = i; j < particles.length; j++) {
+      for (let j = i + 1; j < particles.length; j++) {
         const dx = particles[i].x - particles[j].x;
         const dy = particles[i].y - particles[j].y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance < 100) {
-          ctx.strokeStyle = `rgba(255, 255, 255, ${1 - distance / 100})`;
+        if (distance < 150) {
+          ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 * (1 - distance / 150)})`;
           ctx.lineWidth = 0.5;
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
@@ -460,94 +412,6 @@
       follower.style.top = e.clientY + 'px';
     }, 50);
   });
-
-  // Enter Screen Logic
-  const enterScreen = document.getElementById('enter-screen');
-  const mainContent = document.getElementById('main-content');
-  const audio = document.getElementById('bg-audio');
-
-  // Music Player Logic
-  function initMusicPlayer() {
-    const audio = document.getElementById('bg-audio');
-    const playPauseBtn = document.getElementById('play-pause');
-    const progressBar = document.getElementById('progress-bar');
-    const progressContainer = document.getElementById('progress-container');
-    const currentTimeEl = document.getElementById('current-time');
-    const durationEl = document.getElementById('duration');
-
-    function formatTime(seconds) {
-      const min = Math.floor(seconds / 60);
-      const sec = Math.floor(seconds % 60);
-      return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
-    }
-
-    audio.addEventListener('timeupdate', () => {
-      const percent = (audio.currentTime / audio.duration) * 100;
-      progressBar.style.width = `${percent}%`;
-      currentTimeEl.textContent = formatTime(audio.currentTime);
-    });
-
-    audio.addEventListener('loadedmetadata', () => {
-      durationEl.textContent = formatTime(audio.duration);
-    });
-
-    playPauseBtn.addEventListener('click', () => {
-      if (audio.paused) {
-        audio.play();
-        playPauseBtn.classList.replace('fa-play', 'fa-pause');
-      } else {
-        audio.pause();
-        playPauseBtn.classList.replace('fa-pause', 'fa-play');
-      }
-    });
-
-    progressContainer.addEventListener('click', (e) => {
-      const width = progressContainer.clientWidth;
-      const clickX = e.offsetX;
-      const duration = audio.duration;
-      audio.currentTime = (clickX / width) * duration;
-    });
-  }
-
-  // View Counter Logic
-  async function initViewCounter() {
-    const viewCountEl = document.getElementById('view-count');
-    if (!viewCountEl) return;
-
-    try {
-      const response = await fetch('/api/views');
-      if (!response.ok) throw new Error('API returned ' + response.status);
-      const data = await response.json();
-      if (data && typeof data.count === 'number') {
-        viewCountEl.textContent = data.count.toLocaleString();
-      } else {
-        throw new Error('Invalid data format');
-      }
-    } catch (e) {
-      console.error("Error fetching view count:", e);
-      // Fallback to a static number if it keeps failing
-      if (viewCountEl.textContent === '...') {
-        viewCountEl.textContent = '1,337';
-      }
-    }
-  }
-
-  // Call immediately and on load
-  initViewCounter();
-  window.addEventListener('load', initViewCounter);
-
-  enterScreen.addEventListener('click', () => {
-    enterScreen.classList.add('fade-out');
-    mainContent.classList.add('visible');
-    audio.play().catch(e => console.log("Audio play blocked:", e));
-    initTyped();
-    initTilt();
-    initMusicPlayer();
-    // Refresh count on enter
-    initViewCounter();
-  });
-  
 </script>
 </body>
 </html>
-

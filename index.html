@@ -31,7 +31,6 @@
       font-family: var(--font-sans);
       overflow-x: hidden;
       min-height: 100vh;
-      cursor: none;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -39,61 +38,21 @@
       user-select: none;
     }
 
-    canvas {
+    #visual {
       position: fixed;
-      top: 0;
-      left: 0;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
       z-index: -1;
-      pointer-events: none;
-      opacity: 0.1;
-      transition: opacity 3s ease;
-    }
-
-    body.entered canvas {
       opacity: 0.3;
+      transition: opacity 2s ease;
     }
 
-    /* Custom Cursor */
-    .custom-cursor {
-      width: 8px;
-      height: 8px;
-      background: white;
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      mix-blend-mode: difference;
-      box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8), 0 0 20px 5px rgba(255, 100, 100, 0.6), 0 0 30px 10px rgba(100, 255, 100, 0.4);
-      transform: translate(-50%, -50%);
-      transition: width 0.2s, height 0.2s, background-color 0.2s;
+    body.entered #visual {
+      opacity: 0.6;
     }
 
-    .custom-cursor.hovering {
-      width: 4px;
-      height: 4px;
-    }
-
-    .custom-cursor-follower {
-      width: 30px;
-      height: 30px;
-      border: 1px solid white;
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9998;
-      transform: translate(-50%, -50%);
-      transition: transform 0.1s ease-out, width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
-      opacity: 0.5;
-    }
-
-    .custom-cursor-follower.hovering {
-      width: 60px;
-      height: 60px;
-      background: rgba(255, 255, 255, 0.15);
-      border-color: transparent;
-    }
-
-    /* Background Text Overlay */
     .bg-text-overlay {
       position: fixed;
       inset: -20%;
@@ -150,7 +109,6 @@
       100% { transform: translateX(0); }
     }
 
-    /* Entry Screen */
     #entry-screen {
       position: fixed;
       inset: 0;
@@ -173,7 +131,6 @@
       text-align: center;
     }
 
-    /* Intro Animations */
     @keyframes fadeInDown {
       from { opacity: 0; transform: translateY(-30px); }
       to { opacity: 1; transform: translateY(0); }
@@ -239,7 +196,6 @@
       50% { opacity: 0.7; }
     }
 
-    /* Main Content Animations */
     @keyframes entryReveal {
       0% {
         opacity: 0;
@@ -261,20 +217,16 @@
       animation: entryReveal 1.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
     }
 
-    /* Staggered delays for a "coming together" feel */
     body.entered .profile-section { animation-delay: 0.2s; }
     body.entered .aka-text { animation-delay: 0.4s; }
     body.entered .social-icons { animation-delay: 0.6s; }
     body.entered .bottom-grid { animation-delay: 0.8s; }
     body.entered .music-player { animation-delay: 1.0s; }
 
-    /* Extra movement for specific elements - handled by keyframes if needed, 
-       but we can also just set the initial state */
     .social-icons { transform: translateY(80px) scale(0.9); }
     .bottom-grid { transform: translateY(100px) scale(0.9); }
     .profile-section { transform: scale(0.5) translateY(40px); }
 
-    /* Main Content */
     .main-content {
       width: 100%;
       max-width: 800px;
@@ -331,7 +283,6 @@
       font-weight: 600;
     }
 
-    /* Dock */
     .social-icons {
       display: flex;
       gap: 24px;
@@ -362,7 +313,6 @@
       opacity: 1;
     }
 
-    /* Widgets (Grid) */
     .bottom-grid {
       display: flex;
       gap: 24px;
@@ -446,7 +396,6 @@
     .circle.yes { background: #4ade80; }
     .circle.no { background: #f87171; }
 
-    /* Scanline effect */
     .scanline {
       width: 100%;
       height: 100px;
@@ -469,7 +418,6 @@
       100% { bottom: -100px; }
     }
 
-    /* Music Player (Dynamic Island / Lock Screen Style) */
     .music-player {
       position: relative;
       margin-top: 24px;
@@ -713,7 +661,6 @@
       color: var(--accent);
     }
 
-    /* Liquid Glass Class */
     .liquid-glass {
       background: rgba(255, 255, 255, 0.03);
       backdrop-filter: blur(24px) saturate(180%);
@@ -722,7 +669,6 @@
       box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05), 0 12px 40px rgba(0, 0, 0, 0.2);
     }
 
-    /* Ref Modal */
     .ref-modal {
       position: fixed;
       top: 0;
@@ -1059,7 +1005,6 @@
       transform: scale(1);
     }
 
-    /* NSFW & Age Verification */
     .nsfw-blur {
       filter: blur(20px);
       transition: filter 0.3s ease;
@@ -1184,9 +1129,6 @@
 
 <div class="bg-text-overlay" id="bg-text"></div>
 
-<div class="custom-cursor" id="cursor"></div>
-<div class="custom-cursor-follower" id="cursor-follower"></div>
-
 <div id="entry-screen">
   <div class="entry-content">
     <h1 class="entry-title">runeskate</h1>
@@ -1267,7 +1209,6 @@
     </div>
   </div>
 
-  <!-- Custom Music Player UI -->
   <div class="music-player collapsed" id="music-player">
     <div class="player-toggle" id="player-toggle">
       <i class="fa fa-music"></i>
@@ -1299,10 +1240,8 @@
   </div>
 </div>
 
-<!-- Hidden SoundCloud Player -->
 <iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/runeskate/tracks&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" style="display:none;"></iframe>
 
-<!-- Ref Sheets Modal -->
 <div class="ref-modal" id="ref-modal">
   <div class="ref-modal-content liquid-glass">
     <button class="close-modal" id="close-modal"><i class="fa fa-times"></i></button>
@@ -1324,7 +1263,6 @@
   <img id="full-image" src="" alt="Full Reference">
 </div>
 
-<!-- Age Verification Modal -->
 <div class="age-verification-overlay" id="age-verification-overlay">
   <div class="age-verification-modal liquid-glass">
     <h2>Age Verification</h2>
@@ -1337,7 +1275,6 @@
 </div>
 
 <script>
-  // Music Player Logic (Moved up for early access)
   const widgetIframe = document.getElementById('sc-widget');
   const widget = SC.Widget(widgetIframe);
   const volumeSlider = document.getElementById('volume-slider');
@@ -1354,19 +1291,17 @@
     }
   }
 
-  // Entry Screen Logic
   const entryScreen = document.getElementById('entry-screen');
   const entryPrompt = document.getElementById('entry-prompt');
   const introLoader = document.getElementById('intro-loader');
 
   function enterSite() {
-    if (entryScreen.classList.contains('hidden')) return; // Already entered
+    if (entryScreen.classList.contains('hidden')) return;
     widget.play();
-    widget.setVolume(15); // Start muffled
+    widget.setVolume(15);
     entryScreen.classList.add('hidden');
     document.body.classList.add('entered');
 
-    // Burst effect for plasma particles
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
     for (let i = 0; i < 50; i++) {
@@ -1376,20 +1311,19 @@
       particles.push(p);
     }
 
-    // Smoothly unmuffle the music as the user enters
     setTimeout(() => {
       fadeVolume(100, 2500);
     }, 200);
   }
 
-  // Intro Sequence Timing
+  entryScreen.addEventListener('click', enterSite);
+
   setTimeout(() => {
     if (introLoader) {
       introLoader.style.opacity = '0';
       setTimeout(() => {
         introLoader.style.display = 'none';
         entryPrompt.classList.add('ready');
-        // Automatic entry
         enterSite();
       }, 500);
     }
@@ -1420,7 +1354,6 @@
 
   entryScreen.addEventListener('click', enterSite);
 
-  // Background Text
   const bgTextContainer = document.getElementById('bg-text');
   const nameText = "Hollyn ";
   for (let i = 0; i < 30; i++) {
@@ -1430,7 +1363,6 @@
     bgTextContainer.appendChild(div);
   }
 
-  // Plasma Background
   const canvas = document.getElementById('visual');
   const ctx = canvas.getContext('2d');
   let particles = [];
@@ -1474,18 +1406,15 @@
       this.rotationSpeed = (Math.random() - 0.5) * 0.02;
     }
     update() {
-      // Basic movement
       this.x += this.speedX;
       this.y += this.speedY;
       this.rotation += this.rotationSpeed;
 
-      // Wrap around
       if (this.x > canvas.width + 50) this.x = -50;
       else if (this.x < -50) this.x = canvas.width + 50;
       if (this.y > canvas.height + 50) this.y = -50;
       else if (this.y < -50) this.y = canvas.height + 50;
 
-      // Mouse interaction (repulsion)
       if (mouse.x != null && mouse.y != null) {
         let dx = mouse.x - this.x;
         let dy = mouse.y - this.y;
@@ -1509,7 +1438,6 @@
     draw() {
       let opacity = this.isTemporary ? this.life / 100 : 0.4;
 
-      // Glow near mouse
       if (mouse.x != null && mouse.y != null) {
         let dx = mouse.x - this.x;
         let dy = mouse.y - this.y;
@@ -1541,7 +1469,6 @@
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Filter out dead temporary particles
     particles = particles.filter(p => !p.isTemporary || p.life > 0);
 
     particles.forEach(p => {
@@ -1549,7 +1476,6 @@
       p.draw();
     });
 
-    // Removed line drawing between particles for a cleaner celestial look
     requestAnimationFrame(animate);
   }
 
@@ -1558,9 +1484,6 @@
   initParticles();
   animate();
 
-  // Custom Cursor
-  const cursor = document.getElementById('cursor');
-  const follower = document.getElementById('cursor-follower');
   const mainContent = document.querySelector('.main-content');
   let magneticElements = document.querySelectorAll('.social-icons a, .grid-card, .profile-img-container, .music-player, .ref-modal-content');
 
@@ -1568,20 +1491,10 @@
     const x = e.clientX;
     const y = e.clientY;
 
-    cursor.style.left = x + 'px';
-    cursor.style.top = y + 'px';
-
-    setTimeout(() => {
-      follower.style.left = x + 'px';
-      follower.style.top = y + 'px';
-    }, 50);
-
-    // Parallax effect for main content
     const moveX = (x - window.innerWidth / 2) / 50;
     const moveY = (y - window.innerHeight / 2) / 50;
     mainContent.style.transform = `translate(${moveX}px, ${moveY}px)`;
 
-    // Background text reaction
     const bgItems = document.querySelectorAll('.bg-text-item');
     bgItems.forEach((item, index) => {
       const depth = (index % 5 + 1) * 2;
@@ -1589,7 +1502,6 @@
       item.style.transform = `translateX(${shiftX}px)`;
     });
 
-    // Magnetic and Tilt effects
     magneticElements.forEach(el => {
       const rect = el.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
@@ -1601,7 +1513,6 @@
       const threshold = Math.max(150, rect.width / 2 + 50);
 
       if (distance < threshold) {
-        // Skip magnetic effect for expanded music player to avoid animation conflicts
         if (el.classList.contains('music-player') && !el.classList.contains('collapsed')) {
           el.style.transform = '';
           return;
@@ -1614,11 +1525,9 @@
         let transform = `translate(${magX}px, ${magY}px)`;
 
         if (el.classList.contains('grid-card') || el.classList.contains('profile-img-container') || el.classList.contains('music-player') || el.classList.contains('ref-image-card') || el.classList.contains('ref-modal-content')) {
-          // Calculate tilt based on element dimensions to prevent extreme angles on wide elements
           const tiltX = (dy / (rect.height / 2)) * (el.classList.contains('ref-modal-content') ? 2 : 10);
           const tiltY = -(dx / (rect.width / 2)) * (el.classList.contains('ref-modal-content') ? 2 : 10);
 
-          // Cap the tilt to prevent it from flipping or looking broken
           const maxTilt = el.classList.contains('ref-modal-content') ? 5 : 15;
           const cappedTiltX = Math.max(-maxTilt, Math.min(maxTilt, tiltX));
           const cappedTiltY = Math.max(-maxTilt, Math.min(maxTilt, tiltY));
@@ -1634,20 +1543,6 @@
     });
   });
 
-  // Cursor interaction with elements
-  const interactables = document.querySelectorAll('a, .profile-img-container, .grid-card, .music-player button, .music-player a');
-  interactables.forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.classList.add('hovering');
-      follower.classList.add('hovering');
-    });
-    el.addEventListener('mouseleave', () => {
-      cursor.classList.remove('hovering');
-      follower.classList.remove('hovering');
-    });
-  });
-
-  // Music Player Logic
   const musicPlayerContainer = document.getElementById('music-player');
   const playerToggle = document.getElementById('player-toggle');
   const playerCoverArt = document.getElementById('player-cover-art');
@@ -1675,7 +1570,7 @@
   });
 
   playerCoverArt.addEventListener('click', (e) => {
-    e.stopPropagation(); // Prevent the container click from immediately re-opening it
+    e.stopPropagation();
     musicPlayerContainer.classList.add('collapsed');
   });
 
@@ -1683,7 +1578,6 @@
     const vol = e.target.value;
     widget.setVolume(vol);
     updateVolumeIcon(vol);
-    // If user manually changes volume, stop any ongoing fade
     if (fadeInterval) {
       clearInterval(fadeInterval);
       fadeInterval = null;
@@ -1693,13 +1587,11 @@
   volumeIcon.addEventListener('click', () => {
     widget.getVolume((vol) => {
       if (vol > 0) {
-        // Mute
         volumeSlider.dataset.prevVol = vol;
         widget.setVolume(0);
         volumeSlider.value = 0;
         updateVolumeIcon(0);
       } else {
-        // Unmute
         const prev = volumeSlider.dataset.prevVol || 100;
         const targetVol = Number(prev);
         widget.setVolume(targetVol);
@@ -1716,15 +1608,11 @@
         trackArtist.textContent = "runeskate";
       }
     });
-    // Set initial muffled volume
     widget.setVolume(15);
     volumeSlider.value = 15;
     updateVolumeIcon(15);
-    // Attempt to play automatically (browsers may block this until user interaction)
     widget.play();
   });
-
-  // Removed startAudioOnInteraction as it's now handled by entryScreen logic
 
   widget.bind(SC.Widget.Events.PLAY, () => {
     isPlaying = true;
@@ -1783,7 +1671,6 @@
     }
   });
 
-  // Ref Modal Logic
   const pfpBtn = document.getElementById('pfp-btn');
   const refModal = document.getElementById('ref-modal');
   const closeModal = document.getElementById('close-modal');
@@ -1833,12 +1720,10 @@
     isAgeVerified = true;
     ageVerificationOverlay.classList.remove('active');
 
-    // Unblur all currently rendered NSFW images
     document.querySelectorAll('.nsfw-blur').forEach(el => {
       el.classList.remove('nsfw-blur');
     });
 
-    // Open the pending image if there is one
     if (pendingNsfwImage) {
       fullImage.src = pendingNsfwImage;
       fullImageOverlay.classList.add('active');
@@ -1875,7 +1760,6 @@
 
       groupedErasData = {};
 
-      // First, find all explicit OC folders (direct children of ref sheets)
       data.tree.forEach(item => {
         if (item.type === 'tree' && item.path.startsWith(refSheetsPrefix)) {
           const parts = item.path.replace(refSheetsPrefix, '').split('/');
@@ -1929,9 +1813,8 @@
     refImagesContainer.style.display = 'none';
     ocFoldersContainer.style.display = 'flex';
 
-    // Add zoom animation
     ocFoldersContainer.classList.remove('view-transition-zoom');
-    void ocFoldersContainer.offsetWidth; // Trigger reflow
+    void ocFoldersContainer.offsetWidth;
     ocFoldersContainer.classList.add('view-transition-zoom');
 
     ocFoldersContainer.innerHTML = '';
@@ -1950,7 +1833,6 @@
       const bubble = document.createElement('div');
       bubble.className = 'oc-bubble-slideshow';
 
-      // Get all images for this OC for the slideshow
       const ocImages = allImageFiles.filter(file =>
               file.path.startsWith(`images/ref sheets/${ocName}/`)
       ).map(file => `https://raw.githubusercontent.com/hollyntt/hollyntt.github.io/main/${file.path.split('/').map(encodeURIComponent).join('/')}`);
@@ -1964,7 +1846,6 @@
           bubble.appendChild(img);
         });
 
-        // Start slideshow
         if (ocImages.length > 1) {
           let currentIdx = 0;
           const intervalId = setInterval(() => {
@@ -1977,7 +1858,6 @@
           slideshowIntervals.push(intervalId);
         }
       } else {
-        // Fallback if no images
         const placeholder = document.createElement('div');
         placeholder.style.opacity = '0.3';
         placeholder.innerHTML = '<i class="fa fa-user" style="font-size: 40px;"></i>';
@@ -2001,7 +1881,6 @@
     ocFoldersContainer.appendChild(bubblesDiv);
 
     setTimeout(() => {
-      // Update elements list (if needed for other logic)
     }, 100);
   }
 
@@ -2012,10 +1891,9 @@
     eraFoldersContainer.style.display = 'flex';
     refImagesContainer.style.display = 'flex';
 
-    // Add zoom animation
     eraFoldersContainer.classList.remove('view-transition-zoom');
     refImagesContainer.classList.remove('view-transition-zoom');
-    void eraFoldersContainer.offsetWidth; // Trigger reflow
+    void eraFoldersContainer.offsetWidth;
     eraFoldersContainer.classList.add('view-transition-zoom');
     refImagesContainer.classList.add('view-transition-zoom');
 
@@ -2059,16 +1937,14 @@
     }
 
     setTimeout(() => {
-      // Update magnetic elements list (if needed for other logic)
     }, 100);
   }
 
   function loadImages(path) {
     refImagesContainer.innerHTML = '';
 
-    // Add zoom animation
     refImagesContainer.classList.remove('view-transition-zoom');
-    void refImagesContainer.offsetWidth; // Trigger reflow
+    void refImagesContainer.offsetWidth;
     refImagesContainer.classList.add('view-transition-zoom');
 
     const images = allImageFiles.filter(file => {
@@ -2126,9 +2002,7 @@
       refImagesContainer.appendChild(wrapper);
     });
 
-    // Update magnetic elements list to include the newly created bubbles
     setTimeout(() => {
-      // Update magnetic elements list (if needed for other logic)
     }, 100);
   }
 

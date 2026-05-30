@@ -623,7 +623,7 @@
       box-shadow: 0 0 5px rgba(0,0,0,0.3);
     }
 
-    .bandcamp-link {
+    .soundcloud-player-link {
       color: var(--text-primary);
       opacity: 0.6;
       transition: all 0.2s;
@@ -634,7 +634,7 @@
       font-size: 18px;
     }
 
-    .bandcamp-link:hover {
+    .soundcloud-player-link:hover {
       opacity: 1;
       color: var(--accent);
     }
@@ -1202,7 +1202,7 @@
             <i class="fa fa-volume-up" id="volume-icon"></i>
             <input type="range" id="volume-slider" min="0" max="100" value="100">
           </div>
-          <a href="https://runeskate.bandcamp.com/" target="_blank" title="Listen on Bandcamp (Default)" class="bandcamp-link"><i class="fa fa-bandcamp"></i></a>
+          <a href="https://soundcloud.com/runeskate" target="_blank" title="Listen on SoundCloud" id="soundcloud-track-link" class="soundcloud-player-link"><i class="fa fa-soundcloud"></i></a>
         </div>
       </div>
     </div>
@@ -1656,7 +1656,14 @@
   const trackArtist = document.getElementById('track-artist');
   const trackCover = document.getElementById('track-cover');
   const progressFill = document.getElementById('progress-fill');
+  const soundcloudTrackLink = document.getElementById('soundcloud-track-link');
   let isPlaying = false;
+
+  if (soundcloudTrackLink) {
+    soundcloudTrackLink.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  }
 
   musicPlayerContainer.addEventListener('click', (e) => {
     if (musicPlayerContainer.classList.contains('collapsed')) {
@@ -1724,6 +1731,9 @@
           trackCover.src = sound.artwork_url.replace('-large', '-t500x500');
         } else if (sound.user && sound.user.avatar_url) {
           trackCover.src = sound.user.avatar_url;
+        }
+        if (sound.permalink_url && soundcloudTrackLink) {
+          soundcloudTrackLink.href = sound.permalink_url;
         }
       }
     });

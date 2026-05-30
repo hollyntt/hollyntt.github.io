@@ -1271,35 +1271,52 @@
     return shuffled;
   }
 
-  function fetchPlaylist(index, callback) {
-    if (index >= playlists.length) {
-      callback();
-      return;
-    }
+  function fetchAllPlaylistsParallel(callback) {
+    let completedCount = 0;
+    const totalPlaylists = playlists.length;
 
-    const progressPercent = Math.floor((index / playlists.length) * 80) + 15;
-    setProgress(progressPercent);
+    const tempContainer = document.createElement('div');
+    tempContainer.id = 'sc-temp-container';
+    tempContainer.style.display = 'none';
+    document.body.appendChild(tempContainer);
 
-    const url = playlists[index];
-    let loaded = false;
+    playlists.forEach((url, index) => {
+      const tempIframe = document.createElement('iframe');
+      tempIframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&auto_play=false&show_comments=false&visual=false`;
+      tempContainer.appendChild(tempIframe);
 
-    const timeout = setTimeout(() => {
-      if (!loaded) {
-        console.warn("Timeout fetching: " + url);
-        fetchPlaylist(index + 1, callback);
-      }
-    }, 4000);
+      const tempWidget = SC.Widget(tempIframe);
+      let loaded = false;
 
-    widget.load(url, {
-      auto_play: false,
-      callback: () => {
+      const checkAndProceed = () => {
         if (loaded) return;
         loaded = true;
-        clearTimeout(timeout);
+        completedCount++;
 
+        const progressPercent = Math.min(95, Math.floor((completedCount / totalPlaylists) * 90) + 5);
+        setProgress(progressPercent);
+
+        if (completedCount === totalPlaylists) {
+          setTimeout(() => {
+            if (document.body.contains(tempContainer)) {
+              document.body.removeChild(tempContainer);
+            }
+            callback();
+          }, 100);
+        }
+      };
+
+      const timeout = setTimeout(() => {
+        if (!loaded) {
+          console.warn("Parallel fetch timeout for " + url);
+          checkAndProceed();
+        }
+      }, 4000);
+
+      tempWidget.bind(SC.Widget.Events.READY, () => {
         setTimeout(() => {
-          widget.getSounds((sounds) => {
-            if (sounds && Array.isArray(sounds)) {
+          tempWidget.getSounds((sounds) => {
+            if (sounds && Array.isArray(sounds) && sounds.length > 0) {
               sounds.forEach(sound => {
                 if (sound && sound.id && !seenTrackIds.has(sound.id)) {
                   seenTrackIds.add(sound.id);
@@ -1307,10 +1324,11 @@
                 }
               });
             }
-            fetchPlaylist(index + 1, callback);
+            clearTimeout(timeout);
+            checkAndProceed();
           });
-        }, 500);
-      }
+        }, 150);
+      });
     });
   }
 
@@ -1394,6 +1412,7 @@
 
   function enterSite() {
     if (entryScreen.classList.contains('hidden')) return;
+    if (!entryPrompt.classList.contains('ready')) return; // GUARD: loading must be finished first!
     playEnterSound();
     playTrackAtIndex(0);
     widget.setVolume(15);
@@ -1427,7 +1446,7 @@
 
   window.addEventListener('load', () => {
     setProgress(5);
-    fetchPlaylist(0, () => {
+    fetchAllPlaylistsParallel(() => {
       initQueue();
     });
   });

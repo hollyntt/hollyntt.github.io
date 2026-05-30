@@ -167,14 +167,7 @@
       height: 100%;
       background: var(--text-primary);
       box-shadow: 0 0 15px var(--text-primary);
-      animation: load 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-
-    @keyframes load {
-      0% { width: 0%; }
-      30% { width: 20%; }
-      60% { width: 70%; }
-      100% { width: 100%; }
+      transition: width 0.3s ease;
     }
 
     .entry-prompt {
@@ -347,6 +340,12 @@
       justify-content: center;
       text-decoration: none;
       transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+      opacity: 0;
+    }
+
+    body.entered .grid-card {
+      animation: entryReveal 1.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+      animation-delay: 0.9s;
     }
 
     .grid-card:hover {
@@ -1251,6 +1250,113 @@
   const volumeIcon = document.getElementById('volume-icon');
   let fadeInterval = null;
 
+  const playlists = [
+    'https://soundcloud.com/runeskate/tracks',
+    'https://soundcloud.com/goddessofwarfare/tracks',
+    'https://soundcloud.com/runeskate/likes',
+    'https://soundcloud.com/goddessofwarfare/likes'
+  ];
+  let mergedQueue = [];
+  let currentQueueIndex = 0;
+  let allSounds = [];
+  let seenTrackIds = new Set();
+  let isShuffled = true;
+
+  function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }
+
+  function fetchPlaylist(index, callback) {
+    if (index >= playlists.length) {
+      callback();
+      return;
+    }
+
+    const progressPercent = Math.floor((index / playlists.length) * 80) + 15;
+    setProgress(progressPercent);
+
+    const url = playlists[index];
+    let loaded = false;
+
+    const timeout = setTimeout(() => {
+      if (!loaded) {
+        console.warn("Timeout fetching: " + url);
+        fetchPlaylist(index + 1, callback);
+      }
+    }, 4000);
+
+    widget.load(url, {
+      auto_play: false,
+      callback: () => {
+        if (loaded) return;
+        loaded = true;
+        clearTimeout(timeout);
+
+        setTimeout(() => {
+          widget.getSounds((sounds) => {
+            if (sounds && Array.isArray(sounds)) {
+              sounds.forEach(sound => {
+                if (sound && sound.id && !seenTrackIds.has(sound.id)) {
+                  seenTrackIds.add(sound.id);
+                  allSounds.push(sound);
+                }
+              });
+            }
+            fetchPlaylist(index + 1, callback);
+          });
+        }, 500);
+      }
+    });
+  }
+
+  function initQueue() {
+    setProgress(95);
+
+    if (allSounds.length === 0) {
+      allSounds = [
+        { permalink_url: 'https://soundcloud.com/runeskate/tracks', title: 'runeskate Tracks', user: { username: 'runeskate' } },
+        { permalink_url: 'https://soundcloud.com/goddessofwarfare/tracks', title: 'goddessofwarfare Tracks', user: { username: 'goddessofwarfare' } }
+      ];
+    }
+
+    mergedQueue = shuffleArray(allSounds);
+    currentQueueIndex = 0;
+
+    setProgress(100);
+    setTimeout(() => {
+      document.getElementById('intro-loader').style.opacity = '0';
+      entryPrompt.classList.add('ready');
+    }, 500);
+  }
+
+  function playTrackAtIndex(index) {
+    const listToPlay = isShuffled ? mergedQueue : allSounds;
+    if (listToPlay.length === 0) return;
+
+    if (index < 0) {
+      currentQueueIndex = listToPlay.length - 1;
+    } else if (index >= listToPlay.length) {
+      currentQueueIndex = 0;
+    } else {
+      currentQueueIndex = index;
+    }
+
+    const track = listToPlay[currentQueueIndex];
+    widget.load(track.permalink_url, {
+      auto_play: true,
+      hide_related: true,
+      show_comments: false,
+      show_user: false,
+      show_reposts: false,
+      visual: false
+    });
+  }
+
   function updateVolumeIcon(vol) {
     if (vol == 0) {
       volumeIcon.className = 'fa fa-volume-off';
@@ -1265,9 +1371,31 @@
   const entryPrompt = document.getElementById('entry-prompt');
   const introLoader = document.getElementById('intro-loader');
 
+  function playEnterSound() {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const frequencies = [523.25, 659.25, 783.99];
+
+    frequencies.forEach((freq, i) => {
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.25);
+      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime + i * 0.25);
+      gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + i * 0.25 + 0.2);
+
+      oscillator.start(audioCtx.currentTime + i * 0.25);
+      oscillator.stop(audioCtx.currentTime + i * 0.25 + 0.2);
+    });
+  }
+
   function enterSite() {
     if (entryScreen.classList.contains('hidden')) return;
-    widget.play();
+    playEnterSound();
+    playTrackAtIndex(0);
     widget.setVolume(15);
     entryScreen.classList.add('hidden');
     document.body.classList.add('entered');
@@ -1286,18 +1414,23 @@
     }, 200);
   }
 
+  // Keep event listener for manual entry
   entryScreen.addEventListener('click', enterSite);
 
-  setTimeout(() => {
-    if (introLoader) {
-      introLoader.style.opacity = '0';
-      setTimeout(() => {
-        introLoader.style.display = 'none';
-        entryPrompt.classList.add('ready');
-        enterSite();
-      }, 500);
+  // Initial loading tracking logic
+  function setProgress(percent) {
+    const loaderBar = document.querySelector('.loader-bar');
+    if (loaderBar) {
+      loaderBar.style.width = percent + '%';
     }
-  }, 2800);
+  }
+
+  window.addEventListener('load', () => {
+    setProgress(5);
+    fetchPlaylist(0, () => {
+      initQueue();
+    });
+  });
 
   function fadeVolume(target, duration) {
     if (fadeInterval) clearInterval(fadeInterval);
@@ -1524,7 +1657,6 @@
   const trackCover = document.getElementById('track-cover');
   const progressFill = document.getElementById('progress-fill');
   let isPlaying = false;
-  let isShuffled = false;
 
   musicPlayerContainer.addEventListener('click', (e) => {
     if (musicPlayerContainer.classList.contains('collapsed')) {
@@ -1572,16 +1704,12 @@
   });
 
   widget.bind(SC.Widget.Events.READY, () => {
-    widget.getSounds((sounds) => {
-      if (sounds && sounds.length > 0) {
-        trackTitle.textContent = "Click Play to Start";
-        trackArtist.textContent = "runeskate";
-      }
-    });
     widget.setVolume(15);
     volumeSlider.value = 15;
     updateVolumeIcon(15);
-    widget.play();
+    shuffleBtn.style.color = '#4ade80';
+    trackTitle.textContent = "Click Play to Start";
+    trackArtist.textContent = "runeskate & goddessofwarfare";
   });
 
   widget.bind(SC.Widget.Events.PLAY, () => {
@@ -1591,7 +1719,7 @@
     widget.getCurrentSound((sound) => {
       if (sound) {
         trackTitle.textContent = sound.title;
-        trackArtist.textContent = sound.user.username;
+        trackArtist.textContent = sound.user ? sound.user.username : "runeskate";
         if (sound.artwork_url) {
           trackCover.src = sound.artwork_url.replace('-large', '-t500x500');
         } else if (sound.user && sound.user.avatar_url) {
@@ -1614,12 +1742,7 @@
   });
 
   widget.bind(SC.Widget.Events.FINISH, () => {
-    if (isShuffled) {
-      widget.getSounds((sounds) => {
-        const randomIndex = Math.floor(Math.random() * sounds.length);
-        widget.skip(randomIndex);
-      });
-    }
+    playTrackAtIndex(currentQueueIndex + 1);
   });
 
   playPauseBtn.addEventListener('click', () => {
@@ -1627,18 +1750,13 @@
   });
 
   skipBtn.addEventListener('click', () => {
-    widget.next();
+    playTrackAtIndex(currentQueueIndex + 1);
   });
 
   shuffleBtn.addEventListener('click', () => {
     isShuffled = !isShuffled;
     shuffleBtn.style.color = isShuffled ? '#4ade80' : 'white';
-    if (isShuffled && isPlaying) {
-      widget.getSounds((sounds) => {
-        const randomIndex = Math.floor(Math.random() * sounds.length);
-        widget.skip(randomIndex);
-      });
-    }
+    currentQueueIndex = 0;
   });
 
   const pfpBtn = document.getElementById('pfp-btn');

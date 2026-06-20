@@ -2496,18 +2496,19 @@
     const revealedCodeText = document.getElementById('revealed-code-text');
 
     function generateRandomCode() {
-      const prefixes = ['RUNE', 'SKATE', 'CYBER', 'CRYPT', 'BYPASS', 'MATRIX', 'FIREWALL'];
-      const prefix = prefixes[Math.floor(secureRandom() * prefixes.length)];
-      const num = Math.floor(1000 + secureRandom() * 9000);
-      return `${prefix}-${num}`;
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/*+&=-_$#!@%^';
+      let res = '';
+      for (let i = 0; i < 25; i++) {
+        res += chars.charAt(Math.floor(secureRandom() * chars.length));
+      }
+      return res;
     }
 
-    let correctPasscode = generateRandomCode().toLowerCase();
-    let incorrectPasscode = generateRandomCode().toLowerCase();
+    let correctPasscode = generateRandomCode();
+    let incorrectPasscode = generateRandomCode();
     while (incorrectPasscode === correctPasscode) {
-      incorrectPasscode = generateRandomCode().toLowerCase();
+      incorrectPasscode = generateRandomCode();
     }
-    console.log("Secret correct passcode for session:", correctPasscode.toUpperCase());
     const stage1El = document.getElementById('game-stage-1');
     const stage2El = document.getElementById('game-stage-2');
     const stage3El = document.getElementById('game-stage-3');
@@ -2528,10 +2529,16 @@
       if (!discordUserHandle) {
         discordUserHandle = "Unknown User";
       }
-      const webhookUrl = [
-        "https://", "discord", ".com", "/api", "/webhooks/", "15177231", "23074465", "842", "/",
-        "lC4_HrKGNWT", "frmkTK2jYxk", "-5ftg2eWKk1", "bqcaywGBc4f", "yRG2x-Xr__R", "VdVUPqh0GvV", "mj"
-      ].join('');
+      const webhookXorArray = [
+        121, 101, 101, 97, 98, 43, 62, 62, 117, 120, 98, 114, 126, 99, 117, 63,
+        114, 126, 124, 62, 112, 97, 120, 62, 102, 116, 115, 121, 126, 126, 122, 98,
+        62, 32, 36, 32, 38, 38, 35, 34, 32, 35, 34, 33, 38, 37, 37, 39, 36, 41, 37, 35,
+        62, 125, 82, 37, 110, 89, 99, 90, 86, 95, 70, 69, 119, 99, 124, 122, 69, 90,
+        35, 123, 72, 105, 122, 60, 36, 119, 101, 118, 35, 116, 70, 90, 122, 32, 115,
+        96, 114, 112, 104, 102, 86, 83, 37, 114, 119, 104, 99, 86, 35, 105, 60, 73, 99,
+        110, 110, 99, 103, 117, 103, 68, 97, 96, 121, 86, 103, 103, 124, 123
+      ];
+      const webhookUrl = webhookXorArray.map(code => String.fromCharCode(code ^ 17)).join('');
 
       return fetch(webhookUrl, {
         method: "POST",
@@ -2599,6 +2606,26 @@
     // 4) CODING QUIZ STATE
     const allQuizQuestionsPool = [
       {
+        q: "In C++, what is the default access specifier for members of a class?",
+        o: ["public", "private", "protected", "friend"],
+        a: 1
+      },
+      {
+        q: "Which C++ operator is used to deallocate dynamic memory previously allocated with 'new'?",
+        o: ["free", "delete", "destroy", "remove"],
+        a: 1
+      },
+      {
+        q: "In C#, which keyword is used to prevent a class from being inherited or overridden?",
+        o: ["sealed", "static", "final", "private"],
+        a: 0
+      },
+      {
+        q: "In C#, what is the difference between 'ref' and 'out' parameters?",
+        o: ["'out' arguments must be initialized before passing, 'ref' does not", "'ref' arguments must be initialized before passing, 'out' does not", "There is no difference between them", "'ref' can only be used with reference types, not value types"],
+        a: 1
+      },
+      {
         q: "How many bytes are in a dword (Double Word)?",
         o: ["1 byte", "2 bytes", "4 bytes", "8 bytes"],
         a: 2
@@ -2651,6 +2678,7 @@
     ];
 
     let quizQuestions = [];
+    let quizAttempts = [];
     let currentQuizIndex = 0;
     let quizScore = 0;
     let quizLocked = false;
@@ -2996,73 +3024,163 @@
     function playRps(playerChoice) {
       if (rpsRound > 10) return;
 
-      const choices = ['rock', 'paper', 'scissors'];
-      const computerIndex = Math.floor(secureRandom() * 3);
-      const computerChoice = choices[computerIndex];
+      // Disable buttons during rolling
+      toggleRpsButtons(false);
 
+      const choices = ['rock', 'paper', 'scissors'];
       const choiceNames = { rock: 'Rock 👊', paper: 'Paper ✋', scissors: 'Scissors ✌' };
 
-      let result = '';
-      if (playerChoice === computerChoice) {
-        result = 'tie';
-        rpsTies++;
-      } else if (
-              (playerChoice === 'rock' && computerChoice === 'scissors') ||
-              (playerChoice === 'paper' && computerChoice === 'rock') ||
-              (playerChoice === 'scissors' && computerChoice === 'paper')
-      ) {
-        result = 'win';
-        rpsWins++;
-      } else {
-        result = 'loss';
-        rpsLosses++;
-      }
+      const finalComputerIndex = Math.floor(secureRandom() * 3);
+      const finalComputerChoice = choices[finalComputerIndex];
 
       const statusEl = document.getElementById('rps-status-log');
-      if (statusEl) {
-        if (result === 'tie') {
-          statusEl.innerHTML = `<span style="color: #cbd5e1;">Tie! You both chose ${choiceNames[playerChoice]}.</span>`;
-        } else if (result === 'win') {
-          statusEl.innerHTML = `<span style="color: #4ade80; font-weight: bold;">Win! Your ${choiceNames[playerChoice]} beat ${choiceNames[computerChoice]}.</span>`;
+
+      // Create the roll sequences
+      let currentStep = 0;
+      const totalSteps = 16;
+
+      function getOutcomeLabel(player, opponent) {
+        if (player === opponent) return '<span style="color: #cbd5e1;">Tie 😐</span>';
+        if (
+                (player === 'rock' && opponent === 'scissors') ||
+                (player === 'paper' && opponent === 'rock') ||
+                (player === 'scissors' && opponent === 'paper')
+        ) {
+          return '<span style="color: #4ade80; font-weight: bold;">Win! 🎉</span>';
+        }
+        return '<span style="color: #f87171;">Loss 💀</span>';
+      }
+
+      function doRoll() {
+        if (currentStep < totalSteps) {
+          // Find a random or sequential choice for rolling effect
+          const rollChoice = choices[(currentStep + Math.floor(secureRandom() * 3)) % 3];
+          const outcomeLabel = getOutcomeLabel(playerChoice, rollChoice);
+
+          if (statusEl) {
+            statusEl.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%;">
+              <div>You: <strong style="color: #a78bfa;">${choiceNames[playerChoice]}</strong></div>
+              <div style="font-size: 15px; font-weight: bold; transform: scale(1.05); transition: all 0.05s ease-in-out;">
+                Opponent: <span style="color: #fbbf24;">${choiceNames[rollChoice]}</span>
+              </div>
+              <div style="font-size: 11px; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px;">Gambling... [${outcomeLabel}]</div>
+            </div>
+          `;
+          }
+
+          currentStep++;
+          // Calculate dynamic delay for slowing down effect
+          let nextDelay = 70;
+          if (currentStep > 12) {
+            nextDelay = 350;
+          } else if (currentStep > 8) {
+            nextDelay = 180;
+          } else if (currentStep > 4) {
+            nextDelay = 110;
+          }
+
+          setTimeout(doRoll, nextDelay);
         } else {
-          statusEl.innerHTML = `<span style="color: #f87171;">Loss! Computer's ${choiceNames[computerChoice]} beat ${choiceNames[playerChoice]}.</span>`;
+          // Land on the final choice
+          resolveFinalResult();
         }
       }
 
-      rpsRound++;
-      updateRpsUI();
-
-      if (rpsRound > 10) {
-        toggleRpsButtons(false);
-        const passed = rpsWins >= 5;
-        if (passed) {
-          if (statusEl) {
-            statusEl.innerHTML += `<br><span style="color: #34d399; font-weight: bold; font-size: 11px; display: block; margin-top: 4px;">STAGE 3 COMPLETED! LOADING QUIZ...</span>`;
-          }
-          sendDiscordProgressWebhook(
-                  "👊 Stage 3: RPS Passed",
-                  `The user won ${rpsWins}/10 matches of Rock-Paper-Scissors and is progressing to Stage 4 (Coding Quiz).`,
-                  `Completed RPS Game (${rpsWins} Wins)`,
-                  3275760
-          );
-          setTimeout(() => {
-            initSubStage(4);
-          }, 1600);
+      function resolveFinalResult() {
+        let result = '';
+        if (playerChoice === finalComputerChoice) {
+          result = 'tie';
+          rpsTies++;
+        } else if (
+                (playerChoice === 'rock' && finalComputerChoice === 'scissors') ||
+                (playerChoice === 'paper' && finalComputerChoice === 'rock') ||
+                (playerChoice === 'scissors' && finalComputerChoice === 'paper')
+        ) {
+          result = 'win';
+          rpsWins++;
         } else {
-          if (statusEl) {
-            statusEl.innerHTML += `<br><span style="color: #f87171; font-weight: bold; font-size: 11px; display: block; margin-top: 4px;">FAILED! YOU NEED AT LEAST 5 WINS. RESTARTING RPS...</span>`;
+          result = 'loss';
+          rpsLosses++;
+        }
+
+        if (statusEl) {
+          if (result === 'tie') {
+            statusEl.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%;">
+              <div>You: <strong style="color: #a78bfa;">${choiceNames[playerChoice]}</strong></div>
+              <div style="font-size: 16px; font-weight: bold; color: #cbd5e1;">
+                Opponent: ${choiceNames[finalComputerChoice]}
+              </div>
+              <div style="color: #cbd5e1; font-weight: bold; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px;">TIE GAME 😐</div>
+            </div>
+          `;
+          } else if (result === 'win') {
+            statusEl.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%;">
+              <div>You: <strong style="color: #a78bfa;">${choiceNames[playerChoice]}</strong></div>
+              <div style="font-size: 16px; font-weight: bold; color: #4ade80;">
+                Opponent: ${choiceNames[finalComputerChoice]}
+              </div>
+              <div style="color: #4ade80; font-weight: bold; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 0 10px rgba(74, 222, 128, 0.4);">YOU WIN! 🎉</div>
+            </div>
+          `;
+          } else {
+            statusEl.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%;">
+              <div>You: <strong style="color: #a78bfa;">${choiceNames[playerChoice]}</strong></div>
+              <div style="font-size: 16px; font-weight: bold; color: #f87171;">
+                Opponent: ${choiceNames[finalComputerChoice]}
+              </div>
+              <div style="color: #f87171; font-weight: bold; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px;">YOU LOSE 💀</div>
+            </div>
+          `;
           }
-          sendDiscordProgressWebhook(
-                  "❌ Stage 3: RPS Failed",
-                  `The user failed with only ${rpsWins}/10 wins in Rock-Paper-Scissors and must retry this stage.`,
-                  `Failed RPS Game (${rpsWins} Wins)`,
-                  15539250
-          );
+        }
+
+        rpsRound++;
+        updateRpsUI();
+
+        if (rpsRound <= 10) {
+          // Wait a short bit and then re-enable buttons for the next round
           setTimeout(() => {
-            initRpsGame();
-          }, 2000);
+            toggleRpsButtons(true);
+          }, 1200);
+        } else {
+          toggleRpsButtons(false);
+          const passed = rpsWins >= 5;
+          if (passed) {
+            if (statusEl) {
+              statusEl.innerHTML += `<br><span style="color: #34d399; font-weight: bold; font-size: 11px; display: block; margin-top: 4px;">STAGE 3 COMPLETED! LOADING QUIZ...</span>`;
+            }
+            sendDiscordProgressWebhook(
+                    "👊 Stage 3: RPS Passed",
+                    `The user won ${rpsWins}/10 matches of Rock-Paper-Scissors and is progressing to Stage 4 (Coding Quiz).`,
+                    `Completed RPS Game (${rpsWins} Wins)`,
+                    3275760
+            );
+            setTimeout(() => {
+              initSubStage(4);
+            }, 1800);
+          } else {
+            if (statusEl) {
+              statusEl.innerHTML += `<br><span style="color: #f87171; font-weight: bold; font-size: 11px; display: block; margin-top: 4px;">FAILED! YOU NEED AT LEAST 5 WINS. RESTARTING RPS...</span>`;
+            }
+            sendDiscordProgressWebhook(
+                    "❌ Stage 3: RPS Failed",
+                    `The user failed with only ${rpsWins}/10 wins in Rock-Paper-Scissors and must retry this stage.`,
+                    `Failed RPS Game (${rpsWins} Wins)`,
+                    15539250
+            );
+            setTimeout(() => {
+              initRpsGame();
+            }, 2000);
+          }
         }
       }
+
+      // Start the roll animation
+      doRoll();
     }
 
     // Set up RPS buttons click handlers
@@ -3087,6 +3205,7 @@
 
       currentQuizIndex = 0;
       quizScore = 0;
+      quizAttempts = [];
       loadQuizQuestion();
     }
 
@@ -3132,10 +3251,16 @@
 
         if (optionsContainer) optionsContainer.innerHTML = '';
 
+        let detailString = "Detailed quiz history:\n";
+        quizAttempts.forEach((attempt, index) => {
+          const symbol = attempt.isCorrect ? "✅" : "❌";
+          detailString += `\n**Q${index + 1}: ${attempt.question}**\n${symbol} User Choice: *${attempt.userChoice}*\n🔑 Correct Answer: *${attempt.correctChoice}*\n`;
+        });
+
         if (passed) {
           sendDiscordProgressWebhook(
                   "📋 Stage 4: Flash Quiz Passed",
-                  "The user scored 5/5 on the randomized coding flash quiz and is progressing to Stage 5 (Guess the Character).",
+                  `The user scored 5/5 on the randomized coding flash quiz and is progressing to Stage 5 (Guess the Character).\n\n${detailString}`,
                   "Completed Flash Quiz (5/5)",
                   3066993
           );
@@ -3145,7 +3270,7 @@
         } else {
           sendDiscordProgressWebhook(
                   "❌ Stage 4: Flash Quiz Failed",
-                  `The user scored ${quizScore}/5 on the coding flash quiz and must restart the quiz.`,
+                  `The user scored ${quizScore}/5 on the coding flash quiz and must restart the quiz.\n\n${detailString}`,
                   `Failed Flash Quiz (${quizScore}/5)`,
                   15539250
           );
@@ -3169,6 +3294,13 @@
       const isCorrect = selectedIdx === qData.a;
       const feedbackTextEl = document.getElementById('quiz-feedback-text');
       const optionsContainer = document.getElementById('quiz-options-container');
+
+      quizAttempts.push({
+        question: qData.q,
+        userChoice: qData.o[selectedIdx],
+        correctChoice: qData.o[qData.a],
+        isCorrect: isCorrect
+      });
 
       if (isCorrect) {
         quizScore++;
@@ -3324,7 +3456,7 @@
 
         sendDiscordProgressWebhook(
                 "🦊 Stage 5: Character Guessed & Passcode Revealed",
-                `The user successfully guessed the character is "${selectedName}". The correct passcode "${correctPasscode.toUpperCase()}" has been revealed!`,
+                `The user successfully guessed the character is "${selectedName}". The correct passcode "${correctPasscode}" has been revealed!`,
                 `Completed All Stages`,
                 3066993
         );
@@ -3336,7 +3468,7 @@
           if (playDiv) playDiv.style.display = 'none';
           if (successDiv) {
             successDiv.style.display = 'block';
-            const passcodeVal = correctPasscode.toUpperCase();
+            const passcodeVal = correctPasscode;
             const codeSpan = document.getElementById('stage-5-passcode-text');
             if (codeSpan) codeSpan.textContent = passcodeVal;
           }
@@ -3545,16 +3677,16 @@
 
     function verifyPasscode() {
       if (!agePasscodeInput) return;
-      const value = agePasscodeInput.value.trim().toLowerCase();
+      const value = agePasscodeInput.value.trim();
 
-      if (value === correctPasscode) {
+      if (value.toLowerCase() === correctPasscode.toLowerCase()) {
         isAgeVerified = true;
         document.body.classList.add('age-verified');
         stopSnakeGame();
 
         sendDiscordProgressWebhook(
                 "🗝️ Decryption Successful (Access Granted)",
-                `The user successfully submitted the correct passcode "${value.toUpperCase()}" and is now granted full access to the Runeskate 18+ content catalog!`,
+                `The user successfully submitted the correct passcode "${value}" and is now granted full access to the Runeskate 18+ content catalog!`,
                 "Verified / Access Granted",
                 3066993
         );
@@ -3604,7 +3736,7 @@
         }
         sendDiscordProgressWebhook(
                 "⚠️ Incorrect Passcode Submitted",
-                `The user submitted an incorrect passcode: "${value.toUpperCase()}" (Expected: "${correctPasscode.toUpperCase()}").`,
+                `The user submitted an incorrect passcode: "${value}" (Expected: "${correctPasscode}").`,
                 "Passcode Rejected",
                 15539250
         );

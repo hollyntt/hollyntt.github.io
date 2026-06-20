@@ -1643,6 +1643,25 @@
       </div>
     </div>
 
+    <!-- STEP 1.5: DISCORD VERIFICATION -->
+    <div id="age-step-discord" class="age-step" style="display: none; flex-direction: column; align-items: center; text-align: center; width: 100%;">
+      <h2>Discord Verification</h2>
+      <p style="margin-bottom: 12px; font-size: 13px; opacity: 0.9; line-height: 1.4;">To unlock our age-restricted catalog, please verify with your Discord username/handle.</p>
+
+      <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; margin-bottom: 15px;">
+        <div style="display: flex; align-items: center; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 2px 12px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);">
+          <span style="font-size: 15px; opacity: 0.7; margin-right: 10px; color: #818cf8;"><i class="fa fa-at"></i></span>
+          <input type="text" id="discord-handle-input" class="age-passcode-input" placeholder="e.g., runeskate or user#1234" style="background: transparent; border: none; padding: 12px 0; outline: none; flex: 1; color: white; box-shadow: none; font-size: 14px;" />
+        </div>
+        <span id="discord-error-msg" style="color: #f87171; font-size: 11px; display: none; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Please enter a valid Discord username</span>
+      </div>
+
+      <div class="age-buttons" style="width: 100%;">
+        <button class="age-btn yes" id="discord-btn-submit" style="width: 100%;">Verify & Continue</button>
+        <button class="age-btn no" id="discord-btn-back" style="width: 100%; background: rgba(255, 255, 255, 0.05); color: white; border: 1px solid rgba(255, 255, 255, 0.1);">Back</button>
+      </div>
+    </div>
+
     <!-- STEP 2: PASSCODE CHECK -->
     <div id="age-step-2" class="age-step" style="display: none;">
       <h2>Invitation Passcode</h2>
@@ -1662,61 +1681,111 @@
 
     <!-- STEP 3: PLAY THE DECRYPTION MINIGAME -->
     <div id="age-step-3" class="age-step" style="display: none;">
-      <!-- Glowing Stepper indicating 3 sub-stages -->
-      <div class="game-stepper">
-        <span class="step-dot active" id="step-dot-1">1. Memory</span>
-        <span class="step-dot" id="step-dot-2">2. Snake</span>
-        <span class="step-dot" id="step-dot-3">3. CS2 Roll</span>
+      <!-- Glowing Stepper indicating 5 sub-stages -->
+      <div class="game-stepper" style="display: flex; gap: 4px; justify-content: space-between; width: 100%;">
+        <span class="step-dot active" id="step-dot-1" style="font-size: 8.5px;">1. Memory</span>
+        <span class="step-dot" id="step-dot-2" style="font-size: 8.5px;">2. Snake</span>
+        <span class="step-dot" id="step-dot-3" style="font-size: 8.5px;">3. RPS</span>
+        <span class="step-dot" id="step-dot-4" style="font-size: 8.5px;">4. Quiz</span>
+        <span class="step-dot" id="step-dot-5" style="font-size: 8.5px;">5. Guess OC</span>
       </div>
 
-      <!-- Game Stage 1: Memory Game -->
+      <!-- Game Stage 1: Memory Match -->
       <div id="game-stage-1" style="width: 100%;">
-        <h2>Decryption Matrix</h2>
-        <p style="margin-bottom: 8px; font-size: 13px;">Match all 6 pairs of security layers to unlock the mainframe!</p>
+        <h2 style="font-family: var(--font-serif); font-size: 1.8rem; color: #a78bfa; margin-bottom: 5px;">Memory Match</h2>
+        <p style="margin-bottom: 12px; font-size: 12px; opacity: 0.85;">Match 6 pairs of cards to bypass firewall Stage 1.</p>
         <div class="game-grid" id="memory-game-grid"></div>
       </div>
 
-      <!-- Game Stage 2: Snake Game -->
+      <!-- Game Stage 2: Snake Decryption -->
       <div id="game-stage-2" style="width: 100%; display: none;">
-        <h2>Bypass Firewall</h2>
-        <p style="margin-bottom: 8px; font-size: 13px;">Guide the datastream. Eat 5 apples to bypass the security shield.</p>
-
+        <h2 style="font-family: var(--font-serif); font-size: 1.8rem; color: #a78bfa; margin-bottom: 5px;">Snake Game</h2>
+        <p style="margin-bottom: 12px; font-size: 12px; opacity: 0.85;">Eat 5 apples to unlock firewall Stage 2.</p>
         <div class="snake-board-container">
-          <div class="snake-score" id="snake-level-score">Apples: 0 / 5</div>
+          <div id="snake-level-score" class="snake-score">Apples: 0 / 5</div>
           <canvas id="snake-canvas" width="180" height="180"></canvas>
-
-          <!-- Tactile custom arrows for mobile friendly inputs -->
           <div class="snake-controls">
             <div></div>
-            <button class="snake-btn-control" id="snake-up" title="Up"><i class="fa fa-caret-up"></i></button>
+            <button class="snake-btn-control" id="snake-up"><i class="fa fa-chevron-up"></i></button>
             <div></div>
-            <button class="snake-btn-control" id="snake-left" title="Left"><i class="fa fa-caret-left"></i></button>
-            <div class="snake-btn-control" style="background:transparent; border:none; cursor:default;"><i class="fa fa-gamepad" style="opacity: 0.3;"></i></div>
-            <button class="snake-btn-control" id="snake-right" title="Right"><i class="fa fa-caret-right"></i></button>
+            <button class="snake-btn-control" id="snake-left"><i class="fa fa-chevron-left"></i></button>
             <div></div>
-            <button class="snake-btn-control" id="snake-down" title="Down"><i class="fa fa-caret-down"></i></button>
+            <button class="snake-btn-control" id="snake-right"><i class="fa fa-chevron-right"></i></button>
+            <div></div>
+            <button class="snake-btn-control" id="snake-down"><i class="fa fa-chevron-down"></i></button>
             <div></div>
           </div>
         </div>
       </div>
 
-      <!-- Game Stage 3: CS2-style case opener (Gamble) -->
+      <!-- Game Stage 3: Rock Paper Scissors -->
       <div id="game-stage-3" style="width: 100%; display: none;">
-        <h2>System Roll (0.26%)</h2>
-        <p style="margin-bottom: 8px; font-size: 13px;">Open the legendary vault. Decryption success rate: 0.26%.</p>
+        <h2 style="font-family: var(--font-serif); font-size: 1.8rem; color: #a78bfa; margin-bottom: 5px;">RPS Calibrator</h2>
+        <p style="margin-bottom: 12px; font-size: 12px; opacity: 0.85;">Win 5 out of 10 rounds of Rock Paper Scissors to pass firewall Stage 3.</p>
 
-        <div class="gamble-box">
-          <div class="roulette-viewport">
-            <div class="roulette-needle"></div>
-            <div class="roulette-track" id="roulette-track-element"></div>
+        <div style="background: rgba(0, 0, 0, 0.4); padding: 15px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 15px;">
+          <div style="display: flex; justify-content: space-around; font-weight: bold; font-size: 14px; margin-bottom: 8px;">
+            <span style="color: #fbbf24;" id="rps-round-counter">Round 1 / 10</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 12px; padding: 4px 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+            <span>Wins: <strong id="rps-wins" style="color: #4ade80;">0</strong></span>
+            <span>Losses: <strong id="rps-losses" style="color: #f87171;">0</strong></span>
+            <span>Ties: <strong id="rps-ties">0</strong></span>
+          </div>
+          <div id="rps-status-log" style="text-align: center; margin-top: 12px; font-family: var(--font-mono); font-size: 13px; min-height: 40px; display: flex; align-items: center; justify-content: center; color: #cbd5e1;">
+            Choose Rock, Paper, or Scissors to begin!
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 15px;">
+          <button class="age-btn yes" id="rps-btn-rock" style="flex: 1; padding: 12px; font-size: 13px;"><i class="fa fa-hand-rock-o"></i> Rock</button>
+          <button class="age-btn yes" id="rps-btn-paper" style="flex: 1; padding: 12px; font-size: 13px;"><i class="fa fa-hand-paper-o"></i> Paper</button>
+          <button class="age-btn yes" id="rps-btn-scissors" style="flex: 1; padding: 12px; font-size: 13px;"><i class="fa fa-hand-scissors-o"></i> Scissors</button>
+        </div>
+      </div>
+
+      <!-- Game Stage 4: Coding Flash Quiz -->
+      <div id="game-stage-4" style="width: 100%; display: none;">
+        <h2 style="font-family: var(--font-serif); font-size: 1.8rem; color: #a78bfa; margin-bottom: 5px;">Coding Flash Quiz</h2>
+        <p style="margin-bottom: 12px; font-size: 12px; opacity: 0.85;">Answer the questions correctly to proceed. (Score 5/5 on randomized questions)</p>
+
+        <div style="background: rgba(0, 0, 0, 0.4); padding: 18px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 15px; min-height: 140px; display: flex; flex-direction: column; justify-content: center;">
+          <div id="quiz-question-num" style="font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #fbbf24; margin-bottom: 4px;">Question 1 of 5</div>
+          <div id="quiz-question-text" style="font-size: 14px; font-weight: 500; line-height: 1.4; color: #f8fafc; margin-bottom: 10px;">Loading...</div>
+          <div id="quiz-feedback-text" style="font-size: 12px; font-weight: 700; min-height: 20px; text-transform: uppercase;"></div>
+        </div>
+
+        <div id="quiz-options-container" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">
+          <!-- Options will be dynamically rendered here as buttons -->
+        </div>
+      </div>
+
+      <!-- Game Stage 5: Guess the Character -->
+      <div id="game-stage-5" style="width: 100%; display: none;">
+        <div id="game-stage-5-play" style="width: 100%;">
+          <h2 style="font-family: var(--font-serif); font-size: 1.8rem; color: #a78bfa; margin-bottom: 3px;">Guess the OC</h2>
+          <p style="margin-bottom: 10px; font-size: 12px; opacity: 0.85;">Identify the character correctly! A single error restarts the whole challenge.</p>
+
+          <div style="background: rgba(0, 0, 0, 0.4); padding: 10px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; align-items: center; margin-bottom: 12px;">
+            <div id="guess-char-image-container" style="width: 130px; height: 130px; border-radius: 14px; overflow: hidden; background: rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.2); margin-bottom: 8px; display: flex; align-items: center; justify-content: center; position: relative;">
+              <img id="guess-char-img" src="https://media.bio.site/sites/236dd1f6-0640-47ed-a55b-bdaac973cf03/Uc5gHtkVtx8SvZwAbBhQxF.png" style="width: 100%; height: 100%; object-fit: cover;" alt="Whose sheet?" />
+            </div>
+            <div id="guess-char-feedback" style="font-size: 12px; font-weight: bold; text-transform: uppercase; height: 18px; color: #fbbf24; margin-bottom: 4px;">WHO IS THIS?</div>
           </div>
 
-          <button class="age-btn yes" id="spin-roulette-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; font-weight: bold; width: 100%; box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);">
-            SPIN FOR CODE
-          </button>
+          <div id="guess-options-container" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px;">
+            <!-- Guess choices go here -->
+          </div>
+        </div>
 
-          <div class="gamble-odds-indicator" id="gamble-status-log">
-            CHANCE: 0.26% (~1 IN 385 ROLLS)
+        <div id="game-stage-5-success" style="width: 100%; display: none;">
+          <h2 style="font-family: var(--font-serif); font-size: 1.8rem; color: #34d399; margin-bottom: 5px; text-align: center;">Firewall Defeated!</h2>
+          <div style="background: rgba(0, 0, 0, 0.4); padding: 20px; border-radius: 20px; border: 1px solid rgba(52, 211, 153, 0.3); text-align: center; margin-bottom: 15px;">
+            <i class="fa fa-unlock-alt" style="color: #34d399; font-size: 40px; margin-bottom: 12px; text-shadow: 0 0 15px rgba(52,211,153,0.5);"></i>
+            <p style="font-size: 14px; font-weight: bold; color: #f8fafc; margin-bottom: 10px;">DECRYPTION SECURED SUCCESSFULLY</p>
+            <p style="font-size: 11px; opacity: 0.8; margin-bottom: 8px;">Use the passcode below to bypass the verification portal:</p>
+            <div id="stage-5-passcode-text" style="font-family: var(--font-mono); font-size: 24px; color: #fbbf24; font-weight: 900; letter-spacing: 2px; text-shadow: 0 0 10px rgba(251,191,36,0.6); padding: 8px 12px; background: rgba(0,0,0,0.5); border-radius: 10px; border: 1px solid rgba(251,191,36,0.2); display: inline-block; margin-bottom: 12px;">CYBER-7087</div>
+            <p style="font-size: 10px; color: #a78bfa; font-style: italic; line-height: 1.4;">Write this down, click "Back to Passcode" below, paste/type it in the input field, and press Enter to unlock the adult content catalog!</p>
           </div>
         </div>
       </div>
@@ -2374,6 +2443,37 @@
     });
 
     let allImageFiles = [];
+    let githubTreePromise = null;
+
+    function preloadGithubTree() {
+      if (githubTreePromise) return githubTreePromise;
+      const refSheetsPrefix = 'images/ref sheets/';
+      const imageRegex = /\.(jpg|jpeg|png|gif|webp|svg|bmp|ico|tiff|tif|avif|apng|heic|heif|jxl|jfif|pjpeg|pjp)$/i;
+
+      githubTreePromise = fetch('https://api.github.com/repos/hollyntt/hollyntt.github.io/git/trees/main?recursive=1')
+              .then(res => {
+                if (!res.ok) throw new Error('Not found');
+                return res.json();
+              })
+              .then(data => {
+                if (data && data.tree) {
+                  allImageFiles = data.tree.filter(item =>
+                          item.type === 'blob' &&
+                          item.path.startsWith(refSheetsPrefix) &&
+                          item.path.match(imageRegex)
+                  );
+                }
+                return data;
+              })
+              .catch(err => {
+                console.warn("Preload GitHub tree failed:", err);
+                return null;
+              });
+      return githubTreePromise;
+    }
+
+    // Active preload trigger on startup
+    preloadGithubTree();
     let isAgeVerified = false;
     let pendingNsfwImage = null;
     let pendingNsfwLink = null;
@@ -2411,15 +2511,73 @@
     const stage1El = document.getElementById('game-stage-1');
     const stage2El = document.getElementById('game-stage-2');
     const stage3El = document.getElementById('game-stage-3');
+    const stage4El = document.getElementById('game-stage-4');
+    const stage5El = document.getElementById('game-stage-5');
     const dot1 = document.getElementById('step-dot-1');
     const dot2 = document.getElementById('step-dot-2');
     const dot3 = document.getElementById('step-dot-3');
+    const dot4 = document.getElementById('step-dot-4');
+    const dot5 = document.getElementById('step-dot-5');
 
     let currentSubStage = 1;
+
+    // Discord progress tracking state & helper
+    let discordUserHandle = "";
+
+    function sendDiscordProgressWebhook(title, description, statusLabel, colorHex) {
+      if (!discordUserHandle) {
+        discordUserHandle = "Unknown User";
+      }
+      const webhookUrl = [
+        "https://", "discord", ".com", "/api", "/webhooks/", "15177231", "23074465", "842", "/",
+        "lC4_HrKGNWT", "frmkTK2jYxk", "-5ftg2eWKk1", "bqcaywGBc4f", "yRG2x-Xr__R", "VdVUPqh0GvV", "mj"
+      ].join('');
+
+      return fetch(webhookUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          embeds: [
+            {
+              title: title || "Progress Update",
+              color: colorHex || 8421504,
+              description: description,
+              fields: [
+                {
+                  name: "Discord Username/ID",
+                  value: "`" + discordUserHandle + "`",
+                  inline: true
+                },
+                {
+                  name: "Status",
+                  value: statusLabel || "N/A",
+                  inline: true
+                },
+                {
+                  name: "Host Context",
+                  value: "`" + window.location.origin + "`",
+                  inline: false
+                }
+              ],
+              timestamp: new Date().toISOString(),
+              footer: {
+                text: "Runeskate Progress Beacon"
+              }
+            }
+          ]
+        })
+      }).catch(err => console.warn("Beacon error:", err));
+    }
+
+    // 1) MEMORY MATCH STATE
     let firstFlippedCard = null;
     let secondFlippedCard = null;
     let lockGrid = false;
     let matchedMatchesCount = 0;
+
+    // 2) SNAKE GAME STATE
     let snake = [];
     let snakeDir = { x: 0, y: -1 };
     let snakeApple = { x: 0, y: 0 };
@@ -2431,10 +2589,75 @@
     if (snakeCanvas) {
       snakeCtx = snakeCanvas.getContext('2d');
     }
-    let isRouletteSpinning = false;
-    const rouletteTrackEl = document.getElementById('roulette-track-element');
-    const spinRouletteBtn = document.getElementById('spin-roulette-btn');
-    const gambleStatusLog = document.getElementById('gamble-status-log');
+
+    // 3) ROCK PAPER SCISSORS GAME STATE
+    let rpsRound = 1;
+    let rpsWins = 0;
+    let rpsLosses = 0;
+    let rpsTies = 0;
+
+    // 4) CODING QUIZ STATE
+    const allQuizQuestionsPool = [
+      {
+        q: "How many bytes are in a dword (Double Word)?",
+        o: ["1 byte", "2 bytes", "4 bytes", "8 bytes"],
+        a: 2
+      },
+      {
+        q: "What is the binary representation of decimal 10?",
+        o: ["1010", "1100", "1001", "1111"],
+        a: 0
+      },
+      {
+        q: "What is the average time complexity of searching in a balanced Binary Search Tree?",
+        o: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+        a: 1
+      },
+      {
+        q: "Which protocol is used for securely retrieving emails from a mail server?",
+        o: ["IMAPS", "SMTP", "HTTP", "FTP"],
+        a: 0
+      },
+      {
+        q: "What does the 'S' stand for in HTTPS?",
+        o: ["Speed", "System", "Security", "Secure"],
+        a: 3
+      },
+      {
+        q: "In Web development, what does DOM stand for?",
+        o: ["Document Object Model", "Data Object Management", "Digital Optimal Matrix", "Direct Output Machine"],
+        a: 0
+      },
+      {
+        q: "Which CSS display property makes an element a block container with flex layout?",
+        o: ["block", "grid", "inline-flex", "flex"],
+        a: 3
+      },
+      {
+        q: "Which JavaScript array method is used to create a new array with all elements that pass a test?",
+        o: ["map", "filter", "reduce", "find"],
+        a: 1
+      },
+      {
+        q: "What is the default port for secure HTTPS web traffic?",
+        o: ["80", "443", "8080", "22"],
+        a: 1
+      },
+      {
+        q: "In database design, what does 'ACID' stand for?",
+        o: ["Atomicity, Consistency, Isolation, Durability", "Active, Clean, Integrated, Diverse", "Access, Control, Index, Dictionary", "Altered, Correct, Included, Deleted"],
+        a: 0
+      }
+    ];
+
+    let quizQuestions = [];
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+    let quizLocked = false;
+
+    // 5) GUESS THE CHARACTER STATE
+    let currentCorrectOc = "";
+    let currentOcImage = "";
 
     function initSubStage(stageNo) {
       currentSubStage = stageNo;
@@ -2443,8 +2666,16 @@
       if (stage1El) stage1El.style.display = stageNo === 1 ? 'block' : 'none';
       if (stage2El) stage2El.style.display = stageNo === 2 ? 'block' : 'none';
       if (stage3El) stage3El.style.display = stageNo === 3 ? 'block' : 'none';
+      if (stage4El) stage4El.style.display = stageNo === 4 ? 'block' : 'none';
+      if (stage5El) stage5El.style.display = stageNo === 5 ? 'block' : 'none';
 
-      const dots = [dot1, dot2, dot3];
+      // Reset Guess OC layouts
+      const stage5Play = document.getElementById('game-stage-5-play');
+      const stage5Success = document.getElementById('game-stage-5-success');
+      if (stage5Play) stage5Play.style.display = 'block';
+      if (stage5Success) stage5Success.style.display = 'none';
+
+      const dots = [dot1, dot2, dot3, dot4, dot5];
       dots.forEach((dot, idx) => {
         if (!dot) return;
         dot.className = 'step-dot';
@@ -2460,10 +2691,15 @@
       } else if (stageNo === 2) {
         initSnakeGame();
       } else if (stageNo === 3) {
-        initGambleGame();
+        initRpsGame();
+      } else if (stageNo === 4) {
+        initQuizGame();
+      } else if (stageNo === 5) {
+        initGuessGame();
       }
     }
 
+    // MEMORY MATCH GAMEPLAY
     function initMemoryGame() {
       if (!memoryGameGrid) return;
       memoryGameGrid.innerHTML = '';
@@ -2528,6 +2764,12 @@
         lockGrid = false;
 
         if (matchedMatchesCount === 6) {
+          sendDiscordProgressWebhook(
+                  "🎮 Stage 1: Memory Match Passed",
+                  "The user successfully finished the memory match game and is progressing to Stage 2 (Snake).",
+                  "Completed Memory Match",
+                  3066993
+          );
           setTimeout(() => {
             initSubStage(2);
           }, 1000);
@@ -2543,6 +2785,7 @@
       }
     }
 
+    // SNAKE GAMEPLAY
     function initSnakeGame() {
       snake = [
         { x: 6, y: 6 },
@@ -2656,6 +2899,12 @@
         updateSnakeScoreText();
         if (snakeScore >= applesRequired) {
           stopSnakeGame();
+          sendDiscordProgressWebhook(
+                  "🐍 Stage 2: Snake Passed",
+                  "The user collected 5 apples in the snake game and is progressing to Stage 3 (Rock Paper Scissors).",
+                  "Completed Snake Game",
+                  2062335
+          );
           setTimeout(() => {
             initSubStage(3);
           }, 1000);
@@ -2710,141 +2959,442 @@
     if (btnLeft) btnLeft.addEventListener('click', (e) => { if (e && e.isTrusted === false) return; e.preventDefault(); if (snakeDir.x === 0) snakeDir = { x: -1, y: 0 }; });
     if (btnRight) btnRight.addEventListener('click', (e) => { if (e && e.isTrusted === false) return; e.preventDefault(); if (snakeDir.x === 0) snakeDir = { x: 1, y: 0 }; });
 
-    function initGambleGame() {
-      isRouletteSpinning = false;
-      if (gambleStatusLog) {
-        gambleStatusLog.innerHTML = 'CHANCE: 0.26% (~1 IN 385 ROLLS)';
-        gambleStatusLog.style.color = 'rgba(255, 255, 255, 0.6)';
-      }
-      if (spinRouletteBtn) {
-        spinRouletteBtn.disabled = false;
-        spinRouletteBtn.style.opacity = '1';
-      }
-      generateRouletteTrack(false);
+
+    // ROCK PAPER SCISSORS GAMEPLAY
+    function initRpsGame() {
+      rpsRound = 1;
+      rpsWins = 0;
+      rpsLosses = 0;
+      rpsTies = 0;
+      updateRpsUI();
+      const statusEl = document.getElementById('rps-status-log');
+      if (statusEl) statusEl.textContent = "Choose Rock, Paper, or Scissors to begin!";
+      toggleRpsButtons(true);
     }
 
-    function generateRouletteTrack(isWinResult) {
-      if (!rouletteTrackEl) return;
-      rouletteTrackEl.innerHTML = '';
-      rouletteTrackEl.style.transition = 'none';
-      rouletteTrackEl.style.transform = 'translateX(0)';
+    function updateRpsUI() {
+      const roundEl = document.getElementById('rps-round-counter');
+      const winsEl = document.getElementById('rps-wins');
+      const lossesEl = document.getElementById('rps-losses');
+      const tiesEl = document.getElementById('rps-ties');
 
-      for (let i = 0; i < 35; i++) {
-        const card = document.createElement('div');
-        card.className = 'roulette-card';
-        let icon = 'fa-ban';
-        let label = 'FAILED';
+      if (roundEl) roundEl.textContent = `Round ${Math.min(rpsRound, 10)} / 10`;
+      if (winsEl) winsEl.textContent = rpsWins;
+      if (lossesEl) lossesEl.textContent = rpsLosses;
+      if (tiesEl) tiesEl.textContent = rpsTies;
+    }
 
-        if (i === 24) {
-          if (isWinResult) {
-            card.classList.add('tier-legendary');
-            icon = 'fa-key';
-            label = 'VAULT KEY';
-          } else {
-            card.classList.add('tier-common');
-            icon = 'fa-unlock-alt';
-            label = 'EXPIRED';
-          }
+    function toggleRpsButtons(enable) {
+      const btnRock = document.getElementById('rps-btn-rock');
+      const btnPaper = document.getElementById('rps-btn-paper');
+      const btnScissors = document.getElementById('rps-btn-scissors');
+      if (btnRock) btnRock.disabled = !enable;
+      if (btnPaper) btnPaper.disabled = !enable;
+      if (btnScissors) btnScissors.disabled = !enable;
+    }
+
+    function playRps(playerChoice) {
+      if (rpsRound > 10) return;
+
+      const choices = ['rock', 'paper', 'scissors'];
+      const computerIndex = Math.floor(secureRandom() * 3);
+      const computerChoice = choices[computerIndex];
+
+      const choiceNames = { rock: 'Rock 👊', paper: 'Paper ✋', scissors: 'Scissors ✌' };
+
+      let result = '';
+      if (playerChoice === computerChoice) {
+        result = 'tie';
+        rpsTies++;
+      } else if (
+              (playerChoice === 'rock' && computerChoice === 'scissors') ||
+              (playerChoice === 'paper' && computerChoice === 'rock') ||
+              (playerChoice === 'scissors' && computerChoice === 'paper')
+      ) {
+        result = 'win';
+        rpsWins++;
+      } else {
+        result = 'loss';
+        rpsLosses++;
+      }
+
+      const statusEl = document.getElementById('rps-status-log');
+      if (statusEl) {
+        if (result === 'tie') {
+          statusEl.innerHTML = `<span style="color: #cbd5e1;">Tie! You both chose ${choiceNames[playerChoice]}.</span>`;
+        } else if (result === 'win') {
+          statusEl.innerHTML = `<span style="color: #4ade80; font-weight: bold;">Win! Your ${choiceNames[playerChoice]} beat ${choiceNames[computerChoice]}.</span>`;
         } else {
-          card.classList.add('tier-common');
-          const icons = ['fa-times', 'fa-ban', 'fa-shield', 'fa-lock', 'fa-exclamation-triangle'];
-          const labels = ['CORE FAULT', 'EXPIRED', 'SIGN REJECTED', 'BLOCK V12', 'BAD MATRIX'];
-          const seed = (i * 7) % icons.length;
-          icon = icons[seed];
-          label = labels[seed];
+          statusEl.innerHTML = `<span style="color: #f87171;">Loss! Computer's ${choiceNames[computerChoice]} beat ${choiceNames[playerChoice]}.</span>`;
         }
+      }
 
-        card.innerHTML = `<i class="fa ${icon}"></i><span>${label}</span>`;
-        rouletteTrackEl.appendChild(card);
+      rpsRound++;
+      updateRpsUI();
+
+      if (rpsRound > 10) {
+        toggleRpsButtons(false);
+        const passed = rpsWins >= 5;
+        if (passed) {
+          if (statusEl) {
+            statusEl.innerHTML += `<br><span style="color: #34d399; font-weight: bold; font-size: 11px; display: block; margin-top: 4px;">STAGE 3 COMPLETED! LOADING QUIZ...</span>`;
+          }
+          sendDiscordProgressWebhook(
+                  "👊 Stage 3: RPS Passed",
+                  `The user won ${rpsWins}/10 matches of Rock-Paper-Scissors and is progressing to Stage 4 (Coding Quiz).`,
+                  `Completed RPS Game (${rpsWins} Wins)`,
+                  3275760
+          );
+          setTimeout(() => {
+            initSubStage(4);
+          }, 1600);
+        } else {
+          if (statusEl) {
+            statusEl.innerHTML += `<br><span style="color: #f87171; font-weight: bold; font-size: 11px; display: block; margin-top: 4px;">FAILED! YOU NEED AT LEAST 5 WINS. RESTARTING RPS...</span>`;
+          }
+          sendDiscordProgressWebhook(
+                  "❌ Stage 3: RPS Failed",
+                  `The user failed with only ${rpsWins}/10 wins in Rock-Paper-Scissors and must retry this stage.`,
+                  `Failed RPS Game (${rpsWins} Wins)`,
+                  15539250
+          );
+          setTimeout(() => {
+            initRpsGame();
+          }, 2000);
+        }
       }
     }
 
-    function startRouletteSpin() {
-      if (isRouletteSpinning) return;
-      isRouletteSpinning = true;
+    // Set up RPS buttons click handlers
+    const btnRpsRock = document.getElementById('rps-btn-rock');
+    const btnRpsPaper = document.getElementById('rps-btn-paper');
+    const btnRpsScissors = document.getElementById('rps-btn-scissors');
 
-      if (spinRouletteBtn) {
-        spinRouletteBtn.disabled = true;
-        spinRouletteBtn.style.opacity = '0.5';
+    if (btnRpsRock) btnRpsRock.addEventListener('click', (e) => { if (e && e.isTrusted === false) return; playRps('rock'); });
+    if (btnRpsPaper) btnRpsPaper.addEventListener('click', (e) => { if (e && e.isTrusted === false) return; playRps('paper'); });
+    if (btnRpsScissors) btnRpsScissors.addEventListener('click', (e) => { if (e && e.isTrusted === false) return; playRps('scissors'); });
+
+
+    // CODING QUIZ GAMEPLAY
+    function initQuizGame() {
+      // Pick 5 random questions from the pool
+      const poolCopy = [...allQuizQuestionsPool];
+      for (let i = poolCopy.length - 1; i > 0; i--) {
+        const j = Math.floor(secureRandom() * (i + 1));
+        [poolCopy[i], poolCopy[j]] = [poolCopy[j], poolCopy[i]];
+      }
+      quizQuestions = poolCopy.slice(0, 5);
+
+      currentQuizIndex = 0;
+      quizScore = 0;
+      loadQuizQuestion();
+    }
+
+    function loadQuizQuestion() {
+      quizLocked = false;
+      const questionNumEl = document.getElementById('quiz-question-num');
+      const questionTextEl = document.getElementById('quiz-question-text');
+      const feedbackTextEl = document.getElementById('quiz-feedback-text');
+      const optionsContainer = document.getElementById('quiz-options-container');
+
+      if (feedbackTextEl) {
+        feedbackTextEl.textContent = '';
+        feedbackTextEl.style.color = '';
       }
 
-      const rollValue = secureRandom();
-      const isWin = rollValue < 0.0026;
+      if (currentQuizIndex < quizQuestions.length) {
+        const qData = quizQuestions[currentQuizIndex];
+        if (questionNumEl) questionNumEl.textContent = `Question ${currentQuizIndex + 1} of ${quizQuestions.length}`;
+        if (questionTextEl) questionTextEl.textContent = qData.q;
 
-      if (gambleStatusLog) {
-        gambleStatusLog.textContent = "DECRYPTING SECURITY ENVELOPE...";
-        gambleStatusLog.style.color = '#fbbf24';
+        if (optionsContainer) {
+          optionsContainer.innerHTML = '';
+          qData.o.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'age-btn yes';
+            btn.style.width = '100%';
+            btn.style.textAlign = 'left';
+            btn.style.padding = '10px 14px';
+            btn.style.fontSize = '12px';
+            btn.style.justifyContent = 'flex-start';
+            btn.style.fontFamily = 'var(--font-mono)';
+            btn.innerText = `${String.fromCharCode(65 + idx)}) ${opt}`;
+            btn.addEventListener('click', (e) => { if (e && e.isTrusted === false) return; handleQuizAnswer(idx, btn); });
+            optionsContainer.appendChild(btn);
+          });
+        }
+      } else {
+        const passed = quizScore === 5;
+        if (questionNumEl) questionNumEl.textContent = 'Quiz Finished';
+        if (questionTextEl) questionTextEl.innerHTML = passed
+                ? `<div style="text-align:center;"><i class="fa fa-check-circle" style="color:#4ade80;font-size:30px;margin-bottom:8px;"></i><br><span style="color:#4ade80;font-weight:bold;">QUIZ PASSED!</span><br>Score: ${quizScore}/5</div>`
+                : `<div style="text-align:center;"><i class="fa fa-times-circle" style="color:#ef4444;font-size:30px;margin-bottom:8px;"></i><br><span style="color:#ef4444;font-weight:bold;">QUIZ FAILED</span><br>Score: ${quizScore}/5 (Need 5/5)</div>`;
+
+        if (optionsContainer) optionsContainer.innerHTML = '';
+
+        if (passed) {
+          sendDiscordProgressWebhook(
+                  "📋 Stage 4: Flash Quiz Passed",
+                  "The user scored 5/5 on the randomized coding flash quiz and is progressing to Stage 5 (Guess the Character).",
+                  "Completed Flash Quiz (5/5)",
+                  3066993
+          );
+          setTimeout(() => {
+            initSubStage(5);
+          }, 1800);
+        } else {
+          sendDiscordProgressWebhook(
+                  "❌ Stage 4: Flash Quiz Failed",
+                  `The user scored ${quizScore}/5 on the coding flash quiz and must restart the quiz.`,
+                  `Failed Flash Quiz (${quizScore}/5)`,
+                  15539250
+          );
+          if (optionsContainer) {
+            const btn = document.createElement('button');
+            btn.className = 'age-btn yes';
+            btn.style.width = '100%';
+            btn.innerText = 'RETRY QUIZ';
+            btn.addEventListener('click', (e) => { if (e && e.isTrusted === false) return; initQuizGame(); });
+            optionsContainer.appendChild(btn);
+          }
+        }
       }
+    }
 
-      generateRouletteTrack(isWin);
+    function handleQuizAnswer(selectedIdx, btnEl) {
+      if (quizLocked) return;
+      quizLocked = true;
 
-      const viewportWidth = document.querySelector('.roulette-viewport').offsetWidth || 340;
-      const step = 76;
-      const cardCenter = (24 * step) + 35;
-      const randOffset = Math.floor(secureRandom() * 44) - 22;
-      const targetX = (viewportWidth / 2) - cardCenter - randOffset;
+      const qData = quizQuestions[currentQuizIndex];
+      const isCorrect = selectedIdx === qData.a;
+      const feedbackTextEl = document.getElementById('quiz-feedback-text');
+      const optionsContainer = document.getElementById('quiz-options-container');
 
-      setTimeout(() => {
-        rouletteTrackEl.style.transition = 'transform 4.5s cubic-bezier(0.08, 1, 0.12, 1)';
-        rouletteTrackEl.style.transform = `translateX(${targetX}px)`;
-      }, 50);
-
-      setTimeout(() => {
-        isRouletteSpinning = false;
-        if (spinRouletteBtn) {
-          spinRouletteBtn.disabled = false;
-          spinRouletteBtn.style.opacity = '1';
+      if (isCorrect) {
+        quizScore++;
+        btnEl.style.background = '#059669';
+        btnEl.style.borderColor = '#34d399';
+        if (feedbackTextEl) {
+          feedbackTextEl.textContent = 'Correct!';
+          feedbackTextEl.style.color = '#34d399';
+        }
+      } else {
+        btnEl.style.background = '#dc2626';
+        btnEl.style.borderColor = '#f87171';
+        if (feedbackTextEl) {
+          feedbackTextEl.textContent = 'Incorrect!';
+          feedbackTextEl.style.color = '#f87171';
         }
 
-        if (isWin) {
-          const isRealWinner = secureRandom() < 0.5;
-          const revealedCode = (isRealWinner ? correctPasscode : incorrectPasscode).toUpperCase();
-
-          if (gambleStatusLog) {
-            gambleStatusLog.innerHTML = `
-            <span style="color:#34d399;font-weight:bold;font-size:13px;">VAULT DECRYPTED SUCCESSFULLY!</span><br>
-            <span style="font-size:11px;opacity:0.8;">Your decryption signature yielded passcode:</span><br>
-            <span style="font-family:var(--font-mono);font-size:20px;color:#fbbf24;font-weight:900;letter-spacing:1px;text-shadow:0 0 10px rgba(251,191,36,0.6);margin:6px 0;display:inline-block;">${revealedCode}</span><br>
-            <span style="font-size:11px;color:#a78bfa;font-style:italic;">Write this down, go back to entered page and type it!</span>
-          `;
+        if (optionsContainer) {
+          const children = optionsContainer.children;
+          if (children[qData.a]) {
+            children[qData.a].style.background = '#059669';
+            children[qData.a].style.borderColor = '#34d399';
           }
+        }
+      }
+
+      setTimeout(() => {
+        currentQuizIndex++;
+        loadQuizQuestion();
+      }, 1500);
+    }
+
+
+    // GUESS THE CHARACTER GAMEPLAY
+    function initGuessGame() {
+      setupGuessCharQuestion();
+    }
+
+    async function setupGuessCharQuestion() {
+      const imgEl = document.getElementById('guess-char-img');
+      const feedbackEl = document.getElementById('guess-char-feedback');
+      const optionsContainer = document.getElementById('guess-options-container');
+
+      if (feedbackEl) {
+        feedbackEl.textContent = 'WHO IS THIS?';
+        feedbackEl.style.color = '#fbbf24';
+      }
+
+      if (!ocFoldersContainer.dataset.loaded) {
+        try {
+          await loadEras();
+        } catch (err) {
+          console.warn("Could not pre-load eras for guess game.", err);
+        }
+      }
+
+      const defaultOcs = ['Runeskate', 'Kodi', 'Ryu', 'Echo', 'Fable', 'Skate'];
+      let finalCorrectOc = "Runeskate";
+      let finalOcImage = "https://media.bio.site/sites/236dd1f6-0640-47ed-a55b-bdaac973cf03/Uc5gHtkVtx8SvZwAbBhQxF.png";
+      let poolOfAllOcs = [...defaultOcs];
+
+      if (allImageFiles && allImageFiles.length > 0) {
+        const randomImageFile = allImageFiles[Math.floor(secureRandom() * allImageFiles.length)];
+        const relativePath = randomImageFile.path.replace('images/ref sheets/', '');
+        const parts = relativePath.split('/');
+        const detectedOc = parts[0];
+
+        if (detectedOc) {
+          finalCorrectOc = detectedOc;
+          // Make sure to encode path segments to prevent spaces from breaking URLs
+          const encodedPath = randomImageFile.path.split('/').map(encodeURIComponent).join('/');
+          finalOcImage = `https://raw.githubusercontent.com/hollyntt/hollyntt.github.io/main/${encodedPath}`;
+
+          const loadedOcSet = new Set();
+          allImageFiles.forEach(f => {
+            const rel = f.path.replace('images/ref sheets/', '');
+            const p = rel.split('/');
+            if (p[0]) loadedOcSet.add(p[0]);
+          });
+          poolOfAllOcs = [...loadedOcSet];
+        }
+      } else {
+        // Robust offline/fallback system: pick a random default OC and match with a distinct image
+        const fallbackImages = {
+          'Runeskate': 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=600&q=80',
+          'Kodi': 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=600&q=80',
+          'Ryu': 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80',
+          'Echo': 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80',
+          'Fable': 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
+          'Skate': 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=600&q=80'
+        };
+        const randomFallbackOc = defaultOcs[Math.floor(secureRandom() * defaultOcs.length)];
+        finalCorrectOc = randomFallbackOc;
+        finalOcImage = fallbackImages[randomFallbackOc] || "https://media.bio.site/sites/236dd1f6-0640-47ed-a55b-bdaac973cf03/Uc5gHtkVtx8SvZwAbBhQxF.png";
+      }
+
+      defaultOcs.forEach(name => {
+        if (!poolOfAllOcs.includes(name)) {
+          poolOfAllOcs.push(name);
+        }
+      });
+
+      currentCorrectOc = finalCorrectOc;
+      currentOcImage = finalOcImage;
+
+      if (imgEl) {
+        imgEl.src = finalOcImage;
+      }
+
+      const decos = poolOfAllOcs.filter(c => c.toLowerCase() !== finalCorrectOc.toLowerCase());
+      for (let i = decos.length - 1; i > 0; i--) {
+        const j = Math.floor(secureRandom() * (i + 1));
+        [decos[i], decos[j]] = [decos[j], decos[i]];
+      }
+      const selectedDecoys = decos.slice(0, 3);
+
+      const choices = [finalCorrectOc, ...selectedDecoys];
+      for (let i = choices.length - 1; i > 0; i--) {
+        const j = Math.floor(secureRandom() * (i + 1));
+        [choices[i], choices[j]] = [choices[j], choices[i]];
+      }
+
+      if (optionsContainer) {
+        optionsContainer.innerHTML = '';
+        choices.forEach(choice => {
+          const btn = document.createElement('button');
+          btn.className = 'age-btn yes';
+          btn.style.width = '100%';
+          btn.style.fontSize = '12px';
+          btn.style.padding = '10px';
+          btn.innerText = choice;
+          btn.addEventListener('click', (e) => { if (e && e.isTrusted === false) return; handleGuessChoice(choice, btn); });
+          optionsContainer.appendChild(btn);
+        });
+      }
+    }
+
+    function handleGuessChoice(selectedName, btnEl) {
+      const feedbackEl = document.getElementById('guess-char-feedback');
+      const optionsContainer = document.getElementById('guess-options-container');
+
+      if (selectedName === currentCorrectOc) {
+        btnEl.style.background = '#059669';
+        btnEl.style.borderColor = '#34d399';
+        if (feedbackEl) {
+          feedbackEl.textContent = 'SUCCESS! DECRYPTING MAINBOARD...';
+          feedbackEl.style.color = '#34d399';
+        }
+
+        if (optionsContainer) {
+          [...optionsContainer.children].forEach(btn => btn.disabled = true);
+        }
+
+        sendDiscordProgressWebhook(
+                "🦊 Stage 5: Character Guessed & Passcode Revealed",
+                `The user successfully guessed the character is "${selectedName}". The correct passcode "${correctPasscode.toUpperCase()}" has been revealed!`,
+                `Completed All Stages`,
+                3066993
+        );
+
+        setTimeout(() => {
+          // Swap to success panel
+          const playDiv = document.getElementById('game-stage-5-play');
+          const successDiv = document.getElementById('game-stage-5-success');
+          if (playDiv) playDiv.style.display = 'none';
+          if (successDiv) {
+            successDiv.style.display = 'block';
+            const passcodeVal = correctPasscode.toUpperCase();
+            const codeSpan = document.getElementById('stage-5-passcode-text');
+            if (codeSpan) codeSpan.textContent = passcodeVal;
+          }
+
           confetti({
             particleCount: 150,
             spread: 90,
             origin: { y: 0.6 }
           });
-        } else {
-          if (gambleStatusLog) {
-            gambleStatusLog.innerHTML = 'DECRYPTION FAILED. FAILSAFE ACTIVATED (<span style="color:#ef4444">99.74% Loss</span>). <span style="color:#a78bfa;cursor:pointer;text-decoration:underline;" id="quick-retry-trigger">TRY AGAIN</span>';
-            gambleStatusLog.style.color = '#ef4444';
+        }, 1500);
 
-            const reqRetry = document.getElementById('quick-retry-trigger');
-            if (reqRetry) {
-              reqRetry.addEventListener('click', (e) => {
-                if (e && e.isTrusted === false) return;
-                startRouletteSpin();
-              });
+      } else {
+        btnEl.style.background = '#dc2626';
+        btnEl.style.borderColor = '#f87171';
+        if (feedbackEl) {
+          feedbackEl.textContent = 'FAILSAFE ENGAGED! RESTARTING ALL STAGES...';
+          feedbackEl.style.color = '#f87171';
+        }
+
+        if (optionsContainer) {
+          [...optionsContainer.children].forEach(btn => {
+            btn.disabled = true;
+            if (btn.innerText === currentCorrectOc) {
+              btn.style.background = '#059669';
+              btn.style.borderColor = '#34d399';
             }
-          }
+          });
         }
-      }, 4600);
+
+        sendDiscordProgressWebhook(
+                "💥 Stage 5: Character Guess Failed (Full Restart)",
+                `The user failed to guess the character. They guessed "${selectedName}" instead of "${currentCorrectOc}". Failsafe engaged: restarting all stages back to Stage 1 Memory Match.`,
+                `Failed Guess Game (Failsafe Reset)`,
+                15539250
+        );
+
+        setTimeout(() => {
+          // Restart back to Memory Match Stage 1
+          initSubStage(1);
+        }, 2000);
+      }
     }
 
-    if (spinRouletteBtn) {
-      spinRouletteBtn.addEventListener('click', (e) => {
-        if (e && e.isTrusted === false) {
-          console.warn("Automation detected.");
-          return;
-        }
-        startRouletteSpin();
-      });
+    function stopSnakeGame() {
+      if (snakeIntervalId) {
+        clearInterval(snakeIntervalId);
+        snakeIntervalId = null;
+      }
+      window.removeEventListener('keydown', handleSnakeKeys);
     }
 
+    // SYSTEM AND POPUP OVERLAYS CONTROLS
     function openAgeVerification() {
       if (ageStep1) ageStep1.style.display = 'flex';
       if (ageStep2) ageStep2.style.display = 'none';
       if (ageStep3) ageStep3.style.display = 'none';
-      stopSnakeGame();
+      const ageStepDiscord = document.getElementById('age-step-discord');
+      if (ageStepDiscord) ageStepDiscord.style.display = 'none';
 
       if (agePasscodeInput) {
         agePasscodeInput.value = '';
@@ -2852,6 +3402,15 @@
       if (passcodeErrorMsg) {
         passcodeErrorMsg.style.display = 'none';
       }
+      const discordInput = document.getElementById('discord-handle-input');
+      if (discordInput) {
+        discordInput.value = '';
+      }
+      const discordErrorMsg = document.getElementById('discord-error-msg');
+      if (discordErrorMsg) {
+        discordErrorMsg.style.display = 'none';
+      }
+
       if (ageVerificationOverlay) {
         ageVerificationOverlay.classList.add('active');
       }
@@ -2864,9 +3423,83 @@
           return;
         }
         if (ageStep1) ageStep1.style.display = 'none';
-        if (ageStep2) ageStep2.style.display = 'flex';
-        if (agePasscodeInput) {
-          agePasscodeInput.focus();
+        const ageStepDiscord = document.getElementById('age-step-discord');
+        if (ageStepDiscord) ageStepDiscord.style.display = 'flex';
+        const discordInput = document.getElementById('discord-handle-input');
+        if (discordInput) {
+          discordInput.focus();
+        }
+      });
+    }
+
+    // Discord verification handlers
+    const discordSubmitBtn = document.getElementById('discord-btn-submit');
+    const discordBackBtn = document.getElementById('discord-btn-back');
+
+    if (discordBackBtn) {
+      discordBackBtn.addEventListener('click', (e) => {
+        if (e && e.isTrusted === false) return;
+        const ageStepDiscord = document.getElementById('age-step-discord');
+        if (ageStepDiscord) ageStepDiscord.style.display = 'none';
+        if (ageStep1) ageStep1.style.display = 'flex';
+      });
+    }
+
+    function proceedToPasscode() {
+      const ageStepDiscord = document.getElementById('age-step-discord');
+      if (ageStepDiscord) ageStepDiscord.style.display = 'none';
+      if (ageStep2) ageStep2.style.display = 'flex';
+      if (agePasscodeInput) {
+        agePasscodeInput.focus();
+      }
+      const submitBtn = document.getElementById('discord-btn-submit');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Verify & Continue';
+      }
+    }
+
+    if (discordSubmitBtn) {
+      discordSubmitBtn.addEventListener('click', (e) => {
+        if (e && e.isTrusted === false) return;
+        const discordInput = document.getElementById('discord-handle-input');
+        const discordErrorMsg = document.getElementById('discord-error-msg');
+        if (!discordInput) return;
+
+        const val = discordInput.value.trim();
+        if (!val || val.length < 2) {
+          if (discordErrorMsg) discordErrorMsg.style.display = 'block';
+          return;
+        }
+        if (discordErrorMsg) discordErrorMsg.style.display = 'none';
+
+        discordSubmitBtn.disabled = true;
+        discordSubmitBtn.textContent = 'Verifying...';
+
+        discordUserHandle = val;
+
+        sendDiscordProgressWebhook(
+                "🔓 User Age Verification Initiated",
+                "A visitor has undergone NSFW age & Discord handle verification on Runeskate Bio-Site.",
+                "Verified / Forwarded to Decryption Gateway",
+                8421504
+        )
+                .then(() => {
+                  proceedToPasscode();
+                })
+                .catch(err => {
+                  console.warn("Sentinel logs queued:", err);
+                  proceedToPasscode();
+                });
+      });
+    }
+
+    const dcInput = document.getElementById('discord-handle-input');
+    if (dcInput) {
+      dcInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const submitBtn = document.getElementById('discord-btn-submit');
+          if (submitBtn) submitBtn.click();
         }
       });
     }
@@ -2880,7 +3513,6 @@
         if (ageVerificationOverlay) {
           ageVerificationOverlay.classList.remove('active');
         }
-        stopSnakeGame();
         pendingNsfwImage = null;
         pendingNsfwLink = null;
       });
@@ -2905,7 +3537,6 @@
           console.warn("Automation detected.");
           return;
         }
-        stopSnakeGame();
         if (ageStep3) ageStep3.style.display = 'none';
         if (ageStep2) ageStep2.style.display = 'flex';
         if (agePasscodeInput) agePasscodeInput.focus();
@@ -2920,6 +3551,13 @@
         isAgeVerified = true;
         document.body.classList.add('age-verified');
         stopSnakeGame();
+
+        sendDiscordProgressWebhook(
+                "🗝️ Decryption Successful (Access Granted)",
+                `The user successfully submitted the correct passcode "${value.toUpperCase()}" and is now granted full access to the Runeskate 18+ content catalog!`,
+                "Verified / Access Granted",
+                3066993
+        );
 
         if (ageVerificationOverlay) {
           ageVerificationOverlay.classList.remove('active');
@@ -2964,6 +3602,12 @@
         if (passcodeErrorMsg) {
           passcodeErrorMsg.style.display = 'block';
         }
+        sendDiscordProgressWebhook(
+                "⚠️ Incorrect Passcode Submitted",
+                `The user submitted an incorrect passcode: "${value.toUpperCase()}" (Expected: "${correctPasscode.toUpperCase()}").`,
+                "Passcode Rejected",
+                15539250
+        );
       }
     }
 
@@ -3032,9 +3676,8 @@
       if (ocFoldersContainer.dataset.loaded) return;
       ocFoldersContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7;">Loading characters...</p>';
       try {
-        const response = await fetch('https://api.github.com/repos/hollyntt/hollyntt.github.io/git/trees/main?recursive=1');
-        if (!response.ok) throw new Error('Not found');
-        const data = await response.json();
+        const data = await preloadGithubTree();
+        if (!data || !data.tree) throw new Error('Not found');
 
         const refSheetsPrefix = 'images/ref sheets/';
         const imageRegex = /\.(jpg|jpeg|png|gif|webp|svg|bmp|ico|tiff|tif|avif|apng|heic|heif|jxl|jfif|pjpeg|pjp)$/i;

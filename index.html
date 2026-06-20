@@ -2492,11 +2492,26 @@
 
     let allImageFiles = [];
     let githubTreePromise = null;
+    const GITHUB_TREE_CACHE_KEY = 'github_tree_cache';
 
     function preloadGithubTree() {
       if (githubTreePromise) return githubTreePromise;
       const refSheetsPrefix = 'images/ref sheets/';
       const imageRegex = /\.(jpg|jpeg|png|gif|webp|svg|bmp|ico|tiff|tif|avif|apng|heic|heif|jxl|jfif|pjpeg|pjp)$/i;
+
+      // Check cache
+      const cached = localStorage.getItem(GITHUB_TREE_CACHE_KEY);
+      if (cached) {
+        console.log("Using cached GitHub tree");
+        const data = JSON.parse(cached);
+        allImageFiles = data.tree.filter(item =>
+                item.type === 'blob' &&
+                item.path.startsWith(refSheetsPrefix) &&
+                item.path.match(imageRegex)
+        );
+        githubTreePromise = Promise.resolve(data);
+        return githubTreePromise;
+      }
 
       githubTreePromise = fetch('https://api.github.com/repos/hollyntt/hollyntt.github.io/git/trees/main?recursive=1')
               .then(res => {
@@ -2505,6 +2520,9 @@
               })
               .then(data => {
                 if (data && data.tree) {
+                  // Save to cache
+                  localStorage.setItem(GITHUB_TREE_CACHE_KEY, JSON.stringify(data));
+
                   allImageFiles = data.tree.filter(item =>
                           item.type === 'blob' &&
                           item.path.startsWith(refSheetsPrefix) &&
@@ -3664,9 +3682,8 @@
     function verifyPasscode() {
       if (!agePasscodeInput) return;
       const value = agePasscodeInput.value.trim();
-      console.log("Input:", value, "Expected:", correctPasscode);
 
-      if (value.toLowerCase() === correctPasscode.toLowerCase() || window.isDevMode) {
+      if (value.toLowerCase() === correctPasscode.toLowerCase()) {
         isAgeVerified = true;
         document.body.classList.add('age-verified');
         stopSnakeGame();

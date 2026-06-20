@@ -2522,61 +2522,6 @@
 
     let currentSubStage = 1;
 
-    // Discord progress tracking state & helper
-    let discordUserHandle = "";
-
-    function sendDiscordProgressWebhook(title, description, statusLabel, colorHex) {
-      if (!discordUserHandle) {
-        discordUserHandle = "Unknown User";
-      }
-      const webhookXorArray = [
-        121, 101, 101, 97, 98, 43, 62, 62, 117, 120, 98, 114, 126, 99, 117, 63,
-        114, 126, 124, 62, 112, 97, 120, 62, 102, 116, 115, 121, 126, 126, 122, 98,
-        62, 32, 36, 32, 38, 38, 35, 34, 32, 35, 34, 33, 38, 37, 37, 39, 36, 41, 37, 35,
-        62, 125, 82, 37, 110, 89, 99, 90, 86, 95, 70, 69, 119, 99, 124, 122, 69, 90,
-        35, 123, 72, 105, 122, 60, 36, 119, 101, 118, 35, 116, 70, 90, 122, 32, 115,
-        96, 114, 112, 104, 102, 86, 83, 37, 114, 119, 104, 99, 86, 35, 105, 60, 73, 99,
-        110, 110, 99, 103, 117, 103, 68, 97, 96, 121, 86, 103, 103, 124, 123
-      ];
-      const webhookUrl = webhookXorArray.map(code => String.fromCharCode(code ^ 17)).join('');
-
-      return fetch(webhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          embeds: [
-            {
-              title: title || "Progress Update",
-              color: colorHex || 8421504,
-              description: description,
-              fields: [
-                {
-                  name: "Discord Username/ID",
-                  value: "`" + discordUserHandle + "`",
-                  inline: true
-                },
-                {
-                  name: "Status",
-                  value: statusLabel || "N/A",
-                  inline: true
-                },
-                {
-                  name: "Host Context",
-                  value: "`" + window.location.origin + "`",
-                  inline: false
-                }
-              ],
-              timestamp: new Date().toISOString(),
-              footer: {
-                text: "Runeskate Progress Beacon"
-              }
-            }
-          ]
-        })
-      }).catch(err => console.warn("Beacon error:", err));
-    }
 
     // 1) MEMORY MATCH STATE
     let firstFlippedCard = null;
@@ -2792,12 +2737,7 @@
         lockGrid = false;
 
         if (matchedMatchesCount === 6) {
-          sendDiscordProgressWebhook(
-                  "🎮 Stage 1: Memory Match Passed",
-                  "The user successfully finished the memory match game and is progressing to Stage 2 (Snake).",
-                  "Completed Memory Match",
-                  3066993
-          );
+
           setTimeout(() => {
             initSubStage(2);
           }, 1000);
@@ -2927,12 +2867,7 @@
         updateSnakeScoreText();
         if (snakeScore >= applesRequired) {
           stopSnakeGame();
-          sendDiscordProgressWebhook(
-                  "🐍 Stage 2: Snake Passed",
-                  "The user collected 5 apples in the snake game and is progressing to Stage 3 (Rock Paper Scissors).",
-                  "Completed Snake Game",
-                  2062335
-          );
+
           setTimeout(() => {
             initSubStage(3);
           }, 1000);
@@ -3153,12 +3088,7 @@
             if (statusEl) {
               statusEl.innerHTML += `<br><span style="color: #34d399; font-weight: bold; font-size: 11px; display: block; margin-top: 4px;">STAGE 3 COMPLETED! LOADING QUIZ...</span>`;
             }
-            sendDiscordProgressWebhook(
-                    "👊 Stage 3: RPS Passed",
-                    `The user won ${rpsWins}/10 matches of Rock-Paper-Scissors and is progressing to Stage 4 (Coding Quiz).`,
-                    `Completed RPS Game (${rpsWins} Wins)`,
-                    3275760
-            );
+
             setTimeout(() => {
               initSubStage(4);
             }, 1800);
@@ -3166,12 +3096,7 @@
             if (statusEl) {
               statusEl.innerHTML += `<br><span style="color: #f87171; font-weight: bold; font-size: 11px; display: block; margin-top: 4px;">FAILED! YOU NEED AT LEAST 5 WINS. RESTARTING RPS...</span>`;
             }
-            sendDiscordProgressWebhook(
-                    "❌ Stage 3: RPS Failed",
-                    `The user failed with only ${rpsWins}/10 wins in Rock-Paper-Scissors and must retry this stage.`,
-                    `Failed RPS Game (${rpsWins} Wins)`,
-                    15539250
-            );
+
             setTimeout(() => {
               initRpsGame();
             }, 2000);
@@ -3258,22 +3183,12 @@
         });
 
         if (passed) {
-          sendDiscordProgressWebhook(
-                  "📋 Stage 4: Flash Quiz Passed",
-                  `The user scored 5/5 on the randomized coding flash quiz and is progressing to Stage 5 (Guess the Character).\n\n${detailString}`,
-                  "Completed Flash Quiz (5/5)",
-                  3066993
-          );
+
           setTimeout(() => {
             initSubStage(5);
           }, 1800);
         } else {
-          sendDiscordProgressWebhook(
-                  "❌ Stage 4: Flash Quiz Failed",
-                  `The user scored ${quizScore}/5 on the coding flash quiz and must restart the quiz.\n\n${detailString}`,
-                  `Failed Flash Quiz (${quizScore}/5)`,
-                  15539250
-          );
+
           if (optionsContainer) {
             const btn = document.createElement('button');
             btn.className = 'age-btn yes';
@@ -3454,12 +3369,7 @@
           [...optionsContainer.children].forEach(btn => btn.disabled = true);
         }
 
-        sendDiscordProgressWebhook(
-                "🦊 Stage 5: Character Guessed & Passcode Revealed",
-                `The user successfully guessed the character is "${selectedName}". The correct passcode "${correctPasscode}" has been revealed!`,
-                `Completed All Stages`,
-                3066993
-        );
+
 
         setTimeout(() => {
           // Swap to success panel
@@ -3498,12 +3408,7 @@
           });
         }
 
-        sendDiscordProgressWebhook(
-                "💥 Stage 5: Character Guess Failed (Full Restart)",
-                `The user failed to guess the character. They guessed "${selectedName}" instead of "${currentCorrectOc}". Failsafe engaged: restarting all stages back to Stage 1 Memory Match.`,
-                `Failed Guess Game (Failsafe Reset)`,
-                15539250
-        );
+
 
         setTimeout(() => {
           // Restart back to Memory Match Stage 1
@@ -3555,11 +3460,9 @@
           return;
         }
         if (ageStep1) ageStep1.style.display = 'none';
-        const ageStepDiscord = document.getElementById('age-step-discord');
-        if (ageStepDiscord) ageStepDiscord.style.display = 'flex';
-        const discordInput = document.getElementById('discord-handle-input');
-        if (discordInput) {
-          discordInput.focus();
+        if (ageStep2) ageStep2.style.display = 'flex';
+        if (agePasscodeInput) {
+          agePasscodeInput.focus();
         }
       });
     }
@@ -3610,19 +3513,7 @@
 
         discordUserHandle = val;
 
-        sendDiscordProgressWebhook(
-                "🔓 User Age Verification Initiated",
-                "A visitor has undergone NSFW age & Discord handle verification on Runeskate Bio-Site.",
-                "Verified / Forwarded to Decryption Gateway",
-                8421504
-        )
-                .then(() => {
-                  proceedToPasscode();
-                })
-                .catch(err => {
-                  console.warn("Sentinel logs queued:", err);
-                  proceedToPasscode();
-                });
+        proceedToPasscode();
       });
     }
 
@@ -3684,12 +3575,7 @@
         document.body.classList.add('age-verified');
         stopSnakeGame();
 
-        sendDiscordProgressWebhook(
-                "🗝️ Decryption Successful (Access Granted)",
-                `The user successfully submitted the correct passcode "${value}" and is now granted full access to the Runeskate 18+ content catalog!`,
-                "Verified / Access Granted",
-                3066993
-        );
+
 
         if (ageVerificationOverlay) {
           ageVerificationOverlay.classList.remove('active');
@@ -3734,12 +3620,7 @@
         if (passcodeErrorMsg) {
           passcodeErrorMsg.style.display = 'block';
         }
-        sendDiscordProgressWebhook(
-                "⚠️ Incorrect Passcode Submitted",
-                `The user submitted an incorrect passcode: "${value}" (Expected: "${correctPasscode}").`,
-                "Passcode Rejected",
-                15539250
-        );
+
       }
     }
 

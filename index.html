@@ -299,6 +299,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
     }
 
     .social-icons a:hover {
@@ -1110,6 +1111,10 @@
       transition: filter 0.3s ease;
     }
 
+    body.age-verified .nsfw-blur {
+      filter: none !important;
+    }
+
     .nsfw-badge {
       position: absolute;
       bottom: 15px;
@@ -1126,6 +1131,30 @@
       pointer-events: none;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       backdrop-filter: blur(4px);
+    }
+
+    body.age-verified .nsfw-badge {
+      display: none !important;
+    }
+
+    .age-passcode-input {
+      padding: 12px 20px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.4);
+      color: white;
+      text-align: center;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      outline: none;
+      width: 100%;
+      transition: all 0.3s;
+    }
+
+    .age-passcode-input:focus {
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(0, 0, 0, 0.6);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
     }
 
     .age-verification-overlay {
@@ -1159,9 +1188,16 @@
       text-align: center;
       display: flex;
       flex-direction: column;
-      gap: 20px;
       transform: scale(0.8);
       transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .age-step {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      width: 100%;
     }
 
     .age-verification-overlay.active .age-verification-modal {
@@ -1218,6 +1254,234 @@
 
     .age-btn.no:hover {
       background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* MINI-GAME LAYOUTS */
+    .game-stepper {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .step-dot {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.3;
+      transition: all 0.3s ease;
+    }
+
+    .step-dot.active {
+      opacity: 1;
+      color: #fbbf24;
+      text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+    }
+
+    .step-dot.completed {
+      opacity: 0.8;
+      color: #34d399;
+    }
+
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      width: 100%;
+      margin: 10px 0;
+      perspective: 1000px;
+    }
+
+    .memory-card {
+      aspect-ratio: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      cursor: pointer;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, background-color 0.3s;
+    }
+
+    .memory-card.flipped {
+      transform: rotateY(180deg);
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 245, 230, 0.4);
+    }
+
+    .memory-card.matched {
+      transform: rotateY(180deg);
+      background: rgba(74, 222, 128, 0.2);
+      border-color: rgba(74, 222, 128, 0.6);
+      pointer-events: none;
+    }
+
+    .memory-card .card-front,
+    .memory-card .card-back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 11px;
+    }
+
+    .memory-card .card-front {
+      transform: rotateY(180deg);
+      color: #f5e6d3;
+      font-size: 20px;
+    }
+
+    .memory-card .card-back {
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 16px;
+    }
+
+    /* SNAKE LAYOUTS */
+    .snake-board-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      margin: 10px 0;
+    }
+
+    .snake-score {
+      font-size: 13px;
+      font-weight: 800;
+      color: #4ade80;
+      font-family: var(--font-mono);
+      letter-spacing: 1px;
+    }
+
+    #snake-canvas {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.8);
+      display: block;
+    }
+
+    .snake-controls {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      width: 138px;
+    }
+
+    .snake-btn-control {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      transition: background 0.15s, transform 0.1s;
+      height: 42px;
+      width: 42px;
+      margin: auto;
+      cursor: pointer;
+    }
+
+    .snake-btn-control:active {
+      background: rgba(255, 255, 255, 0.25);
+      transform: scale(0.9);
+    }
+
+    /* GAMBLE LAYOUTS */
+    .gamble-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      margin: 10px 0;
+      gap: 12px;
+    }
+
+    .roulette-viewport {
+      position: relative;
+      width: 100%;
+      height: 90px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9);
+    }
+
+    .roulette-needle {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #ef4444;
+      z-index: 10;
+      box-shadow: 0 0 8px #ef4444;
+    }
+
+    .roulette-track {
+      display: flex;
+      gap: 6px;
+      height: 100%;
+      padding: 10px 0;
+      transform: translateX(0);
+      will-change: transform;
+      align-items: center;
+    }
+
+    .roulette-card {
+      flex-shrink: 0;
+      width: 70px;
+      height: 70px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 10px;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-weight: 600;
+    }
+
+    .roulette-card.tier-common {
+      background: linear-gradient(135deg, rgba(74, 85, 104, 0.4), rgba(45, 55, 72, 0.4));
+      border-bottom: 3px solid #718096;
+    }
+
+    .roulette-card.tier-legendary {
+      background: linear-gradient(135deg, rgba(217, 119, 6, 0.4), rgba(245, 158, 11, 0.4));
+      border-bottom: 3px solid #fbbf24;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+      color: #fbbf24;
+    }
+
+    .roulette-card i {
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+
+    .gamble-odds-indicator {
+      font-size: 11px;
+      opacity: 0.6;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-family: var(--font-mono);
+      text-align: center;
     }
   </style>
   <script src="https://w.soundcloud.com/player/api.js"></script>
@@ -1283,9 +1547,9 @@
   </script>
 
   <div class="social-icons">
-    <a href="needs update" target="_blank" title="BlueSky"><i class="fa fa-cloud"></i></a>
+    <a data-hash="eqqmp7,,_phv+^mm,molcfib,`^kfkborkb+_phv+pl`f^i" title="BlueSky"><i class="fa fa-cloud"></i></a>
     <a href="https://www.youtube.com/@runeskatee" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
-    <a href="needs update" target="_blank" title="X"><i class="fa fa-twitter"></i></a>
+    <a data-hash="eqqmp7,,u+`lj,`^kfkborkbph^qb" title="X"><i class="fa fa-twitter"></i></a>
     <a href="https://open.spotify.com/artist/27VTriHuDxNYlfLPa2KRx5" target="_blank" title="Spotify"><i class="fa fa-spotify"></i></a>
     <a href="https://soundcloud.com/runeskate" target="_blank" title="SoundCloud"><i class="fa fa-soundcloud"></i></a>
     <a href="https://discord.com/users/1280652814217117696" target="_blank" title="Discord"><i class="fa fa-comments"></i></a>
@@ -1367,514 +1631,620 @@
 
 <div class="age-verification-overlay" id="age-verification-overlay">
   <div class="age-verification-modal liquid-glass">
-    <h2>Age Verification</h2>
-    <p>This content is marked as NSFW. Are you 18 years of age or older?</p>
-    <div class="age-buttons">
-      <button class="age-btn yes" id="age-btn-yes">Yes, I am 18+</button>
-      <button class="age-btn no" id="age-btn-no">No, take me back</button>
+
+    <!-- STEP 1: AGE CHECK -->
+    <div id="age-step-1" class="age-step">
+      <h2>Access Restricted</h2>
+      <p>This content is age-restricted and marked as NSFW. Are you 18 years of age or older?</p>
+
+      <div class="age-buttons" style="width: 100%;">
+        <button class="age-btn yes" id="age-btn-step1-yes" style="width: 100%;">Yes, I am 18+</button>
+        <button class="age-btn no" id="age-btn-step1-no" style="width: 100%;">No, Cancel</button>
+      </div>
     </div>
+
+    <!-- STEP 2: PASSCODE CHECK -->
+    <div id="age-step-2" class="age-step" style="display: none;">
+      <h2>Invitation Passcode</h2>
+      <p>Please enter the invitation passcode to verify access.</p>
+
+      <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+        <input type="password" id="age-passcode-input" class="age-passcode-input" placeholder="Enter Passcode..." />
+        <span id="passcode-error-msg" style="color: #f87171; font-size: 11px; display: none; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Invalid Passcode</span>
+      </div>
+
+      <div class="age-buttons" style="width: 100%;">
+        <button class="age-btn yes" id="age-btn-yes" style="width: 100%;">Submit Passcode</button>
+        <button class="age-btn yes" id="play-game-btn" style="background: linear-gradient(135deg, #a78bfa, #818cf8); color: white; border: none; box-shadow: 0 4px 15px rgba(129, 140, 248, 0.4); width: 100%;">Play Game to Get Passcode</button>
+        <button class="age-btn no" id="age-btn-no" style="width: 100%;">Cancel</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: PLAY THE DECRYPTION MINIGAME -->
+    <div id="age-step-3" class="age-step" style="display: none;">
+      <!-- Glowing Stepper indicating 3 sub-stages -->
+      <div class="game-stepper">
+        <span class="step-dot active" id="step-dot-1">1. Memory</span>
+        <span class="step-dot" id="step-dot-2">2. Snake</span>
+        <span class="step-dot" id="step-dot-3">3. CS2 Roll</span>
+      </div>
+
+      <!-- Game Stage 1: Memory Game -->
+      <div id="game-stage-1" style="width: 100%;">
+        <h2>Decryption Matrix</h2>
+        <p style="margin-bottom: 8px; font-size: 13px;">Match all 6 pairs of security layers to unlock the mainframe!</p>
+        <div class="game-grid" id="memory-game-grid"></div>
+      </div>
+
+      <!-- Game Stage 2: Snake Game -->
+      <div id="game-stage-2" style="width: 100%; display: none;">
+        <h2>Bypass Firewall</h2>
+        <p style="margin-bottom: 8px; font-size: 13px;">Guide the datastream. Eat 5 apples to bypass the security shield.</p>
+
+        <div class="snake-board-container">
+          <div class="snake-score" id="snake-level-score">Apples: 0 / 5</div>
+          <canvas id="snake-canvas" width="180" height="180"></canvas>
+
+          <!-- Tactile custom arrows for mobile friendly inputs -->
+          <div class="snake-controls">
+            <div></div>
+            <button class="snake-btn-control" id="snake-up" title="Up"><i class="fa fa-caret-up"></i></button>
+            <div></div>
+            <button class="snake-btn-control" id="snake-left" title="Left"><i class="fa fa-caret-left"></i></button>
+            <div class="snake-btn-control" style="background:transparent; border:none; cursor:default;"><i class="fa fa-gamepad" style="opacity: 0.3;"></i></div>
+            <button class="snake-btn-control" id="snake-right" title="Right"><i class="fa fa-caret-right"></i></button>
+            <div></div>
+            <button class="snake-btn-control" id="snake-down" title="Down"><i class="fa fa-caret-down"></i></button>
+            <div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game Stage 3: CS2-style case opener (Gamble) -->
+      <div id="game-stage-3" style="width: 100%; display: none;">
+        <h2>System Roll (0.26%)</h2>
+        <p style="margin-bottom: 8px; font-size: 13px;">Open the legendary vault. Decryption success rate: 0.26%.</p>
+
+        <div class="gamble-box">
+          <div class="roulette-viewport">
+            <div class="roulette-needle"></div>
+            <div class="roulette-track" id="roulette-track-element"></div>
+          </div>
+
+          <button class="age-btn yes" id="spin-roulette-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; font-weight: bold; width: 100%; box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);">
+            SPIN FOR CODE
+          </button>
+
+          <div class="gamble-odds-indicator" id="gamble-status-log">
+            CHANCE: 0.26% (~1 IN 385 ROLLS)
+          </div>
+        </div>
+      </div>
+
+      <div class="age-buttons" style="width: 100%; margin-top: 10px;">
+        <button class="age-btn no" id="back-to-passcode-btn" style="width: 100%;">Back to Passcode</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <script>
-  const widgetIframe = document.getElementById('sc-widget');
-  const widget = SC.Widget(widgetIframe);
-  const volumeSlider = document.getElementById('volume-slider');
-  const volumeIcon = document.getElementById('volume-icon');
-  let fadeInterval = null;
+  (function() {
+    "use strict";
 
-  const playlists = [
-    'https://soundcloud.com/runeskate/tracks',
-    'https://soundcloud.com/goddessofwarfare/tracks',
-    'https://soundcloud.com/runeskate/likes',
-    'https://soundcloud.com/goddessofwarfare/likes'
-  ];
-  let mergedQueue = [];
-  let currentQueueIndex = 0;
-  let allSounds = [];
-  let seenTrackIds = new Set();
-  let isShuffled = true;
+    const secureRandom = () => {
+      try {
+        const array = new Uint32Array(1);
+        (window.crypto || window.msCrypto).getRandomValues(array);
+        return array[0] / (0xffffffff + 1);
+      } catch (e) {
+        return Math.random();
+      }
+    };
 
-  function shuffleArray(array) {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    const widgetIframe = document.getElementById('sc-widget');
+    const widget = SC.Widget(widgetIframe);
+    const volumeSlider = document.getElementById('volume-slider');
+    const volumeIcon = document.getElementById('volume-icon');
+    let fadeInterval = null;
+
+    const playlists = [
+      'https://soundcloud.com/runeskate/tracks',
+      'https://soundcloud.com/goddessofwarfare/tracks',
+      'https://soundcloud.com/runeskate/likes',
+      'https://soundcloud.com/goddessofwarfare/likes'
+    ];
+    let mergedQueue = [];
+    let currentQueueIndex = 0;
+    let allSounds = [];
+    let seenTrackIds = new Set();
+    let isShuffled = true;
+
+    function shuffleArray(array) {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(secureRandom() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
     }
-    return shuffled;
-  }
 
-  function fetchAllPlaylistsParallel(callback) {
-    let completedCount = 0;
-    const totalPlaylists = playlists.length;
+    function fetchAllPlaylistsParallel(callback) {
+      let completedCount = 0;
+      const totalPlaylists = playlists.length;
 
-    const tempContainer = document.createElement('div');
-    tempContainer.id = 'sc-temp-container';
-    tempContainer.style.display = 'none';
-    document.body.appendChild(tempContainer);
+      const tempContainer = document.createElement('div');
+      tempContainer.id = 'sc-temp-container';
+      tempContainer.style.display = 'none';
+      document.body.appendChild(tempContainer);
 
-    playlists.forEach((url, index) => {
-      const tempIframe = document.createElement('iframe');
-      tempIframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&auto_play=false&show_comments=false&visual=false`;
-      tempContainer.appendChild(tempIframe);
+      playlists.forEach((url, index) => {
+        const tempIframe = document.createElement('iframe');
+        tempIframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&auto_play=false&show_comments=false&visual=false`;
+        tempContainer.appendChild(tempIframe);
 
-      const tempWidget = SC.Widget(tempIframe);
-      let loaded = false;
+        const tempWidget = SC.Widget(tempIframe);
+        let loaded = false;
 
-      const checkAndProceed = () => {
-        if (loaded) return;
-        loaded = true;
-        completedCount++;
+        const checkAndProceed = () => {
+          if (loaded) return;
+          loaded = true;
+          completedCount++;
 
-        const progressPercent = Math.min(95, Math.floor((completedCount / totalPlaylists) * 90) + 5);
-        setProgress(progressPercent);
+          const progressPercent = Math.min(95, Math.floor((completedCount / totalPlaylists) * 90) + 5);
+          setProgress(progressPercent);
 
-        if (completedCount === totalPlaylists) {
-          setTimeout(() => {
-            if (document.body.contains(tempContainer)) {
-              document.body.removeChild(tempContainer);
-            }
-            callback();
-          }, 100);
-        }
-      };
+          if (completedCount === totalPlaylists) {
+            setTimeout(() => {
+              if (document.body.contains(tempContainer)) {
+                document.body.removeChild(tempContainer);
+              }
+              callback();
+            }, 100);
+          }
+        };
 
-      const timeout = setTimeout(() => {
-        if (!loaded) {
-          console.warn("Parallel fetch timeout for " + url);
-          checkAndProceed();
-        }
-      }, 4000);
-
-      tempWidget.bind(SC.Widget.Events.READY, () => {
-        setTimeout(() => {
-          tempWidget.getSounds((sounds) => {
-            if (sounds && Array.isArray(sounds) && sounds.length > 0) {
-              sounds.forEach(sound => {
-                if (sound && sound.id && !seenTrackIds.has(sound.id)) {
-                  seenTrackIds.add(sound.id);
-                  allSounds.push(sound);
-                }
-              });
-            }
-            clearTimeout(timeout);
+        const timeout = setTimeout(() => {
+          if (!loaded) {
+            console.warn("Parallel fetch timeout for " + url);
             checkAndProceed();
-          });
-        }, 150);
+          }
+        }, 4000);
+
+        tempWidget.bind(SC.Widget.Events.READY, () => {
+          setTimeout(() => {
+            tempWidget.getSounds((sounds) => {
+              if (sounds && Array.isArray(sounds) && sounds.length > 0) {
+                sounds.forEach(sound => {
+                  if (sound && sound.id && !seenTrackIds.has(sound.id)) {
+                    seenTrackIds.add(sound.id);
+                    allSounds.push(sound);
+                  }
+                });
+              }
+              clearTimeout(timeout);
+              checkAndProceed();
+            });
+          }, 150);
+        });
+      });
+    }
+
+    function initQueue() {
+      setProgress(95);
+
+      if (allSounds.length === 0) {
+        allSounds = [
+          { permalink_url: 'https://soundcloud.com/runeskate/tracks', title: 'runeskate Tracks', user: { username: 'runeskate' } },
+          { permalink_url: 'https://soundcloud.com/goddessofwarfare/tracks', title: 'goddessofwarfare Tracks', user: { username: 'goddessofwarfare' } }
+        ];
+      }
+
+      mergedQueue = shuffleArray(allSounds);
+      currentQueueIndex = 0;
+
+      setProgress(100);
+      setTimeout(() => {
+        document.getElementById('intro-loader').style.opacity = '0';
+        entryPrompt.classList.add('ready');
+      }, 500);
+    }
+
+    function playTrackAtIndex(index) {
+      const listToPlay = isShuffled ? mergedQueue : allSounds;
+      if (listToPlay.length === 0) return;
+
+      if (index < 0) {
+        currentQueueIndex = listToPlay.length - 1;
+      } else if (index >= listToPlay.length) {
+        currentQueueIndex = 0;
+      } else {
+        currentQueueIndex = index;
+      }
+
+      const track = listToPlay[currentQueueIndex];
+      widget.load(track.permalink_url, {
+        auto_play: true,
+        hide_related: true,
+        show_comments: false,
+        show_user: false,
+        show_reposts: false,
+        visual: false
+      });
+    }
+
+    function updateVolumeIcon(vol) {
+      if (vol == 0) {
+        volumeIcon.className = 'fa fa-volume-off';
+      } else if (vol < 50) {
+        volumeIcon.className = 'fa fa-volume-down';
+      } else {
+        volumeIcon.className = 'fa fa-volume-up';
+      }
+    }
+
+    const entryScreen = document.getElementById('entry-screen');
+    const entryPrompt = document.getElementById('entry-prompt');
+    const introLoader = document.getElementById('intro-loader');
+
+    function playEnterSound() {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const frequencies = [523.25, 659.25, 783.99];
+
+      frequencies.forEach((freq, i) => {
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.25);
+        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime + i * 0.25);
+        gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + i * 0.25 + 0.2);
+
+        oscillator.start(audioCtx.currentTime + i * 0.25);
+        oscillator.stop(audioCtx.currentTime + i * 0.25 + 0.2);
+      });
+    }
+
+    function enterSite(e) {
+      if (e && e.isTrusted === false) {
+        console.warn("Automation detected.");
+        return;
+      }
+      if (entryScreen.classList.contains('hidden')) return;
+      if (!entryPrompt.classList.contains('ready')) return;
+      playEnterSound();
+      playTrackAtIndex(0);
+      widget.setVolume(15);
+      entryScreen.classList.add('hidden');
+      document.body.classList.add('entered');
+
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      for (let i = 0; i < 50; i++) {
+        const p = new Particle(centerX, centerY, true);
+        p.speedX = (Math.random() - 0.5) * 15;
+        p.speedY = (Math.random() - 0.5) * 15;
+        particles.push(p);
+      }
+    }
+
+    // Keep event listener for manual entry
+    entryScreen.addEventListener('click', enterSite);
+
+    // Initial loading tracking logic
+    function setProgress(percent) {
+      const loaderBar = document.querySelector('.loader-bar');
+      if (loaderBar) {
+        loaderBar.style.width = percent + '%';
+      }
+    }
+
+    window.addEventListener('load', () => {
+      setProgress(5);
+      fetchAllPlaylistsParallel(() => {
+        initQueue();
       });
     });
-  }
 
-  function initQueue() {
-    setProgress(95);
+    function fadeVolume(target, duration) {
+      if (fadeInterval) clearInterval(fadeInterval);
 
-    if (allSounds.length === 0) {
-      allSounds = [
-        { permalink_url: 'https://soundcloud.com/runeskate/tracks', title: 'runeskate Tracks', user: { username: 'runeskate' } },
-        { permalink_url: 'https://soundcloud.com/goddessofwarfare/tracks', title: 'goddessofwarfare Tracks', user: { username: 'goddessofwarfare' } }
-      ];
+      widget.getVolume((current) => {
+        const steps = 30;
+        const stepTime = duration / steps;
+        const stepAmount = (target - current) / steps;
+        let count = 0;
+        fadeInterval = setInterval(() => {
+          count++;
+          const nextVolume = current + stepAmount * count;
+          const finalVolume = Math.max(0, Math.min(100, nextVolume));
+          widget.setVolume(finalVolume);
+          volumeSlider.value = finalVolume;
+          updateVolumeIcon(finalVolume);
+          if (count >= steps) {
+            clearInterval(fadeInterval);
+            fadeInterval = null;
+          }
+        }, stepTime);
+      });
     }
 
-    mergedQueue = shuffleArray(allSounds);
-    currentQueueIndex = 0;
+    entryScreen.addEventListener('click', enterSite);
 
-    setProgress(100);
-    setTimeout(() => {
-      document.getElementById('intro-loader').style.opacity = '0';
-      entryPrompt.classList.add('ready');
-    }, 500);
-  }
-
-  function playTrackAtIndex(index) {
-    const listToPlay = isShuffled ? mergedQueue : allSounds;
-    if (listToPlay.length === 0) return;
-
-    if (index < 0) {
-      currentQueueIndex = listToPlay.length - 1;
-    } else if (index >= listToPlay.length) {
-      currentQueueIndex = 0;
-    } else {
-      currentQueueIndex = index;
+    const bgTextContainer = document.getElementById('bg-text');
+    const nameText = "Hollyn ";
+    for (let i = 0; i < 30; i++) {
+      const div = document.createElement('div');
+      div.className = `bg-text-item ${i % 2 === 0 ? 'scroll-left' : 'scroll-right'}`;
+      div.textContent = nameText.repeat(40);
+      bgTextContainer.appendChild(div);
     }
 
-    const track = listToPlay[currentQueueIndex];
-    widget.load(track.permalink_url, {
-      auto_play: true,
-      hide_related: true,
-      show_comments: false,
-      show_user: false,
-      show_reposts: false,
-      visual: false
+    const canvas = document.getElementById('visual');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const particleCount = 80;
+    let mouse = { x: null, y: null, radius: 150 };
+    const symbols = ['˚', '⋆', '✦', '☁', '✩', '☾', '✧'];
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
     });
-  }
 
-  function updateVolumeIcon(vol) {
-    if (vol == 0) {
-      volumeIcon.className = 'fa fa-volume-off';
-    } else if (vol < 50) {
-      volumeIcon.className = 'fa fa-volume-down';
-    } else {
-      volumeIcon.className = 'fa fa-volume-up';
-    }
-  }
-
-  const entryScreen = document.getElementById('entry-screen');
-  const entryPrompt = document.getElementById('entry-prompt');
-  const introLoader = document.getElementById('intro-loader');
-
-  function playEnterSound() {
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const frequencies = [523.25, 659.25, 783.99];
-
-    frequencies.forEach((freq, i) => {
-      const oscillator = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-
-      oscillator.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.25);
-      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime + i * 0.25);
-      gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + i * 0.25 + 0.2);
-
-      oscillator.start(audioCtx.currentTime + i * 0.25);
-      oscillator.stop(audioCtx.currentTime + i * 0.25 + 0.2);
+    window.addEventListener('mousedown', (e) => {
+      for (let i = 0; i < 15; i++) {
+        particles.push(new Particle(e.clientX, e.clientY, true));
+      }
     });
-  }
 
-  function enterSite() {
-    if (entryScreen.classList.contains('hidden')) return;
-    if (!entryPrompt.classList.contains('ready')) return; // GUARD: loading must be finished first!
-    playEnterSound();
-    playTrackAtIndex(0);
-    widget.setVolume(15);
-    entryScreen.classList.add('hidden');
-    document.body.classList.add('entered');
-
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-    for (let i = 0; i < 50; i++) {
-      const p = new Particle(centerX, centerY, true);
-      p.speedX = (Math.random() - 0.5) * 15;
-      p.speedY = (Math.random() - 0.5) * 15;
-      particles.push(p);
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     }
-  }
 
-  // Keep event listener for manual entry
-  entryScreen.addEventListener('click', enterSite);
+    class Particle {
+      constructor(x, y, isTemporary = false) {
+        this.isTemporary = isTemporary;
+        this.life = isTemporary ? 100 : Infinity;
+        this.symbol = symbols[Math.floor(Math.random() * symbols.length)];
+        this.init(x, y);
+      }
+      init(x, y) {
+        this.x = x || Math.random() * canvas.width;
+        this.y = y || Math.random() * canvas.height;
+        this.size = Math.random() * 15 + 5;
+        this.baseX = this.x;
+        this.baseY = this.y;
+        this.density = (Math.random() * 30) + 1;
+        this.speedX = (Math.random() - 0.5) * 1;
+        this.speedY = (Math.random() - 0.5) * 1;
+        this.rotation = Math.random() * Math.PI * 2;
+        this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.rotation += this.rotationSpeed;
 
-  // Initial loading tracking logic
-  function setProgress(percent) {
-    const loaderBar = document.querySelector('.loader-bar');
-    if (loaderBar) {
-      loaderBar.style.width = percent + '%';
-    }
-  }
+        if (this.x > canvas.width + 50) this.x = -50;
+        else if (this.x < -50) this.x = canvas.width + 50;
+        if (this.y > canvas.height + 50) this.y = -50;
+        else if (this.y < -50) this.y = canvas.height + 50;
 
-  window.addEventListener('load', () => {
-    setProgress(5);
-    fetchAllPlaylistsParallel(() => {
-      initQueue();
-    });
-  });
-
-  function fadeVolume(target, duration) {
-    if (fadeInterval) clearInterval(fadeInterval);
-
-    widget.getVolume((current) => {
-      const steps = 30;
-      const stepTime = duration / steps;
-      const stepAmount = (target - current) / steps;
-      let count = 0;
-      fadeInterval = setInterval(() => {
-        count++;
-        const nextVolume = current + stepAmount * count;
-        const finalVolume = Math.max(0, Math.min(100, nextVolume));
-        widget.setVolume(finalVolume);
-        volumeSlider.value = finalVolume;
-        updateVolumeIcon(finalVolume);
-        if (count >= steps) {
-          clearInterval(fadeInterval);
-          fadeInterval = null;
+        if (mouse.x != null && mouse.y != null) {
+          let dx = mouse.x - this.x;
+          let dy = mouse.y - this.y;
+          let distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < mouse.radius) {
+            const forceDirectionX = dx / distance;
+            const forceDirectionY = dy / distance;
+            const maxDistance = mouse.radius;
+            const force = (maxDistance - distance) / maxDistance;
+            const directionX = forceDirectionX * force * this.density;
+            const directionY = forceDirectionY * force * this.density;
+            this.x -= directionX;
+            this.y -= directionY;
+          }
         }
-      }, stepTime);
-    });
-  }
 
-  entryScreen.addEventListener('click', enterSite);
-
-  const bgTextContainer = document.getElementById('bg-text');
-  const nameText = "Hollyn ";
-  for (let i = 0; i < 30; i++) {
-    const div = document.createElement('div');
-    div.className = `bg-text-item ${i % 2 === 0 ? 'scroll-left' : 'scroll-right'}`;
-    div.textContent = nameText.repeat(40);
-    bgTextContainer.appendChild(div);
-  }
-
-  const canvas = document.getElementById('visual');
-  const ctx = canvas.getContext('2d');
-  let particles = [];
-  const particleCount = 80;
-  let mouse = { x: null, y: null, radius: 150 };
-  const symbols = ['˚', '⋆', '✦', '☁', '✩', '☾', '✧'];
-
-  window.addEventListener('mousemove', (e) => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-  });
-
-  window.addEventListener('mousedown', (e) => {
-    for (let i = 0; i < 15; i++) {
-      particles.push(new Particle(e.clientX, e.clientY, true));
-    }
-  });
-
-  function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-
-  class Particle {
-    constructor(x, y, isTemporary = false) {
-      this.isTemporary = isTemporary;
-      this.life = isTemporary ? 100 : Infinity;
-      this.symbol = symbols[Math.floor(Math.random() * symbols.length)];
-      this.init(x, y);
-    }
-    init(x, y) {
-      this.x = x || Math.random() * canvas.width;
-      this.y = y || Math.random() * canvas.height;
-      this.size = Math.random() * 15 + 5;
-      this.baseX = this.x;
-      this.baseY = this.y;
-      this.density = (Math.random() * 30) + 1;
-      this.speedX = (Math.random() - 0.5) * 1;
-      this.speedY = (Math.random() - 0.5) * 1;
-      this.rotation = Math.random() * Math.PI * 2;
-      this.rotationSpeed = (Math.random() - 0.5) * 0.02;
-    }
-    update() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-      this.rotation += this.rotationSpeed;
-
-      if (this.x > canvas.width + 50) this.x = -50;
-      else if (this.x < -50) this.x = canvas.width + 50;
-      if (this.y > canvas.height + 50) this.y = -50;
-      else if (this.y < -50) this.y = canvas.height + 50;
-
-      if (mouse.x != null && mouse.y != null) {
-        let dx = mouse.x - this.x;
-        let dy = mouse.y - this.y;
-        let distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance < mouse.radius) {
-          const forceDirectionX = dx / distance;
-          const forceDirectionY = dy / distance;
-          const maxDistance = mouse.radius;
-          const force = (maxDistance - distance) / maxDistance;
-          const directionX = forceDirectionX * force * this.density;
-          const directionY = forceDirectionY * force * this.density;
-          this.x -= directionX;
-          this.y -= directionY;
+        if (this.isTemporary) {
+          this.life -= 1;
         }
       }
+      draw() {
+        let opacity = this.isTemporary ? this.life / 100 : 0.4;
 
-      if (this.isTemporary) {
-        this.life -= 1;
-      }
-    }
-    draw() {
-      let opacity = this.isTemporary ? this.life / 100 : 0.4;
-
-      if (mouse.x != null && mouse.y != null) {
-        let dx = mouse.x - this.x;
-        let dy = mouse.y - this.y;
-        let distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance < 150) {
-          opacity = Math.min(0.8, opacity + (1 - distance / 150) * 0.4);
+        if (mouse.x != null && mouse.y != null) {
+          let dx = mouse.x - this.x;
+          let dy = mouse.y - this.y;
+          let distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < 150) {
+            opacity = Math.min(0.8, opacity + (1 - distance / 150) * 0.4);
+          }
         }
+
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+        ctx.font = `${this.size}px serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(this.symbol, 0, 0);
+        ctx.restore();
       }
-
-      ctx.save();
-      ctx.translate(this.x, this.y);
-      ctx.rotate(this.rotation);
-      ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
-      ctx.font = `${this.size}px serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(this.symbol, 0, 0);
-      ctx.restore();
     }
-  }
 
-  function initParticles() {
-    particles = [];
-    for (let i = 0; i < particleCount; i++) {
-      particles.push(new Particle());
+    function initParticles() {
+      particles = [];
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+      }
     }
-  }
 
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    particles = particles.filter(p => !p.isTemporary || p.life > 0);
+      particles = particles.filter(p => !p.isTemporary || p.life > 0);
 
-    particles.forEach(p => {
-      p.update();
-      p.draw();
-    });
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
 
-    requestAnimationFrame(animate);
-  }
+      requestAnimationFrame(animate);
+    }
 
-  window.addEventListener('resize', resize);
-  resize();
-  initParticles();
-  animate();
+    window.addEventListener('resize', resize);
+    resize();
+    initParticles();
+    animate();
 
-  const mainContent = document.querySelector('.main-content');
-  let magneticElements = document.querySelectorAll('.social-icons a, .grid-card, .profile-img-container, .music-player, .ref-modal-content');
+    const mainContent = document.querySelector('.main-content');
+    let magneticElements = document.querySelectorAll('.social-icons a, .grid-card, .profile-img-container, .music-player, .ref-modal-content');
 
-  document.addEventListener('mousemove', (e) => {
-    const x = e.clientX;
-    const y = e.clientY;
+    document.addEventListener('mousemove', (e) => {
+      const x = e.clientX;
+      const y = e.clientY;
 
-    const moveX = (x - window.innerWidth / 2) / 50;
-    const moveY = (y - window.innerHeight / 2) / 50;
-    mainContent.style.transform = `translate(${moveX}px, ${moveY}px)`;
+      const moveX = (x - window.innerWidth / 2) / 50;
+      const moveY = (y - window.innerHeight / 2) / 50;
+      mainContent.style.transform = `translate(${moveX}px, ${moveY}px)`;
 
-    const bgItems = document.querySelectorAll('.bg-text-item');
-    bgItems.forEach((item, index) => {
-      const depth = (index % 5 + 1) * 2;
-      const shiftX = (x - window.innerWidth / 2) / (100 / depth);
-      item.style.transform = `translateX(${shiftX}px)`;
-    });
+      const bgItems = document.querySelectorAll('.bg-text-item');
+      bgItems.forEach((item, index) => {
+        const depth = (index % 5 + 1) * 2;
+        const shiftX = (x - window.innerWidth / 2) / (100 / depth);
+        item.style.transform = `translateX(${shiftX}px)`;
+      });
 
-    magneticElements.forEach(el => {
-      const rect = el.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const dx = x - centerX;
-      const dy = y - centerY;
-      const distance = Math.sqrt(dx * dx + dy * dy);
+      magneticElements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const dx = x - centerX;
+        const dy = y - centerY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
 
-      const threshold = Math.max(150, rect.width / 2 + 50);
+        const threshold = Math.max(150, rect.width / 2 + 50);
 
-      if (distance < threshold) {
-        if (el.classList.contains('music-player') && !el.classList.contains('collapsed')) {
+        if (distance < threshold) {
+          if (el.classList.contains('music-player') && !el.classList.contains('collapsed')) {
+            el.style.transform = '';
+            return;
+          }
+
+          const strength = 15;
+          const magX = (dx / distance) * strength * (1 - distance / threshold);
+          const magY = (dy / distance) * strength * (1 - distance / threshold);
+
+          let transform = `translate(${magX}px, ${magY}px)`;
+
+          if (el.classList.contains('grid-card') || el.classList.contains('profile-img-container') || el.classList.contains('music-player') || el.classList.contains('ref-image-card') || el.classList.contains('ref-modal-content')) {
+            const tiltX = (dy / (rect.height / 2)) * (el.classList.contains('ref-modal-content') ? 2 : 10);
+            const tiltY = -(dx / (rect.width / 2)) * (el.classList.contains('ref-modal-content') ? 2 : 10);
+
+            const maxTilt = el.classList.contains('ref-modal-content') ? 5 : 15;
+            const cappedTiltX = Math.max(-maxTilt, Math.min(maxTilt, tiltX));
+            const cappedTiltY = Math.max(-maxTilt, Math.min(maxTilt, tiltY));
+
+            const scale = el.classList.contains('ref-modal-content') ? 1.01 : 1.02;
+            transform += ` perspective(1000px) rotateX(${cappedTiltX}deg) rotateY(${cappedTiltY}deg) scale(${scale})`;
+          }
+
+          el.style.transform = transform;
+        } else {
           el.style.transform = '';
-          return;
         }
+      });
+    });
 
-        const strength = 15;
-        const magX = (dx / distance) * strength * (1 - distance / threshold);
-        const magY = (dy / distance) * strength * (1 - distance / threshold);
+    const musicPlayerContainer = document.getElementById('music-player');
+    const playerToggle = document.getElementById('player-toggle');
+    const playerCoverArt = document.getElementById('player-cover-art');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const skipBtn = document.getElementById('skip-btn');
+    const shuffleBtn = document.getElementById('shuffle-btn');
+    const trackTitle = document.getElementById('track-title');
+    const trackArtist = document.getElementById('track-artist');
+    const trackCover = document.getElementById('track-cover');
+    const progressFill = document.getElementById('progress-fill');
+    const soundcloudTrackLink = document.getElementById('soundcloud-track-link');
+    let isPlaying = false;
 
-        let transform = `translate(${magX}px, ${magY}px)`;
+    if (soundcloudTrackLink) {
+      soundcloudTrackLink.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+    }
 
-        if (el.classList.contains('grid-card') || el.classList.contains('profile-img-container') || el.classList.contains('music-player') || el.classList.contains('ref-image-card') || el.classList.contains('ref-modal-content')) {
-          const tiltX = (dy / (rect.height / 2)) * (el.classList.contains('ref-modal-content') ? 2 : 10);
-          const tiltY = -(dx / (rect.width / 2)) * (el.classList.contains('ref-modal-content') ? 2 : 10);
-
-          const maxTilt = el.classList.contains('ref-modal-content') ? 5 : 15;
-          const cappedTiltX = Math.max(-maxTilt, Math.min(maxTilt, tiltX));
-          const cappedTiltY = Math.max(-maxTilt, Math.min(maxTilt, tiltY));
-
-          const scale = el.classList.contains('ref-modal-content') ? 1.01 : 1.02;
-          transform += ` perspective(1000px) rotateX(${cappedTiltX}deg) rotateY(${cappedTiltY}deg) scale(${scale})`;
-        }
-
-        el.style.transform = transform;
-      } else {
-        el.style.transform = '';
+    musicPlayerContainer.addEventListener('click', (e) => {
+      if (musicPlayerContainer.classList.contains('collapsed')) {
+        musicPlayerContainer.classList.remove('collapsed');
       }
     });
-  });
 
-  const musicPlayerContainer = document.getElementById('music-player');
-  const playerToggle = document.getElementById('player-toggle');
-  const playerCoverArt = document.getElementById('player-cover-art');
-  const playPauseBtn = document.getElementById('play-pause-btn');
-  const skipBtn = document.getElementById('skip-btn');
-  const shuffleBtn = document.getElementById('shuffle-btn');
-  const trackTitle = document.getElementById('track-title');
-  const trackArtist = document.getElementById('track-artist');
-  const trackCover = document.getElementById('track-cover');
-  const progressFill = document.getElementById('progress-fill');
-  const soundcloudTrackLink = document.getElementById('soundcloud-track-link');
-  let isPlaying = false;
-
-  if (soundcloudTrackLink) {
-    soundcloudTrackLink.addEventListener('click', (e) => {
-      e.stopPropagation();
-    });
-  }
-
-  musicPlayerContainer.addEventListener('click', (e) => {
-    if (musicPlayerContainer.classList.contains('collapsed')) {
-      musicPlayerContainer.classList.remove('collapsed');
-    }
-  });
-
-  playerToggle.addEventListener('click', (e) => {
-    if (musicPlayerContainer.classList.contains('collapsed')) {
-      e.stopPropagation();
-      musicPlayerContainer.classList.remove('collapsed');
-    }
-  });
-
-  playerCoverArt.addEventListener('click', (e) => {
-    e.stopPropagation();
-    musicPlayerContainer.classList.add('collapsed');
-  });
-
-  volumeSlider.addEventListener('input', (e) => {
-    const vol = e.target.value;
-    widget.setVolume(vol);
-    updateVolumeIcon(vol);
-    if (fadeInterval) {
-      clearInterval(fadeInterval);
-      fadeInterval = null;
-    }
-  });
-
-  volumeIcon.addEventListener('click', () => {
-    widget.getVolume((vol) => {
-      if (vol > 0) {
-        volumeSlider.dataset.prevVol = vol;
-        widget.setVolume(0);
-        volumeSlider.value = 0;
-        updateVolumeIcon(0);
-      } else {
-        const prev = volumeSlider.dataset.prevVol || 100;
-        const targetVol = Number(prev);
-        widget.setVolume(targetVol);
-        volumeSlider.value = targetVol;
-        updateVolumeIcon(targetVol);
+    playerToggle.addEventListener('click', (e) => {
+      if (musicPlayerContainer.classList.contains('collapsed')) {
+        e.stopPropagation();
+        musicPlayerContainer.classList.remove('collapsed');
       }
     });
-  });
 
-  let lastToastTrackId = null;
+    playerCoverArt.addEventListener('click', (e) => {
+      e.stopPropagation();
+      musicPlayerContainer.classList.add('collapsed');
+    });
 
-  function showTrackToast(sound) {
-    if (!sound) return;
-    if (sound.id === lastToastTrackId) return; // Prevent spamming on play/pause logic
-    lastToastTrackId = sound.id;
+    volumeSlider.addEventListener('input', (e) => {
+      const vol = e.target.value;
+      widget.setVolume(vol);
+      updateVolumeIcon(vol);
+      if (fadeInterval) {
+        clearInterval(fadeInterval);
+        fadeInterval = null;
+      }
+    });
 
-    const toastContainer = document.getElementById('toast-container');
-    if (!toastContainer) return;
+    volumeIcon.addEventListener('click', () => {
+      widget.getVolume((vol) => {
+        if (vol > 0) {
+          volumeSlider.dataset.prevVol = vol;
+          widget.setVolume(0);
+          volumeSlider.value = 0;
+          updateVolumeIcon(0);
+        } else {
+          const prev = volumeSlider.dataset.prevVol || 100;
+          const targetVol = Number(prev);
+          widget.setVolume(targetVol);
+          volumeSlider.value = targetVol;
+          updateVolumeIcon(targetVol);
+        }
+      });
+    });
 
-    // Create toast notice card element
-    const toast = document.createElement('div');
-    toast.className = 'toast';
+    let lastToastTrackId = null;
 
-    const artistName = sound.user ? sound.user.username : "runeskate";
+    function showTrackToast(sound) {
+      if (!sound) return;
+      if (sound.id === lastToastTrackId) return; // Prevent spamming on play/pause logic
+      lastToastTrackId = sound.id;
 
-    toast.innerHTML = `
+      const toastContainer = document.getElementById('toast-container');
+      if (!toastContainer) return;
+
+      // Create toast notice card element
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+
+      const artistName = sound.user ? sound.user.username : "runeskate";
+
+      toast.innerHTML = `
       <div class="toast-icon">
         <i class="fa fa-music"></i>
       </div>
@@ -1885,422 +2255,1052 @@
       </div>
     `;
 
-    toastContainer.appendChild(toast);
+      toastContainer.appendChild(toast);
 
-    // Trigger reveal animation transition
-    setTimeout(() => {
-      toast.classList.add('show');
-    }, 50);
-
-    // Auto-remove helper
-    setTimeout(() => {
-      toast.classList.remove('show');
+      // Trigger reveal animation transition
       setTimeout(() => {
-        if (toastContainer.contains(toast)) {
-          toastContainer.removeChild(toast);
-        }
-      }, 400);
-    }, 4000);
-  }
+        toast.classList.add('show');
+      }, 50);
 
-  widget.bind(SC.Widget.Events.READY, () => {
-    widget.setVolume(15);
-    volumeSlider.value = 15;
-    updateVolumeIcon(15);
-    shuffleBtn.style.color = '#4ade80';
-    trackTitle.textContent = "Click Play to Start";
-    trackArtist.textContent = "runeskate & goddessofwarfare";
-  });
-
-  widget.bind(SC.Widget.Events.PLAY, () => {
-    isPlaying = true;
-    musicPlayerContainer.classList.add('playing');
-    playPauseBtn.innerHTML = '<i class="fa fa-pause"></i>';
-    if (volumeSlider) {
-      widget.setVolume(volumeSlider.value);
+      // Auto-remove helper
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+          if (toastContainer.contains(toast)) {
+            toastContainer.removeChild(toast);
+          }
+        }, 400);
+      }, 4000);
     }
-    widget.getCurrentSound((sound) => {
-      if (sound) {
-        trackTitle.textContent = sound.title;
-        trackArtist.textContent = sound.user ? sound.user.username : "runeskate";
-        if (sound.artwork_url) {
-          trackCover.src = sound.artwork_url.replace('-large', '-t500x500');
-        } else if (sound.user && sound.user.avatar_url) {
-          trackCover.src = sound.user.avatar_url;
+
+    widget.bind(SC.Widget.Events.READY, () => {
+      widget.setVolume(15);
+      volumeSlider.value = 15;
+      updateVolumeIcon(15);
+      shuffleBtn.style.color = '#4ade80';
+      trackTitle.textContent = "Click Play to Start";
+      trackArtist.textContent = "runeskate & goddessofwarfare";
+    });
+
+    widget.bind(SC.Widget.Events.PLAY, () => {
+      isPlaying = true;
+      musicPlayerContainer.classList.add('playing');
+      playPauseBtn.innerHTML = '<i class="fa fa-pause"></i>';
+      if (volumeSlider) {
+        widget.setVolume(volumeSlider.value);
+      }
+      widget.getCurrentSound((sound) => {
+        if (sound) {
+          trackTitle.textContent = sound.title;
+          trackArtist.textContent = sound.user ? sound.user.username : "runeskate";
+          if (sound.artwork_url) {
+            trackCover.src = sound.artwork_url.replace('-large', '-t500x500');
+          } else if (sound.user && sound.user.avatar_url) {
+            trackCover.src = sound.user.avatar_url;
+          }
+          if (sound.permalink_url && soundcloudTrackLink) {
+            soundcloudTrackLink.href = sound.permalink_url;
+          }
+          showTrackToast(sound);
         }
-        if (sound.permalink_url && soundcloudTrackLink) {
-          soundcloudTrackLink.href = sound.permalink_url;
-        }
-        showTrackToast(sound);
+      });
+    });
+
+    widget.bind(SC.Widget.Events.PAUSE, () => {
+      isPlaying = false;
+      musicPlayerContainer.classList.remove('playing');
+      playPauseBtn.innerHTML = '<i class="fa fa-play"></i>';
+    });
+
+    widget.bind(SC.Widget.Events.PLAY_PROGRESS, (e) => {
+      if (e.relativePosition !== undefined) {
+        progressFill.style.width = `${e.relativePosition * 100}%`;
       }
     });
-  });
 
-  widget.bind(SC.Widget.Events.PAUSE, () => {
-    isPlaying = false;
-    musicPlayerContainer.classList.remove('playing');
-    playPauseBtn.innerHTML = '<i class="fa fa-play"></i>';
-  });
-
-  widget.bind(SC.Widget.Events.PLAY_PROGRESS, (e) => {
-    if (e.relativePosition !== undefined) {
-      progressFill.style.width = `${e.relativePosition * 100}%`;
-    }
-  });
-
-  widget.bind(SC.Widget.Events.FINISH, () => {
-    playTrackAtIndex(currentQueueIndex + 1);
-  });
-
-  playPauseBtn.addEventListener('click', () => {
-    widget.toggle();
-  });
-
-  skipBtn.addEventListener('click', () => {
-    playTrackAtIndex(currentQueueIndex + 1);
-  });
-
-  shuffleBtn.addEventListener('click', () => {
-    isShuffled = !isShuffled;
-    shuffleBtn.style.color = isShuffled ? '#4ade80' : 'white';
-    currentQueueIndex = 0;
-  });
-
-  const pfpBtn = document.getElementById('pfp-btn');
-  const refModal = document.getElementById('ref-modal');
-  const closeModal = document.getElementById('close-modal');
-  const ocFoldersContainer = document.getElementById('oc-folders');
-  const eraFoldersContainer = document.getElementById('era-folders');
-  const refImagesContainer = document.getElementById('ref-images');
-  const fullImageOverlay = document.getElementById('full-image-overlay');
-  const fullImage = document.getElementById('full-image');
-  const backToOcsBtn = document.getElementById('back-to-ocs-btn');
-  const modalTitle = document.getElementById('modal-title');
-
-  let groupedErasData = {};
-  let slideshowIntervals = [];
-
-  pfpBtn.addEventListener('click', () => {
-    refModal.classList.add('active');
-    loadEras();
-  });
-
-  closeModal.addEventListener('click', () => {
-    refModal.classList.remove('active');
-    clearSlideshows();
-  });
-
-  backToOcsBtn.addEventListener('click', () => {
-    renderOcList();
-  });
-
-  function clearSlideshows() {
-    slideshowIntervals.forEach(id => clearInterval(id));
-    slideshowIntervals = [];
-  }
-
-  fullImageOverlay.addEventListener('click', () => {
-    fullImageOverlay.classList.remove('active');
-  });
-
-  let allImageFiles = [];
-  let isAgeVerified = false;
-  let pendingNsfwImage = null;
-
-  const ageVerificationOverlay = document.getElementById('age-verification-overlay');
-  const btnAgeYes = document.getElementById('age-btn-yes');
-  const btnAgeNo = document.getElementById('age-btn-no');
-
-  btnAgeYes.addEventListener('click', () => {
-    isAgeVerified = true;
-    ageVerificationOverlay.classList.remove('active');
-
-    document.querySelectorAll('.nsfw-blur').forEach(el => {
-      el.classList.remove('nsfw-blur');
+    widget.bind(SC.Widget.Events.FINISH, () => {
+      playTrackAtIndex(currentQueueIndex + 1);
     });
 
-    if (pendingNsfwImage) {
-      fullImage.src = pendingNsfwImage;
-      fullImageOverlay.classList.add('active');
-      pendingNsfwImage = null;
+    playPauseBtn.addEventListener('click', () => {
+      widget.toggle();
+    });
+
+    skipBtn.addEventListener('click', () => {
+      playTrackAtIndex(currentQueueIndex + 1);
+    });
+
+    shuffleBtn.addEventListener('click', () => {
+      isShuffled = !isShuffled;
+      shuffleBtn.style.color = isShuffled ? '#4ade80' : 'white';
+      currentQueueIndex = 0;
+    });
+
+    const pfpBtn = document.getElementById('pfp-btn');
+    const refModal = document.getElementById('ref-modal');
+    const closeModal = document.getElementById('close-modal');
+    const ocFoldersContainer = document.getElementById('oc-folders');
+    const eraFoldersContainer = document.getElementById('era-folders');
+    const refImagesContainer = document.getElementById('ref-images');
+    const fullImageOverlay = document.getElementById('full-image-overlay');
+    const fullImage = document.getElementById('full-image');
+    const backToOcsBtn = document.getElementById('back-to-ocs-btn');
+    const modalTitle = document.getElementById('modal-title');
+
+    let groupedErasData = {};
+    let slideshowIntervals = [];
+
+    pfpBtn.addEventListener('click', () => {
+      refModal.classList.add('active');
+      loadEras();
+    });
+
+    closeModal.addEventListener('click', () => {
+      refModal.classList.remove('active');
+      clearSlideshows();
+    });
+
+    backToOcsBtn.addEventListener('click', () => {
+      renderOcList();
+    });
+
+    function clearSlideshows() {
+      slideshowIntervals.forEach(id => clearInterval(id));
+      slideshowIntervals = [];
     }
-  });
 
-  btnAgeNo.addEventListener('click', () => {
-    ageVerificationOverlay.classList.remove('active');
-    pendingNsfwImage = null;
-  });
+    fullImageOverlay.addEventListener('click', () => {
+      fullImageOverlay.classList.remove('active');
+    });
 
-  async function loadEras() {
-    if (ocFoldersContainer.dataset.loaded) return;
-    ocFoldersContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7;">Loading characters...</p>';
-    try {
-      const response = await fetch('https://api.github.com/repos/hollyntt/hollyntt.github.io/git/trees/main?recursive=1');
-      if (!response.ok) throw new Error('Not found');
-      const data = await response.json();
+    let allImageFiles = [];
+    let isAgeVerified = false;
+    let pendingNsfwImage = null;
+    let pendingNsfwLink = null;
 
-      const refSheetsPrefix = 'images/ref sheets/';
-      const imageRegex = /\.(jpg|jpeg|png|gif|webp|svg|bmp|ico|tiff|tif|avif|apng|heic|heif|jxl|jfif|pjpeg|pjp)$/i;
+    const ageVerificationOverlay = document.getElementById('age-verification-overlay');
+    const btnAgeYes = document.getElementById('age-btn-yes');
+    const btnAgeNo = document.getElementById('age-btn-no');
+    const agePasscodeInput = document.getElementById('age-passcode-input');
+    const passcodeErrorMsg = document.getElementById('passcode-error-msg');
+    const ageStep1 = document.getElementById('age-step-1');
+    const ageStep2 = document.getElementById('age-step-2');
+    const ageStep3 = document.getElementById('age-step-3');
+    const btnStep1Yes = document.getElementById('age-btn-step1-yes');
+    const btnStep1No = document.getElementById('age-btn-step1-no');
+    const playGameBtn = document.getElementById('play-game-btn');
+    const backToPasscodeBtn = document.getElementById('back-to-passcode-btn');
+    const memoryGameGrid = document.getElementById('memory-game-grid');
+    const gameSuccessPanel = document.getElementById('game-success-panel');
+    const autoFillAccessBtn = document.getElementById('auto-fill-access-btn');
+    const revealedCodeText = document.getElementById('revealed-code-text');
 
-      allImageFiles = data.tree.filter(item =>
-              item.type === 'blob' &&
-              item.path.startsWith(refSheetsPrefix) &&
-              item.path.match(imageRegex)
-      );
+    function generateRandomCode() {
+      const prefixes = ['RUNE', 'SKATE', 'CYBER', 'CRYPT', 'BYPASS', 'MATRIX', 'FIREWALL'];
+      const prefix = prefixes[Math.floor(secureRandom() * prefixes.length)];
+      const num = Math.floor(1000 + secureRandom() * 9000);
+      return `${prefix}-${num}`;
+    }
 
-      const eraPaths = [...new Set(allImageFiles.map(file => {
-        const lastSlash = file.path.lastIndexOf('/');
-        return file.path.substring(0, lastSlash);
-      }))];
+    let correctPasscode = generateRandomCode().toLowerCase();
+    let incorrectPasscode = generateRandomCode().toLowerCase();
+    while (incorrectPasscode === correctPasscode) {
+      incorrectPasscode = generateRandomCode().toLowerCase();
+    }
+    console.log("Secret correct passcode for session:", correctPasscode.toUpperCase());
+    const stage1El = document.getElementById('game-stage-1');
+    const stage2El = document.getElementById('game-stage-2');
+    const stage3El = document.getElementById('game-stage-3');
+    const dot1 = document.getElementById('step-dot-1');
+    const dot2 = document.getElementById('step-dot-2');
+    const dot3 = document.getElementById('step-dot-3');
 
-      groupedErasData = {};
+    let currentSubStage = 1;
+    let firstFlippedCard = null;
+    let secondFlippedCard = null;
+    let lockGrid = false;
+    let matchedMatchesCount = 0;
+    let snake = [];
+    let snakeDir = { x: 0, y: -1 };
+    let snakeApple = { x: 0, y: 0 };
+    let snakeScore = 0;
+    const applesRequired = 5;
+    let snakeIntervalId = null;
+    const snakeCanvas = document.getElementById('snake-canvas');
+    let snakeCtx = null;
+    if (snakeCanvas) {
+      snakeCtx = snakeCanvas.getContext('2d');
+    }
+    let isRouletteSpinning = false;
+    const rouletteTrackEl = document.getElementById('roulette-track-element');
+    const spinRouletteBtn = document.getElementById('spin-roulette-btn');
+    const gambleStatusLog = document.getElementById('gamble-status-log');
 
-      data.tree.forEach(item => {
-        if (item.type === 'tree' && item.path.startsWith(refSheetsPrefix)) {
-          const parts = item.path.replace(refSheetsPrefix, '').split('/');
-          if (parts.length === 1 && parts[0]) {
-            groupedErasData[parts[0]] = [];
-          }
+    function initSubStage(stageNo) {
+      currentSubStage = stageNo;
+      stopSnakeGame();
+
+      if (stage1El) stage1El.style.display = stageNo === 1 ? 'block' : 'none';
+      if (stage2El) stage2El.style.display = stageNo === 2 ? 'block' : 'none';
+      if (stage3El) stage3El.style.display = stageNo === 3 ? 'block' : 'none';
+
+      const dots = [dot1, dot2, dot3];
+      dots.forEach((dot, idx) => {
+        if (!dot) return;
+        dot.className = 'step-dot';
+        if (idx + 1 === stageNo) {
+          dot.classList.add('active');
+        } else if (idx + 1 < stageNo) {
+          dot.classList.add('completed');
         }
       });
 
-      eraPaths.forEach(path => {
-        const parts = path.replace(refSheetsPrefix, '').split('/');
-        const ocName = parts[0] || 'Main';
+      if (stageNo === 1) {
+        initMemoryGame();
+      } else if (stageNo === 2) {
+        initSnakeGame();
+      } else if (stageNo === 3) {
+        initGambleGame();
+      }
+    }
 
-        let eraName = parts[parts.length - 1];
-        if (parts.length > 2) {
-          const parentName = parts[parts.length - 2];
-          if (!eraName.toLowerCase().includes(parentName.toLowerCase())) {
-            eraName = `${parentName} - ${eraName}`;
-          }
-        } else if (parts.length <= 1 || !eraName) {
-          eraName = 'Main';
-        }
+    function initMemoryGame() {
+      if (!memoryGameGrid) return;
+      memoryGameGrid.innerHTML = '';
 
-        if (!groupedErasData[ocName]) {
-          groupedErasData[ocName] = [];
-        }
-        groupedErasData[ocName].push({ path, displayName: eraName });
+      firstFlippedCard = null;
+      secondFlippedCard = null;
+      lockGrid = false;
+      matchedMatchesCount = 0;
+
+      const availableIcons = ['fa-paw', 'fa-cloud', 'fa-spotify', 'fa-gamepad', 'fa-music', 'fa-heart'];
+      let gameIcons = [...availableIcons, ...availableIcons];
+
+      for (let i = gameIcons.length - 1; i > 0; i--) {
+        const j = Math.floor(secureRandom() * (i + 1));
+        [gameIcons[i], gameIcons[j]] = [gameIcons[j], gameIcons[i]];
+      }
+
+      gameIcons.forEach((icon, idx) => {
+        const card = document.createElement('div');
+        card.className = 'memory-card';
+        card.dataset.icon = icon;
+        card.dataset.id = idx;
+
+        card.innerHTML = `
+        <div class="card-front"><i class="fa ${icon}"></i></div>
+        <div class="card-back"><i class="fa fa-question-circle"></i></div>
+      `;
+
+        card.addEventListener('click', handleCardClick);
+        memoryGameGrid.appendChild(card);
       });
+    }
 
-      Object.keys(groupedErasData).forEach(oc => {
-        groupedErasData[oc].sort((a, b) => a.displayName.localeCompare(b.displayName, undefined, { numeric: true, sensitivity: 'base' }));
-      });
+    function handleCardClick(e) {
+      if (e && e.isTrusted === false) {
+        console.warn("Automation detected.");
+        return;
+      }
+      if (lockGrid) return;
+      if (this === firstFlippedCard) return;
 
-      if (Object.keys(groupedErasData).length === 0) {
-        ocFoldersContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7;">No characters found.</p>';
+      this.classList.add('flipped');
+
+      if (!firstFlippedCard) {
+        firstFlippedCard = this;
         return;
       }
 
-      ocFoldersContainer.dataset.loaded = "true";
-      renderOcList();
-    } catch (e) {
-      console.error(e);
-      ocFoldersContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7;">No reference sheets found yet. Add them to "images/ref sheets" in your repo!</p>';
-    }
-  }
+      secondFlippedCard = this;
+      lockGrid = true;
 
-  function renderOcList() {
-    modalTitle.textContent = 'Select Character';
-    backToOcsBtn.style.display = 'none';
-    eraFoldersContainer.style.display = 'none';
-    refImagesContainer.style.display = 'none';
-    ocFoldersContainer.style.display = 'flex';
+      if (firstFlippedCard.dataset.icon === secondFlippedCard.dataset.icon) {
+        firstFlippedCard.classList.add('matched');
+        secondFlippedCard.classList.add('matched');
 
-    ocFoldersContainer.classList.remove('view-transition-zoom');
-    void ocFoldersContainer.offsetWidth;
-    ocFoldersContainer.classList.add('view-transition-zoom');
+        firstFlippedCard.removeEventListener('click', handleCardClick);
+        secondFlippedCard.removeEventListener('click', handleCardClick);
 
-    ocFoldersContainer.innerHTML = '';
-    clearSlideshows();
+        matchedMatchesCount++;
+        firstFlippedCard = null;
+        secondFlippedCard = null;
+        lockGrid = false;
 
-    const ocNames = Object.keys(groupedErasData).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
-
-    const bubblesDiv = document.createElement('div');
-    bubblesDiv.className = 'oc-bubbles';
-
-    ocNames.forEach((ocName, index) => {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'bubble-wrapper';
-      wrapper.style.animationDelay = `${index * 0.1}s`;
-
-      const bubble = document.createElement('div');
-      bubble.className = 'oc-bubble-slideshow';
-
-      const ocImages = allImageFiles.filter(file =>
-              file.path.startsWith(`images/ref sheets/${ocName}/`)
-      ).map(file => `https://raw.githubusercontent.com/hollyntt/hollyntt.github.io/main/${file.path.split('/').map(encodeURIComponent).join('/')}`);
-
-      if (ocImages.length > 0) {
-        ocImages.forEach((url, imgIdx) => {
-          const img = document.createElement('img');
-          img.src = url;
-          img.className = 'oc-slideshow-img';
-          if (imgIdx === 0) img.classList.add('active');
-          bubble.appendChild(img);
-        });
-
-        if (ocImages.length > 1) {
-          let currentIdx = 0;
-          const intervalId = setInterval(() => {
-            const imgs = bubble.querySelectorAll('.oc-slideshow-img');
-            if (imgs.length === 0) return;
-            imgs[currentIdx].classList.remove('active');
-            currentIdx = (currentIdx + 1) % imgs.length;
-            imgs[currentIdx].classList.add('active');
-          }, 2000);
-          slideshowIntervals.push(intervalId);
+        if (matchedMatchesCount === 6) {
+          setTimeout(() => {
+            initSubStage(2);
+          }, 1000);
         }
       } else {
-        const placeholder = document.createElement('div');
-        placeholder.style.opacity = '0.3';
-        placeholder.innerHTML = '<i class="fa fa-user" style="font-size: 40px;"></i>';
-        bubble.appendChild(placeholder);
+        setTimeout(() => {
+          if (firstFlippedCard) firstFlippedCard.classList.remove('flipped');
+          if (secondFlippedCard) secondFlippedCard.classList.remove('flipped');
+          firstFlippedCard = null;
+          secondFlippedCard = null;
+          lockGrid = false;
+        }, 1000);
       }
-
-      const label = document.createElement('div');
-      label.className = 'oc-bubble-label';
-      label.textContent = ocName;
-      bubble.appendChild(label);
-
-      bubble.addEventListener('click', () => {
-        clearSlideshows();
-        renderEraList(ocName);
-      });
-
-      wrapper.appendChild(bubble);
-      bubblesDiv.appendChild(wrapper);
-    });
-
-    ocFoldersContainer.appendChild(bubblesDiv);
-
-    setTimeout(() => {
-    }, 100);
-  }
-
-  function renderEraList(ocName) {
-    modalTitle.textContent = ocName;
-    backToOcsBtn.style.display = 'flex';
-    ocFoldersContainer.style.display = 'none';
-    eraFoldersContainer.style.display = 'flex';
-    refImagesContainer.style.display = 'flex';
-
-    eraFoldersContainer.classList.remove('view-transition-zoom');
-    refImagesContainer.classList.remove('view-transition-zoom');
-    void eraFoldersContainer.offsetWidth;
-    eraFoldersContainer.classList.add('view-transition-zoom');
-    refImagesContainer.classList.add('view-transition-zoom');
-
-    eraFoldersContainer.innerHTML = '';
-
-    const eras = groupedErasData[ocName];
-    let isFirst = true;
-
-    const bubblesDiv = document.createElement('div');
-    bubblesDiv.className = 'oc-bubbles';
-
-    eras.forEach((era, index) => {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'bubble-wrapper';
-      wrapper.style.animationDelay = `${index * 0.05}s`;
-
-      const bubble = document.createElement('div');
-      bubble.className = 'era-bubble';
-      if (isFirst) {
-        bubble.classList.add('active');
-        isFirst = false;
-      }
-
-      bubble.textContent = era.displayName;
-      bubble.addEventListener('click', () => {
-        document.querySelectorAll('#era-folders .era-bubble').forEach(b => b.classList.remove('active'));
-        bubble.classList.add('active');
-        loadImages(era.path);
-      });
-
-      wrapper.appendChild(bubble);
-      bubblesDiv.appendChild(wrapper);
-    });
-
-    eraFoldersContainer.appendChild(bubblesDiv);
-
-    if (eras.length > 0) {
-      loadImages(eras[0].path);
-    } else {
-      refImagesContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7;">No reference sheets found for this character yet.</p>';
     }
 
-    setTimeout(() => {
-    }, 100);
-  }
-
-  function loadImages(path) {
-    refImagesContainer.innerHTML = '';
-
-    refImagesContainer.classList.remove('view-transition-zoom');
-    void refImagesContainer.offsetWidth;
-    refImagesContainer.classList.add('view-transition-zoom');
-
-    const images = allImageFiles.filter(file => {
-      const lastSlash = file.path.lastIndexOf('/');
-      return file.path.substring(0, lastSlash) === path;
-    });
-
-    if (images.length === 0) {
-      refImagesContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7;">No images in this folder.</p>';
-      return;
+    function initSnakeGame() {
+      snake = [
+        { x: 6, y: 6 },
+        { x: 6, y: 7 },
+        { x: 6, y: 8 }
+      ];
+      snakeDir = { x: 0, y: -1 };
+      snakeScore = 0;
+      updateSnakeScoreText();
+      placeApple();
+      startSnakeGameLoop();
     }
 
-    images.forEach((img, index) => {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'bubble-wrapper';
-      wrapper.style.animationDelay = `${index * 0.05}s`;
+    function updateSnakeScoreText() {
+      const el = document.getElementById('snake-level-score');
+      if (el) {
+        el.textContent = `Apples: ${snakeScore} / ${applesRequired}`;
+      }
+    }
 
-      const card = document.createElement('div');
-      card.className = 'ref-image-card';
-
-      const imgEl = document.createElement('img');
-
-      const downloadUrl = `https://raw.githubusercontent.com/hollyntt/hollyntt.github.io/main/${img.path.split('/').map(encodeURIComponent).join('/')}`;
-      const fileName = img.path.split('/').pop();
-
-      imgEl.src = downloadUrl;
-      imgEl.alt = fileName;
-
-      const isNsfw = fileName.toLowerCase().includes('nsfw');
-
-      if (isNsfw) {
-        const badge = document.createElement('div');
-        badge.className = 'nsfw-badge';
-        badge.textContent = 'NSFW';
-        card.appendChild(badge);
-
-        if (!isAgeVerified) {
-          imgEl.classList.add('nsfw-blur');
+    function placeApple() {
+      let valid = false;
+      let attempts = 0;
+      while (!valid && attempts < 100) {
+        attempts++;
+        const rx = Math.floor(secureRandom() * 12);
+        const ry = Math.floor(secureRandom() * 12);
+        const hitsBody = snake.some(part => part.x === rx && part.y === ry);
+        if (!hitsBody) {
+          snakeApple = { x: rx, y: ry };
+          valid = true;
         }
       }
+    }
 
-      card.appendChild(imgEl);
+    function startSnakeGameLoop() {
+      stopSnakeGame();
+      snakeIntervalId = setInterval(tickSnake, 200);
+      window.addEventListener('keydown', handleSnakeKeys);
+    }
 
-      card.addEventListener('click', () => {
-        if (isNsfw && !isAgeVerified) {
-          pendingNsfwImage = downloadUrl;
-          ageVerificationOverlay.classList.add('active');
+    function stopSnakeGame() {
+      if (snakeIntervalId) {
+        clearInterval(snakeIntervalId);
+        snakeIntervalId = null;
+      }
+      window.removeEventListener('keydown', handleSnakeKeys);
+    }
+
+    function handleSnakeKeys(e) {
+      if (e && e.isTrusted === false) {
+        console.warn("Automation detected.");
+        return;
+      }
+      if (ageStep3.style.display !== 'flex') return;
+      switch (e.key) {
+        case 'ArrowUp':
+        case 'w':
+        case 'W':
+          if (snakeDir.y === 0) snakeDir = { x: 0, y: -1 };
+          e.preventDefault();
+          break;
+        case 'ArrowDown':
+        case 's':
+        case 'S':
+          if (snakeDir.y === 0) snakeDir = { x: 0, y: 1 };
+          e.preventDefault();
+          break;
+        case 'ArrowLeft':
+        case 'a':
+        case 'A':
+          if (snakeDir.x === 0) snakeDir = { x: -1, y: 0 };
+          e.preventDefault();
+          break;
+        case 'ArrowRight':
+        case 'd':
+        case 'D':
+          if (snakeDir.x === 0) snakeDir = { x: 1, y: 0 };
+          e.preventDefault();
+          break;
+      }
+    }
+
+    function tickSnake() {
+      if (!snakeCtx || !snakeCanvas) return;
+
+      const nextHead = {
+        x: snake[0].x + snakeDir.x,
+        y: snake[0].y + snakeDir.y
+      };
+
+      if (nextHead.x < 0 || nextHead.x >= 12 || nextHead.y < 0 || nextHead.y >= 12) {
+        snakeCtx.fillStyle = '#ef4444';
+        snakeCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+        setTimeout(initSnakeGame, 300);
+        return;
+      }
+
+      const selfCrash = snake.some(part => part.x === nextHead.x && part.y === nextHead.y);
+      if (selfCrash) {
+        snakeCtx.fillStyle = '#ef4444';
+        snakeCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+        setTimeout(initSnakeGame, 300);
+        return;
+      }
+
+      snake.unshift(nextHead);
+
+      if (nextHead.x === snakeApple.x && nextHead.y === snakeApple.y) {
+        snakeScore++;
+        updateSnakeScoreText();
+        if (snakeScore >= applesRequired) {
+          stopSnakeGame();
+          setTimeout(() => {
+            initSubStage(3);
+          }, 1000);
           return;
         }
-        fullImage.src = downloadUrl;
-        fullImageOverlay.classList.add('active');
-      });
+        placeApple();
+      } else {
+        snake.pop();
+      }
 
-      wrapper.appendChild(card);
-      refImagesContainer.appendChild(wrapper);
+      drawSnakeGrid();
+    }
+
+    function drawSnakeGrid() {
+      if (!snakeCtx || !snakeCanvas) return;
+      const w = snakeCanvas.width;
+      const h = snakeCanvas.height;
+      const cellSize = w / 12;
+
+      snakeCtx.clearRect(0, 0, w, h);
+
+      // Apple
+      snakeCtx.fillStyle = '#ef4444';
+      snakeCtx.beginPath();
+      const ax = snakeApple.x * cellSize + cellSize/2;
+      const ay = snakeApple.y * cellSize + cellSize/2;
+      snakeCtx.arc(ax, ay, cellSize/2.5, 0, Math.PI * 2);
+      snakeCtx.fill();
+
+      // Snake outline/body
+      snake.forEach((part, idx) => {
+        if (idx === 0) {
+          snakeCtx.fillStyle = '#fbbf24';
+        } else {
+          snakeCtx.fillStyle = '#818cf8';
+        }
+        snakeCtx.beginPath();
+        const px = part.x * cellSize + cellSize/2;
+        const py = part.y * cellSize + cellSize/2;
+        snakeCtx.arc(px, py, cellSize/2.2, 0, Math.PI * 2);
+        snakeCtx.fill();
+      });
+    }
+
+    const btnUp = document.getElementById('snake-up');
+    const btnDown = document.getElementById('snake-down');
+    const btnLeft = document.getElementById('snake-left');
+    const btnRight = document.getElementById('snake-right');
+
+    if (btnUp) btnUp.addEventListener('click', (e) => { if (e && e.isTrusted === false) return; e.preventDefault(); if (snakeDir.y === 0) snakeDir = { x: 0, y: -1 }; });
+    if (btnDown) btnDown.addEventListener('click', (e) => { if (e && e.isTrusted === false) return; e.preventDefault(); if (snakeDir.y === 0) snakeDir = { x: 0, y: 1 }; });
+    if (btnLeft) btnLeft.addEventListener('click', (e) => { if (e && e.isTrusted === false) return; e.preventDefault(); if (snakeDir.x === 0) snakeDir = { x: -1, y: 0 }; });
+    if (btnRight) btnRight.addEventListener('click', (e) => { if (e && e.isTrusted === false) return; e.preventDefault(); if (snakeDir.x === 0) snakeDir = { x: 1, y: 0 }; });
+
+    function initGambleGame() {
+      isRouletteSpinning = false;
+      if (gambleStatusLog) {
+        gambleStatusLog.innerHTML = 'CHANCE: 0.26% (~1 IN 385 ROLLS)';
+        gambleStatusLog.style.color = 'rgba(255, 255, 255, 0.6)';
+      }
+      if (spinRouletteBtn) {
+        spinRouletteBtn.disabled = false;
+        spinRouletteBtn.style.opacity = '1';
+      }
+      generateRouletteTrack(false);
+    }
+
+    function generateRouletteTrack(isWinResult) {
+      if (!rouletteTrackEl) return;
+      rouletteTrackEl.innerHTML = '';
+      rouletteTrackEl.style.transition = 'none';
+      rouletteTrackEl.style.transform = 'translateX(0)';
+
+      for (let i = 0; i < 35; i++) {
+        const card = document.createElement('div');
+        card.className = 'roulette-card';
+        let icon = 'fa-ban';
+        let label = 'FAILED';
+
+        if (i === 24) {
+          if (isWinResult) {
+            card.classList.add('tier-legendary');
+            icon = 'fa-key';
+            label = 'VAULT KEY';
+          } else {
+            card.classList.add('tier-common');
+            icon = 'fa-unlock-alt';
+            label = 'EXPIRED';
+          }
+        } else {
+          card.classList.add('tier-common');
+          const icons = ['fa-times', 'fa-ban', 'fa-shield', 'fa-lock', 'fa-exclamation-triangle'];
+          const labels = ['CORE FAULT', 'EXPIRED', 'SIGN REJECTED', 'BLOCK V12', 'BAD MATRIX'];
+          const seed = (i * 7) % icons.length;
+          icon = icons[seed];
+          label = labels[seed];
+        }
+
+        card.innerHTML = `<i class="fa ${icon}"></i><span>${label}</span>`;
+        rouletteTrackEl.appendChild(card);
+      }
+    }
+
+    function startRouletteSpin() {
+      if (isRouletteSpinning) return;
+      isRouletteSpinning = true;
+
+      if (spinRouletteBtn) {
+        spinRouletteBtn.disabled = true;
+        spinRouletteBtn.style.opacity = '0.5';
+      }
+
+      const rollValue = secureRandom();
+      const isWin = rollValue < 0.0026;
+
+      if (gambleStatusLog) {
+        gambleStatusLog.textContent = "DECRYPTING SECURITY ENVELOPE...";
+        gambleStatusLog.style.color = '#fbbf24';
+      }
+
+      generateRouletteTrack(isWin);
+
+      const viewportWidth = document.querySelector('.roulette-viewport').offsetWidth || 340;
+      const step = 76;
+      const cardCenter = (24 * step) + 35;
+      const randOffset = Math.floor(secureRandom() * 44) - 22;
+      const targetX = (viewportWidth / 2) - cardCenter - randOffset;
+
+      setTimeout(() => {
+        rouletteTrackEl.style.transition = 'transform 4.5s cubic-bezier(0.08, 1, 0.12, 1)';
+        rouletteTrackEl.style.transform = `translateX(${targetX}px)`;
+      }, 50);
+
+      setTimeout(() => {
+        isRouletteSpinning = false;
+        if (spinRouletteBtn) {
+          spinRouletteBtn.disabled = false;
+          spinRouletteBtn.style.opacity = '1';
+        }
+
+        if (isWin) {
+          const isRealWinner = secureRandom() < 0.5;
+          const revealedCode = (isRealWinner ? correctPasscode : incorrectPasscode).toUpperCase();
+
+          if (gambleStatusLog) {
+            gambleStatusLog.innerHTML = `
+            <span style="color:#34d399;font-weight:bold;font-size:13px;">VAULT DECRYPTED SUCCESSFULLY!</span><br>
+            <span style="font-size:11px;opacity:0.8;">Your decryption signature yielded passcode:</span><br>
+            <span style="font-family:var(--font-mono);font-size:20px;color:#fbbf24;font-weight:900;letter-spacing:1px;text-shadow:0 0 10px rgba(251,191,36,0.6);margin:6px 0;display:inline-block;">${revealedCode}</span><br>
+            <span style="font-size:11px;color:#a78bfa;font-style:italic;">Write this down, go back to entered page and type it!</span>
+          `;
+          }
+          confetti({
+            particleCount: 150,
+            spread: 90,
+            origin: { y: 0.6 }
+          });
+        } else {
+          if (gambleStatusLog) {
+            gambleStatusLog.innerHTML = 'DECRYPTION FAILED. FAILSAFE ACTIVATED (<span style="color:#ef4444">99.74% Loss</span>). <span style="color:#a78bfa;cursor:pointer;text-decoration:underline;" id="quick-retry-trigger">TRY AGAIN</span>';
+            gambleStatusLog.style.color = '#ef4444';
+
+            const reqRetry = document.getElementById('quick-retry-trigger');
+            if (reqRetry) {
+              reqRetry.addEventListener('click', (e) => {
+                if (e && e.isTrusted === false) return;
+                startRouletteSpin();
+              });
+            }
+          }
+        }
+      }, 4600);
+    }
+
+    if (spinRouletteBtn) {
+      spinRouletteBtn.addEventListener('click', (e) => {
+        if (e && e.isTrusted === false) {
+          console.warn("Automation detected.");
+          return;
+        }
+        startRouletteSpin();
+      });
+    }
+
+    function openAgeVerification() {
+      if (ageStep1) ageStep1.style.display = 'flex';
+      if (ageStep2) ageStep2.style.display = 'none';
+      if (ageStep3) ageStep3.style.display = 'none';
+      stopSnakeGame();
+
+      if (agePasscodeInput) {
+        agePasscodeInput.value = '';
+      }
+      if (passcodeErrorMsg) {
+        passcodeErrorMsg.style.display = 'none';
+      }
+      if (ageVerificationOverlay) {
+        ageVerificationOverlay.classList.add('active');
+      }
+    }
+
+    if (btnStep1Yes) {
+      btnStep1Yes.addEventListener('click', (e) => {
+        if (e && e.isTrusted === false) {
+          console.warn("Automation detected.");
+          return;
+        }
+        if (ageStep1) ageStep1.style.display = 'none';
+        if (ageStep2) ageStep2.style.display = 'flex';
+        if (agePasscodeInput) {
+          agePasscodeInput.focus();
+        }
+      });
+    }
+
+    if (btnStep1No) {
+      btnStep1No.addEventListener('click', (e) => {
+        if (e && e.isTrusted === false) {
+          console.warn("Automation detected.");
+          return;
+        }
+        if (ageVerificationOverlay) {
+          ageVerificationOverlay.classList.remove('active');
+        }
+        stopSnakeGame();
+        pendingNsfwImage = null;
+        pendingNsfwLink = null;
+      });
+    }
+
+    if (playGameBtn) {
+      playGameBtn.addEventListener('click', (e) => {
+        if (e && e.isTrusted === false) {
+          console.warn("Automation detected.");
+          return;
+        }
+        if (ageStep2) ageStep2.style.display = 'none';
+        if (ageStep1) ageStep1.style.display = 'none';
+        if (ageStep3) ageStep3.style.display = 'flex';
+        initSubStage(1);
+      });
+    }
+
+    if (backToPasscodeBtn) {
+      backToPasscodeBtn.addEventListener('click', (e) => {
+        if (e && e.isTrusted === false) {
+          console.warn("Automation detected.");
+          return;
+        }
+        stopSnakeGame();
+        if (ageStep3) ageStep3.style.display = 'none';
+        if (ageStep2) ageStep2.style.display = 'flex';
+        if (agePasscodeInput) agePasscodeInput.focus();
+      });
+    }
+
+    function verifyPasscode() {
+      if (!agePasscodeInput) return;
+      const value = agePasscodeInput.value.trim().toLowerCase();
+
+      if (value === correctPasscode) {
+        isAgeVerified = true;
+        document.body.classList.add('age-verified');
+        stopSnakeGame();
+
+        if (ageVerificationOverlay) {
+          ageVerificationOverlay.classList.remove('active');
+        }
+        if (passcodeErrorMsg) {
+          passcodeErrorMsg.style.display = 'none';
+        }
+
+        document.querySelectorAll('img[data-src]').forEach(img => {
+          img.src = img.getAttribute('data-src');
+          img.removeAttribute('data-src');
+          img.classList.remove('nsfw-blur');
+        });
+
+        document.querySelectorAll('.nsfw-blur').forEach(el => {
+          el.classList.remove('nsfw-blur');
+        });
+        document.querySelectorAll('.nsfw-badge').forEach(el => {
+          el.remove();
+        });
+
+        document.querySelectorAll('.social-icons a[data-hash]').forEach(a => {
+          const hash = a.getAttribute('data-hash');
+          if (hash) {
+            const decoded = decodeLink(hash);
+            a.setAttribute('href', decoded);
+            a.setAttribute('target', '_blank');
+          }
+        });
+
+        if (pendingNsfwImage) {
+          fullImage.src = pendingNsfwImage;
+          fullImageOverlay.classList.add('active');
+          pendingNsfwImage = null;
+        }
+
+        if (pendingNsfwLink) {
+          window.open(pendingNsfwLink, '_blank');
+          pendingNsfwLink = null;
+        }
+      } else {
+        if (passcodeErrorMsg) {
+          passcodeErrorMsg.style.display = 'block';
+        }
+      }
+    }
+
+    if (btnAgeYes) {
+      btnAgeYes.addEventListener('click', (e) => {
+        if (e && e.isTrusted === false) {
+          console.warn("Automation detected.");
+          return;
+        }
+        verifyPasscode();
+      });
+    }
+
+    if (agePasscodeInput) {
+      agePasscodeInput.addEventListener('keydown', (e) => {
+        if (e && e.isTrusted === false) {
+          console.warn("Automation detected.");
+          return;
+        }
+        if (e.key === 'Enter') {
+          verifyPasscode();
+        }
+      });
+    }
+
+    if (btnAgeNo) {
+      btnAgeNo.addEventListener('click', (e) => {
+        if (e && e.isTrusted === false) {
+          console.warn("Automation detected.");
+          return;
+        }
+        if (ageVerificationOverlay) {
+          ageVerificationOverlay.classList.remove('active');
+        }
+        stopSnakeGame();
+        pendingNsfwImage = null;
+        pendingNsfwLink = null;
+        if (passcodeErrorMsg) {
+          passcodeErrorMsg.style.display = 'none';
+        }
+        if (agePasscodeInput) {
+          agePasscodeInput.value = '';
+        }
+      });
+    }
+
+    const decodeLink = (hash) => {
+      return hash.split('').map(c => String.fromCharCode(c.charCodeAt(0) + 3)).join('');
+    };
+
+    document.querySelectorAll('.social-icons a').forEach(a => {
+      const dataHash = a.getAttribute('data-hash');
+      if (dataHash) {
+        a.addEventListener('click', (e) => {
+          if (!isAgeVerified) {
+            e.preventDefault();
+            const decodedUrl = decodeLink(dataHash);
+            pendingNsfwLink = decodedUrl;
+            openAgeVerification();
+          }
+        });
+      }
     });
 
-    setTimeout(() => {
-    }, 100);
-  }
+    async function loadEras() {
+      if (ocFoldersContainer.dataset.loaded) return;
+      ocFoldersContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7;">Loading characters...</p>';
+      try {
+        const response = await fetch('https://api.github.com/repos/hollyntt/hollyntt.github.io/git/trees/main?recursive=1');
+        if (!response.ok) throw new Error('Not found');
+        const data = await response.json();
 
+        const refSheetsPrefix = 'images/ref sheets/';
+        const imageRegex = /\.(jpg|jpeg|png|gif|webp|svg|bmp|ico|tiff|tif|avif|apng|heic|heif|jxl|jfif|pjpeg|pjp)$/i;
+
+        allImageFiles = data.tree.filter(item =>
+                item.type === 'blob' &&
+                item.path.startsWith(refSheetsPrefix) &&
+                item.path.match(imageRegex)
+        );
+
+        const eraPaths = [...new Set(allImageFiles.map(file => {
+          const lastSlash = file.path.lastIndexOf('/');
+          return file.path.substring(0, lastSlash);
+        }))];
+
+        groupedErasData = {};
+
+        data.tree.forEach(item => {
+          if (item.type === 'tree' && item.path.startsWith(refSheetsPrefix)) {
+            const parts = item.path.replace(refSheetsPrefix, '').split('/');
+            if (parts.length === 1 && parts[0]) {
+              groupedErasData[parts[0]] = [];
+            }
+          }
+        });
+
+        eraPaths.forEach(path => {
+          const parts = path.replace(refSheetsPrefix, '').split('/');
+          const ocName = parts[0] || 'Main';
+
+          let eraName = parts[parts.length - 1];
+          if (parts.length > 2) {
+            const parentName = parts[parts.length - 2];
+            if (!eraName.toLowerCase().includes(parentName.toLowerCase())) {
+              eraName = `${parentName} - ${eraName}`;
+            }
+          } else if (parts.length <= 1 || !eraName) {
+            eraName = 'Main';
+          }
+
+          if (!groupedErasData[ocName]) {
+            groupedErasData[ocName] = [];
+          }
+          groupedErasData[ocName].push({ path, displayName: eraName });
+        });
+
+        Object.keys(groupedErasData).forEach(oc => {
+          groupedErasData[oc].sort((a, b) => a.displayName.localeCompare(b.displayName, undefined, { numeric: true, sensitivity: 'base' }));
+        });
+
+        if (Object.keys(groupedErasData).length === 0) {
+          ocFoldersContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7;">No characters found.</p>';
+          return;
+        }
+
+        ocFoldersContainer.dataset.loaded = "true";
+        renderOcList();
+      } catch (e) {
+        console.error(e);
+        ocFoldersContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7;">No reference sheets found yet. Add them to "images/ref sheets" in your repo!</p>';
+      }
+    }
+
+    function renderOcList() {
+      modalTitle.textContent = 'Select Character';
+      backToOcsBtn.style.display = 'none';
+      eraFoldersContainer.style.display = 'none';
+      refImagesContainer.style.display = 'none';
+      ocFoldersContainer.style.display = 'flex';
+
+      ocFoldersContainer.classList.remove('view-transition-zoom');
+      void ocFoldersContainer.offsetWidth;
+      ocFoldersContainer.classList.add('view-transition-zoom');
+
+      ocFoldersContainer.innerHTML = '';
+      clearSlideshows();
+
+      const ocNames = Object.keys(groupedErasData).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+
+      const bubblesDiv = document.createElement('div');
+      bubblesDiv.className = 'oc-bubbles';
+
+      ocNames.forEach((ocName, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'bubble-wrapper';
+        wrapper.style.animationDelay = `${index * 0.1}s`;
+
+        const bubble = document.createElement('div');
+        bubble.className = 'oc-bubble-slideshow';
+
+        const ocImages = allImageFiles.filter(file =>
+                file.path.startsWith(`images/ref sheets/${ocName}/`)
+        ).map(file => `https://raw.githubusercontent.com/hollyntt/hollyntt.github.io/main/${file.path.split('/').map(encodeURIComponent).join('/')}`);
+
+        if (ocImages.length > 0) {
+          ocImages.forEach((url, imgIdx) => {
+            const img = document.createElement('img');
+            img.src = url;
+            img.className = 'oc-slideshow-img';
+            if (imgIdx === 0) img.classList.add('active');
+            bubble.appendChild(img);
+          });
+
+          if (ocImages.length > 1) {
+            let currentIdx = 0;
+            const intervalId = setInterval(() => {
+              const imgs = bubble.querySelectorAll('.oc-slideshow-img');
+              if (imgs.length === 0) return;
+              imgs[currentIdx].classList.remove('active');
+              currentIdx = (currentIdx + 1) % imgs.length;
+              imgs[currentIdx].classList.add('active');
+            }, 2000);
+            slideshowIntervals.push(intervalId);
+          }
+        } else {
+          const placeholder = document.createElement('div');
+          placeholder.style.opacity = '0.3';
+          placeholder.innerHTML = '<i class="fa fa-user" style="font-size: 40px;"></i>';
+          bubble.appendChild(placeholder);
+        }
+
+        const label = document.createElement('div');
+        label.className = 'oc-bubble-label';
+        label.textContent = ocName;
+        bubble.appendChild(label);
+
+        bubble.addEventListener('click', () => {
+          clearSlideshows();
+          renderEraList(ocName);
+        });
+
+        wrapper.appendChild(bubble);
+        bubblesDiv.appendChild(wrapper);
+      });
+
+      ocFoldersContainer.appendChild(bubblesDiv);
+
+      setTimeout(() => {
+      }, 100);
+    }
+
+    function renderEraList(ocName) {
+      modalTitle.textContent = ocName;
+      backToOcsBtn.style.display = 'flex';
+      ocFoldersContainer.style.display = 'none';
+      eraFoldersContainer.style.display = 'flex';
+      refImagesContainer.style.display = 'flex';
+
+      eraFoldersContainer.classList.remove('view-transition-zoom');
+      refImagesContainer.classList.remove('view-transition-zoom');
+      void eraFoldersContainer.offsetWidth;
+      eraFoldersContainer.classList.add('view-transition-zoom');
+      refImagesContainer.classList.add('view-transition-zoom');
+
+      eraFoldersContainer.innerHTML = '';
+
+      const eras = groupedErasData[ocName];
+      let isFirst = true;
+
+      const bubblesDiv = document.createElement('div');
+      bubblesDiv.className = 'oc-bubbles';
+
+      eras.forEach((era, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'bubble-wrapper';
+        wrapper.style.animationDelay = `${index * 0.05}s`;
+
+        const bubble = document.createElement('div');
+        bubble.className = 'era-bubble';
+        if (isFirst) {
+          bubble.classList.add('active');
+          isFirst = false;
+        }
+
+        bubble.textContent = era.displayName;
+        bubble.addEventListener('click', () => {
+          document.querySelectorAll('#era-folders .era-bubble').forEach(b => b.classList.remove('active'));
+          bubble.classList.add('active');
+          loadImages(era.path);
+        });
+
+        wrapper.appendChild(bubble);
+        bubblesDiv.appendChild(wrapper);
+      });
+
+      eraFoldersContainer.appendChild(bubblesDiv);
+
+      if (eras.length > 0) {
+        loadImages(eras[0].path);
+      } else {
+        refImagesContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7;">No reference sheets found for this character yet.</p>';
+      }
+
+      setTimeout(() => {
+      }, 100);
+    }
+
+    function loadImages(path) {
+      refImagesContainer.innerHTML = '';
+
+      refImagesContainer.classList.remove('view-transition-zoom');
+      void refImagesContainer.offsetWidth;
+      refImagesContainer.classList.add('view-transition-zoom');
+
+      const images = allImageFiles.filter(file => {
+        const lastSlash = file.path.lastIndexOf('/');
+        return file.path.substring(0, lastSlash) === path;
+      });
+
+      if (images.length === 0) {
+        refImagesContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7;">No images in this folder.</p>';
+        return;
+      }
+
+      images.forEach((img, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'bubble-wrapper';
+        wrapper.style.animationDelay = `${index * 0.05}s`;
+
+        const card = document.createElement('div');
+        card.className = 'ref-image-card';
+
+        const imgEl = document.createElement('img');
+
+        const downloadUrl = `https://raw.githubusercontent.com/hollyntt/hollyntt.github.io/main/${img.path.split('/').map(encodeURIComponent).join('/')}`;
+        const fileName = img.path.split('/').pop();
+
+        const isNsfw = fileName.toLowerCase().includes('nsfw');
+
+        if (isNsfw && !isAgeVerified) {
+          // High-security placeholder to prevent any network inspect or caching leaks prior to passcode validation
+          imgEl.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23222"/><text x="50" y="55" fill="%23ef4444" font-size="12" font-family="sans-serif" font-weight="bold" text-anchor="middle">NSFW</text></svg>';
+          imgEl.alt = 'NSFW Content';
+          imgEl.classList.add('nsfw-blur');
+          imgEl.setAttribute('data-src', downloadUrl);
+
+          const badge = document.createElement('div');
+          badge.className = 'nsfw-badge';
+          badge.textContent = 'NSFW';
+          card.appendChild(badge);
+        } else {
+          imgEl.src = downloadUrl;
+          imgEl.alt = fileName;
+        }
+
+        card.appendChild(imgEl);
+
+        card.addEventListener('click', () => {
+          if (isNsfw && !isAgeVerified) {
+            pendingNsfwImage = downloadUrl;
+            openAgeVerification();
+            return;
+          }
+          fullImage.src = imgEl.src;
+          fullImageOverlay.classList.add('active');
+        });
+
+        wrapper.appendChild(card);
+        refImagesContainer.appendChild(wrapper);
+      });
+
+      setTimeout(() => {
+      }, 100);
+    }
+
+  })();
 </script>
 </body>
 </html>

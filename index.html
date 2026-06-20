@@ -19,6 +19,13 @@
       --accent: #f5e6d3;
     }
 
+    .dev-only { display: none; }
+    body.dev-mode .dev-only { display: block; }
+    body:not(.age-verified) .nsfw-img {
+      filter: blur(15px);
+      pointer-events: none;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -1512,8 +1519,40 @@
     </div>
   </div>
 
-  <div class="aka-text">runeskate</div>
+  <div class="aka-text" id="dev-toggle" style="cursor: pointer;">runeskate</div>
   <div class="age-text" id="runeskate-age" style="font-size: 10px; margin-bottom: 30px; opacity: 0.6; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3em;"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const devToggle = document.getElementById('dev-toggle');
+      let devClicks = 0;
+
+      devToggle.addEventListener('click', () => {
+        devClicks++;
+        if (devClicks >= 5) {
+          window.isDevMode = !window.isDevMode;
+          devClicks = 0;
+          document.body.classList.toggle('dev-mode', window.isDevMode);
+          alert("Developer Mode: " + (window.isDevMode ? "ENABLED" : "DISABLED"));
+        }
+      });
+
+      document.querySelectorAll('.skip-stage').forEach(btn => {
+        btn.addEventListener('click', () => {
+          initSubStage(parseInt(btn.getAttribute('data-target')));
+        });
+      });
+
+      document.querySelectorAll('.skip-stage-5').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const stage5Play = document.getElementById('game-stage-5-play');
+          const stage5Success = document.getElementById('game-stage-5-success');
+          if (stage5Play) stage5Play.style.display = 'none';
+          if (stage5Success) stage5Success.style.display = 'block';
+        });
+      });
+    });
+  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <script>
@@ -1638,8 +1677,10 @@
       <p>This content is age-restricted and marked as NSFW. Are you 18 years of age or older?</p>
 
       <div class="age-buttons" style="width: 100%;">
-        <button class="age-btn yes" id="age-btn-step1-yes" style="width: 100%;">Yes, I am 18+</button>
-        <button class="age-btn no" id="age-btn-step1-no" style="width: 100%;">No, Cancel</button>
+        <button class="age-btn yes" id="age-btn-18-24" style="width: 100%;">18 - 24</button>
+        <button class="age-btn yes" id="age-btn-25-34" style="width: 100%;">25 - 34</button>
+        <button class="age-btn yes" id="age-btn-35plus" style="width: 100%;">35+</button>
+        <button class="age-btn no" id="age-btn-under18" style="width: 100%;">Under 18</button>
       </div>
     </div>
 
@@ -1695,6 +1736,7 @@
         <h2 style="font-family: var(--font-serif); font-size: 1.8rem; color: #a78bfa; margin-bottom: 5px;">Memory Match</h2>
         <p style="margin-bottom: 12px; font-size: 12px; opacity: 0.85;">Match 6 pairs of cards to bypass firewall Stage 1.</p>
         <div class="game-grid" id="memory-game-grid"></div>
+        <button class="age-btn no skip-stage dev-only" data-target="2" style="width: 100%; margin-top: 10px;">Skip Stage</button>
       </div>
 
       <!-- Game Stage 2: Snake Decryption -->
@@ -1716,6 +1758,7 @@
             <div></div>
           </div>
         </div>
+        <button class="age-btn no skip-stage dev-only" data-target="3" style="width: 100%; margin-top: 10px;">Skip Stage</button>
       </div>
 
       <!-- Game Stage 3: Rock Paper Scissors -->
@@ -1742,6 +1785,7 @@
           <button class="age-btn yes" id="rps-btn-paper" style="flex: 1; padding: 12px; font-size: 13px;"><i class="fa fa-hand-paper-o"></i> Paper</button>
           <button class="age-btn yes" id="rps-btn-scissors" style="flex: 1; padding: 12px; font-size: 13px;"><i class="fa fa-hand-scissors-o"></i> Scissors</button>
         </div>
+        <button class="age-btn no skip-stage dev-only" data-target="4" style="width: 100%; margin-top: 10px;">Skip Stage</button>
       </div>
 
       <!-- Game Stage 4: Coding Flash Quiz -->
@@ -1758,6 +1802,7 @@
         <div id="quiz-options-container" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">
           <!-- Options will be dynamically rendered here as buttons -->
         </div>
+        <button class="age-btn no skip-stage dev-only" data-target="5" style="width: 100%; margin-top: 10px;">Skip Stage</button>
       </div>
 
       <!-- Game Stage 5: Guess the Character -->
@@ -1776,6 +1821,7 @@
           <div id="guess-options-container" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px;">
             <!-- Guess choices go here -->
           </div>
+          <button class="age-btn no skip-stage-5 dev-only" style="width: 100%; margin-top: 10px;">Skip Stage</button>
         </div>
 
         <div id="game-stage-5-success" style="width: 100%; display: none;">
@@ -1784,7 +1830,7 @@
             <i class="fa fa-unlock-alt" style="color: #34d399; font-size: 40px; margin-bottom: 12px; text-shadow: 0 0 15px rgba(52,211,153,0.5);"></i>
             <p style="font-size: 14px; font-weight: bold; color: #f8fafc; margin-bottom: 10px;">DECRYPTION SECURED SUCCESSFULLY</p>
             <p style="font-size: 11px; opacity: 0.8; margin-bottom: 8px;">Use the passcode below to bypass the verification portal:</p>
-            <div id="stage-5-passcode-text" style="font-family: var(--font-mono); font-size: 24px; color: #fbbf24; font-weight: 900; letter-spacing: 2px; text-shadow: 0 0 10px rgba(251,191,36,0.6); padding: 8px 12px; background: rgba(0,0,0,0.5); border-radius: 10px; border: 1px solid rgba(251,191,36,0.2); display: inline-block; margin-bottom: 12px;">CYBER-7087</div>
+            <div id="stage-5-passcode-text" style="font-family: var(--font-mono); font-size: 24px; color: #fbbf24; font-weight: 900; letter-spacing: 2px; text-shadow: 0 0 10px rgba(251,191,36,0.6); padding: 8px 12px; background: rgba(0,0,0,0.5); border-radius: 10px; border: 1px solid rgba(251,191,36,0.2); display: inline-block; margin-bottom: 12px;">Waiting...</div>
             <div id="passcode-timer" style="font-size: 14px; color: #fbbf24; margin-bottom: 10px;">Expires in: 15s</div>
             <button id="copy-passcode-btn" class="age-btn yes" style="padding: 6px 12px; font-size: 12px; margin-bottom: 10px;">Copy Passcode</button>
             <p style="font-size: 10px; color: #a78bfa; font-style: italic; line-height: 1.4;">Write this down, click "Back to Passcode" below, paste/type it in the input field, and press Enter to unlock the adult content catalog!</p>
@@ -2477,6 +2523,7 @@
     // Active preload trigger on startup
     preloadGithubTree();
     let isAgeVerified = false;
+    window.isDevMode = false;
     let pendingNsfwImage = null;
     let pendingNsfwLink = null;
 
@@ -2488,8 +2535,10 @@
     const ageStep1 = document.getElementById('age-step-1');
     const ageStep2 = document.getElementById('age-step-2');
     const ageStep3 = document.getElementById('age-step-3');
-    const btnStep1Yes = document.getElementById('age-btn-step1-yes');
-    const btnStep1No = document.getElementById('age-btn-step1-no');
+    const ageBtn1824 = document.getElementById('age-btn-18-24');
+    const ageBtn2534 = document.getElementById('age-btn-25-34');
+    const ageBtn35plus = document.getElementById('age-btn-35plus');
+    const ageBtnUnder18 = document.getElementById('age-btn-under18');
     const playGameBtn = document.getElementById('play-game-btn');
     const backToPasscodeBtn = document.getElementById('back-to-passcode-btn');
     const memoryGameGrid = document.getElementById('memory-game-grid');
@@ -2634,7 +2683,7 @@
     let currentCorrectOc = "";
     let currentOcImage = "";
 
-    function initSubStage(stageNo) {
+    window.initSubStage = function initSubStage(stageNo) {
       currentSubStage = stageNo;
       stopSnakeGame();
 
@@ -2738,8 +2787,10 @@
         secondFlippedCard = null;
         lockGrid = false;
 
-        if (matchedMatchesCount === 6) {
-
+        if (matchedMatchesCount === 6 || window.isDevMode) {
+          if (window.isDevMode) {
+            console.log("Dev: Skipped Memory Match");
+          }
           setTimeout(() => {
             initSubStage(2);
           }, 1000);
@@ -2867,7 +2918,8 @@
       if (nextHead.x === snakeApple.x && nextHead.y === snakeApple.y) {
         snakeScore++;
         updateSnakeScoreText();
-        if (snakeScore >= applesRequired) {
+        if (snakeScore >= applesRequired || window.isDevMode) {
+          if (window.isDevMode) console.log("Dev: Skipped Snake");
           stopSnakeGame();
 
           setTimeout(() => {
@@ -3085,7 +3137,8 @@
           }, 1200);
         } else {
           toggleRpsButtons(false);
-          const passed = rpsWins >= 5;
+          const passed = rpsWins >= 5 || window.isDevMode;
+          if (window.isDevMode) console.log("Dev: Skipped RPS");
           if (passed) {
             if (statusEl) {
               statusEl.innerHTML += `<br><span style="color: #34d399; font-weight: bold; font-size: 11px; display: block; margin-top: 4px;">STAGE 3 COMPLETED! LOADING QUIZ...</span>`;
@@ -3157,7 +3210,7 @@
           optionsContainer.innerHTML = '';
           qData.o.forEach((opt, idx) => {
             const btn = document.createElement('button');
-            btn.className = 'quiz-btn';
+            btn.className = 'age-btn yes';
             btn.style.width = '100%';
             btn.style.textAlign = 'left';
             btn.style.padding = '10px 14px';
@@ -3170,7 +3223,8 @@
           });
         }
       } else {
-        const passed = quizScore === 5;
+        const passed = quizScore === 5 || window.isDevMode;
+        if (window.isDevMode) console.log("Dev: Skipped Quiz");
         if (questionNumEl) questionNumEl.textContent = 'Quiz Finished';
         if (questionTextEl) questionTextEl.innerHTML = passed
                 ? `<div style="text-align:center;"><i class="fa fa-check-circle" style="color:#4ade80;font-size:30px;margin-bottom:8px;"></i><br><span style="color:#4ade80;font-weight:bold;">QUIZ PASSED!</span><br>Score: ${quizScore}/5</div>`
@@ -3367,7 +3421,8 @@
       const feedbackEl = document.getElementById('guess-char-feedback');
       const optionsContainer = document.getElementById('guess-options-container');
 
-      if (selectedName === currentCorrectOc) {
+      if (selectedName === currentCorrectOc || window.isDevMode) {
+        if (window.isDevMode) console.log("Dev: Skipped Character Guess");
         btnEl.style.background = '#059669';
         btnEl.style.borderColor = '#34d399';
         if (feedbackEl) {
@@ -3398,8 +3453,19 @@
             const copyBtn = document.getElementById('copy-passcode-btn');
 
             copyBtn.addEventListener('click', () => {
-              navigator.clipboard.writeText(passcodeVal);
-              copyBtn.textContent = 'Copied!';
+              // Fallback-first approach is more reliable in iframes
+              const tempTextArea = document.createElement("textarea");
+              tempTextArea.value = passcodeVal;
+              document.body.appendChild(tempTextArea);
+              tempTextArea.select();
+              try {
+                document.execCommand("copy");
+                copyBtn.textContent = 'Copied!';
+              } catch (err) {
+                console.error('Failed to copy: ', err);
+                copyBtn.textContent = 'Failed!';
+              }
+              document.body.removeChild(tempTextArea);
               setTimeout(() => copyBtn.textContent = 'Copy Passcode', 2000);
             });
 
@@ -3408,8 +3474,7 @@
               if (timerEl) timerEl.textContent = `Expires in: ${timeLeft}s`;
               if (timeLeft <= 0) {
                 clearInterval(timerInterval);
-                timerEl.textContent = 'Copied to clipboard!';
-                navigator.clipboard.writeText(passcodeVal);
+                timerEl.textContent = 'Passcode expired';
               }
             }, 1000);
           }
@@ -3484,17 +3549,30 @@
       }
     }
 
-    if (btnStep1Yes) {
-      btnStep1Yes.addEventListener('click', (e) => {
+    // Age qualification handlers
+    const ageButtons = [ageBtn1824, ageBtn2534, ageBtn35plus];
+    ageButtons.forEach(btn => {
+      if (btn) {
+        btn.addEventListener('click', (e) => {
+          if (e && e.isTrusted === false) return;
+          if (ageStep1) ageStep1.style.display = 'none';
+          if (ageStep2) ageStep2.style.display = 'flex';
+          if (agePasscodeInput) agePasscodeInput.focus();
+        });
+      }
+    });
+
+    if (ageBtnUnder18) {
+      ageBtnUnder18.addEventListener('click', (e) => {
         if (e && e.isTrusted === false) {
           console.warn("Automation detected.");
           return;
         }
-        if (ageStep1) ageStep1.style.display = 'none';
-        if (ageStep2) ageStep2.style.display = 'flex';
-        if (agePasscodeInput) {
-          agePasscodeInput.focus();
+        if (ageVerificationOverlay) {
+          ageVerificationOverlay.classList.remove('active');
         }
+        pendingNsfwImage = null;
+        pendingNsfwLink = null;
       });
     }
 
@@ -3558,20 +3636,6 @@
       });
     }
 
-    if (btnStep1No) {
-      btnStep1No.addEventListener('click', (e) => {
-        if (e && e.isTrusted === false) {
-          console.warn("Automation detected.");
-          return;
-        }
-        if (ageVerificationOverlay) {
-          ageVerificationOverlay.classList.remove('active');
-        }
-        pendingNsfwImage = null;
-        pendingNsfwLink = null;
-      });
-    }
-
     if (playGameBtn) {
       playGameBtn.addEventListener('click', (e) => {
         if (e && e.isTrusted === false) {
@@ -3602,7 +3666,7 @@
       const value = agePasscodeInput.value.trim();
       console.log("Input:", value, "Expected:", correctPasscode);
 
-      if (value.toLowerCase() === correctPasscode.toLowerCase()) {
+      if (value.toLowerCase() === correctPasscode.toLowerCase() || window.isDevMode) {
         isAgeVerified = true;
         document.body.classList.add('age-verified');
         stopSnakeGame();
@@ -3822,6 +3886,9 @@
             const img = document.createElement('img');
             img.src = url;
             img.className = 'oc-slideshow-img';
+            if (url.toLowerCase().includes('nsfw')) {
+              img.classList.add('nsfw-img');
+            }
             if (imgIdx === 0) img.classList.add('active');
             bubble.appendChild(img);
           });

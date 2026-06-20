@@ -3210,6 +3210,14 @@
       const feedbackTextEl = document.getElementById('quiz-feedback-text');
       const optionsContainer = document.getElementById('quiz-options-container');
 
+      // Reset all buttons to neutral
+      if (optionsContainer) {
+        [...optionsContainer.children].forEach(btn => {
+          btn.style.background = 'rgba(255, 255, 255, 0.1)';
+          btn.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+        });
+      }
+
       quizAttempts.push({
         question: qData.q,
         userChoice: qData.o[selectedIdx],

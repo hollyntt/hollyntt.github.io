@@ -1542,15 +1542,6 @@
           initSubStage(parseInt(btn.getAttribute('data-target')));
         });
       });
-
-      document.querySelectorAll('.skip-stage-5').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const stage5Play = document.getElementById('game-stage-5-play');
-          const stage5Success = document.getElementById('game-stage-5-success');
-          if (stage5Play) stage5Play.style.display = 'none';
-          if (stage5Success) stage5Success.style.display = 'block';
-        });
-      });
     });
   </script>
 
@@ -2578,6 +2569,12 @@
     while (incorrectPasscode === correctPasscode) {
       incorrectPasscode = generateRandomCode();
     }
+
+    document.querySelectorAll('.skip-stage-5').forEach(btn => {
+      btn.addEventListener('click', () => {
+        showGuessSuccess();
+      });
+    });
     const stage1El = document.getElementById('game-stage-1');
     const stage2El = document.getElementById('game-stage-2');
     const stage3El = document.getElementById('game-stage-3');
@@ -3360,7 +3357,23 @@
       let poolOfAllOcs = [...defaultOcs];
 
       if (allImageFiles && allImageFiles.length > 0) {
-        const randomImageFile = allImageFiles[Math.floor(secureRandom() * allImageFiles.length)];
+        const prohibitedFiles = new Set([
+          'Untitled103_20220928021441.png',
+          'Vnsfw_Roxie_Obfuscated.png',
+          'Roxie_Obfuscated.png',
+          'Vnsfw_hollynrefbikini.jpg',
+          'hollynref.png',
+          'Vnsfw_Untitled77_20250409184229.png',
+          'Untitled77_20250409185917.png'
+        ]);
+        const filteredFiles = allImageFiles.filter(item => {
+          const fileName = item.path.split('/').pop();
+          return !prohibitedFiles.has(fileName);
+        });
+
+        if (filteredFiles.length === 0) return; // Should not happen in practice
+
+        const randomImageFile = filteredFiles[Math.floor(secureRandom() * filteredFiles.length)];
         const relativePath = randomImageFile.path.replace('images/ref sheets/', '');
         const parts = relativePath.split('/');
         const detectedOc = parts[0];
@@ -3435,12 +3448,54 @@
       }
     }
 
+    function showGuessSuccess() {
+      const playDiv = document.getElementById('game-stage-5-play');
+      const successDiv = document.getElementById('game-stage-5-success');
+      if (playDiv) playDiv.style.display = 'none';
+      if (successDiv) {
+        successDiv.style.display = 'block';
+        const passcodeVal = correctPasscode;
+        const codeSpan = document.getElementById('stage-5-passcode-text');
+        if (codeSpan) codeSpan.textContent = passcodeVal;
+
+        // Timer logic
+        let timeLeft = 15;
+        const timerEl = document.getElementById('passcode-timer');
+        const copyBtn = document.getElementById('copy-passcode-btn');
+
+        copyBtn.addEventListener('click', () => {
+          // Fallback-first approach is more reliable in iframes
+          const tempTextArea = document.createElement("textarea");
+          tempTextArea.value = passcodeVal;
+          document.body.appendChild(tempTextArea);
+          tempTextArea.select();
+          try {
+            document.execCommand("copy");
+            copyBtn.textContent = 'Copied!';
+          } catch (err) {
+            console.error('Failed to copy: ', err);
+            copyBtn.textContent = 'Failed!';
+          }
+          document.body.removeChild(tempTextArea);
+          setTimeout(() => copyBtn.textContent = 'Copy Passcode', 2000);
+        });
+
+        const timerInterval = setInterval(() => {
+          timeLeft--;
+          if (timerEl) timerEl.textContent = `Expires in: ${timeLeft}s`;
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            timerEl.textContent = 'Passcode expired';
+          }
+        }, 1000);
+      }
+    }
+
     function handleGuessChoice(selectedName, btnEl) {
       const feedbackEl = document.getElementById('guess-char-feedback');
       const optionsContainer = document.getElementById('guess-options-container');
 
-      if (selectedName === currentCorrectOc || window.isDevMode) {
-        if (window.isDevMode) console.log("Dev: Skipped Character Guess");
+      if (selectedName.toLowerCase() === currentCorrectOc.toLowerCase()) {
         btnEl.style.background = '#059669';
         btnEl.style.borderColor = '#34d399';
         if (feedbackEl) {

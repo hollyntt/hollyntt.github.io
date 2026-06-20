@@ -1785,6 +1785,8 @@
             <p style="font-size: 14px; font-weight: bold; color: #f8fafc; margin-bottom: 10px;">DECRYPTION SECURED SUCCESSFULLY</p>
             <p style="font-size: 11px; opacity: 0.8; margin-bottom: 8px;">Use the passcode below to bypass the verification portal:</p>
             <div id="stage-5-passcode-text" style="font-family: var(--font-mono); font-size: 24px; color: #fbbf24; font-weight: 900; letter-spacing: 2px; text-shadow: 0 0 10px rgba(251,191,36,0.6); padding: 8px 12px; background: rgba(0,0,0,0.5); border-radius: 10px; border: 1px solid rgba(251,191,36,0.2); display: inline-block; margin-bottom: 12px;">CYBER-7087</div>
+            <div id="passcode-timer" style="font-size: 14px; color: #fbbf24; margin-bottom: 10px;">Expires in: 15s</div>
+            <button id="copy-passcode-btn" class="age-btn yes" style="padding: 6px 12px; font-size: 12px; margin-bottom: 10px;">Copy Passcode</button>
             <p style="font-size: 10px; color: #a78bfa; font-style: italic; line-height: 1.4;">Write this down, click "Back to Passcode" below, paste/type it in the input field, and press Enter to unlock the adult content catalog!</p>
           </div>
         </div>
@@ -3155,7 +3157,7 @@
           optionsContainer.innerHTML = '';
           qData.o.forEach((opt, idx) => {
             const btn = document.createElement('button');
-            btn.className = 'age-btn yes';
+            btn.className = 'quiz-btn';
             btn.style.width = '100%';
             btn.style.textAlign = 'left';
             btn.style.padding = '10px 14px';
@@ -3389,6 +3391,27 @@
             const passcodeVal = correctPasscode;
             const codeSpan = document.getElementById('stage-5-passcode-text');
             if (codeSpan) codeSpan.textContent = passcodeVal;
+
+            // Timer logic
+            let timeLeft = 15;
+            const timerEl = document.getElementById('passcode-timer');
+            const copyBtn = document.getElementById('copy-passcode-btn');
+
+            copyBtn.addEventListener('click', () => {
+              navigator.clipboard.writeText(passcodeVal);
+              copyBtn.textContent = 'Copied!';
+              setTimeout(() => copyBtn.textContent = 'Copy Passcode', 2000);
+            });
+
+            const timerInterval = setInterval(() => {
+              timeLeft--;
+              if (timerEl) timerEl.textContent = `Expires in: ${timeLeft}s`;
+              if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timerEl.textContent = 'Copied to clipboard!';
+                navigator.clipboard.writeText(passcodeVal);
+              }
+            }, 1000);
           }
 
           confetti({
@@ -3577,6 +3600,7 @@
     function verifyPasscode() {
       if (!agePasscodeInput) return;
       const value = agePasscodeInput.value.trim();
+      console.log("Input:", value, "Expected:", correctPasscode);
 
       if (value.toLowerCase() === correctPasscode.toLowerCase()) {
         isAgeVerified = true;

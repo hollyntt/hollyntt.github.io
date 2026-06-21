@@ -1963,8 +1963,6 @@
   </div>
 </div>
 
-<iframe id="sc-widget" data-src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/runeskate/tracks&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" style="display:none;"></iframe>
-
 <div class="ref-modal" id="ref-modal">
   <div class="ref-modal-content neumorphic-panel">
     <button class="close-modal" id="close-modal"><i class="fa fa-times"></i></button>
@@ -2241,7 +2239,7 @@
       }
     };
 
-    const widgetIframe = document.getElementById('sc-widget');
+    let widgetIframe = null;
     let widget = null;
     const volumeSlider = document.getElementById('volume-slider');
     const volumeIcon = document.getElementById('volume-icon');
@@ -2352,11 +2350,11 @@
         if (entryScreen) entryScreen.classList.add('ready-to-enter');
         playReadySound();
 
-        // Auto enter after 1.8 seconds for a snappier transition
+        // Auto enter after 3.5 seconds to restore visual immersion
         setTimeout(() => {
           enterSite();
-        }, 1800);
-      }, 400);
+        }, 3500);
+      }, 1000);
     }
 
     function playTrackAtIndex(index) {
@@ -2433,12 +2431,21 @@
         document.body.classList.add('entered');
 
         // Initialize music player only AFTER the loading screen is completely gone
+        // Create the widget iframe dynamically only now
         setTimeout(() => {
-          if (widgetIframe && widgetIframe.dataset.src) {
-            widgetIframe.src = widgetIframe.dataset.src;
-            widget = SC.Widget(widgetIframe);
-            setupMusicEvents();
-          }
+          widgetIframe = document.createElement('iframe');
+          widgetIframe.id = 'sc-widget';
+          widgetIframe.width = '100%';
+          widgetIframe.height = '166';
+          widgetIframe.scrolling = 'no';
+          widgetIframe.frameBorder = 'no';
+          widgetIframe.allow = 'autoplay';
+          widgetIframe.style.display = 'none';
+          widgetIframe.src = "https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/runeskate/tracks&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false";
+          document.body.appendChild(widgetIframe);
+
+          widget = SC.Widget(widgetIframe);
+          setupMusicEvents();
 
           // Delay playback slightly to let the reveal animation finish
           setTimeout(() => {
@@ -2474,7 +2481,7 @@
       // No SoundCloud activity allowed during this sequence
       setTimeout(() => {
         initQueue();
-      }, 600);
+      }, 2000);
     });
 
     function fadeVolume(target, duration) {

@@ -159,8 +159,6 @@
       align-items: center;
       justify-content: center;
       transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-      perspective: 1000px;
-      transform-style: preserve-3d;
     }
 
     #pre-load.ready-to-enter .loader-inner {
@@ -168,15 +166,15 @@
     }
 
     #pre-load.ready-to-enter .loader-inner .loader-logo {
-      animation: logo-pulse 3s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+      animation: logo-pulse 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
       border-color: rgba(255, 255, 255, 0.5);
-      box-shadow: 0 0 60px rgba(212, 140, 93, 0.4);
+      box-shadow: 0 0 40px rgba(212, 140, 93, 0.3);
     }
 
     @keyframes logo-pulse {
-      0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0; }
-      15% { transform: translate(-50%, -50%) scale(2.2); opacity: 1; } /* Fast pulse to big red circle size */
-      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; } /* Slow pulse back to initial small size */
+      0% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.2); }
+      100% { transform: translate(-50%, -50%) scale(1.1); }
     }
 
     #pre-load .loader-inner .loader-logo {
@@ -184,19 +182,16 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 90px;
-      height: 90px;
+      width: 80px;
+      height: 80px;
       display: flex;
       align-items: center;
       justify-content: center;
+      animation: color-change 2s infinite ease-in-out;
       z-index: 999;
       border-radius: 50%;
       overflow: hidden;
-      border: 3px solid rgba(255, 255, 255, 0.2);
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(8px);
-      transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-      will-change: transform, opacity;
+      border: 2px solid rgba(255, 255, 255, 0.2);
     }
 
     #pre-load .loader-inner .loader-logo img {
@@ -214,7 +209,6 @@
       backdrop-filter: blur(5px);
       animation: ripple 2s infinite ease-in-out;
       transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
-      will-change: transform, opacity;
     }
 
     /* Portal loop animation triggered when site is ready */
@@ -307,13 +301,10 @@
       }
     }
 
-    #pre-load.entering .loader-logo {
-      animation: logo-flip 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards !important;
-    }
-
-    @keyframes logo-flip {
-      0% { transform: translate(-50%, -50%) rotateY(0) scale(1); }
-      100% { transform: translate(-50%, -50%) rotateY(1440deg) scale(1); }
+    #pre-load.pressed .loader-inner {
+      transform: scale(0.9) !important;
+      transition: transform 0.1s cubic-bezier(0.23, 1, 0.32, 1) !important;
+      filter: brightness(0.6);
     }
 
     #pre-load.entering .loader-inner {
@@ -2403,7 +2394,7 @@
           particles.push(p);
         }
 
-      }, 2500); // Extended to match slower flip animation
+      }, 1100); // Matches the warp zoom duration
     }
 
     function setProgress(percent) {
@@ -2468,12 +2459,8 @@
     });
 
     function resize() {
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
-      canvas.style.width = window.innerWidth + 'px';
-      canvas.style.height = window.innerHeight + 'px';
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     }
 
     class Particle {
@@ -2485,8 +2472,8 @@
         this.init(x, y);
       }
       init(x, y) {
-        this.x = x || Math.random() * window.innerWidth;
-        this.y = y || Math.random() * window.innerHeight;
+        this.x = x || Math.random() * canvas.width;
+        this.y = y || Math.random() * canvas.height;
         this.size = Math.random() * 15 + 5;
         this.baseX = this.x;
         this.baseY = this.y;
@@ -2501,10 +2488,10 @@
         this.y += this.speedY;
         this.rotation += this.rotationSpeed;
 
-        if (this.x > window.innerWidth + 50) this.x = -50;
-        else if (this.x < -50) this.x = window.innerWidth + 50;
-        if (this.y > window.innerHeight + 50) this.y = -50;
-        else if (this.y < -50) this.y = window.innerHeight + 50;
+        if (this.x > canvas.width + 50) this.x = -50;
+        else if (this.x < -50) this.x = canvas.width + 50;
+        if (this.y > canvas.height + 50) this.y = -50;
+        else if (this.y < -50) this.y = canvas.height + 50;
 
         this.mouseDistance = Infinity;
         if (mouse.x != null && mouse.y != null) {

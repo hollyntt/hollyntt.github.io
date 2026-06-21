@@ -14,8 +14,8 @@
       --font-serif: 'Playfair Display', serif;
       --font-sans: 'Inter', sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
-      --glass-bg: rgba(255, 255, 255, 0.15);
-      --glass-border: rgba(255, 255, 255, 0.2);
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
       --accent: #f5e6d3;
     }
 
@@ -34,10 +34,10 @@
 
     body {
       background: var(--bg-gradient);
+      min-height: 100vh;
       color: var(--text-primary);
       font-family: var(--font-sans);
       overflow-x: hidden;
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -116,74 +116,247 @@
       100% { transform: translateX(0); }
     }
 
-    #entry-screen {
+    #pre-load {
       position: fixed;
       inset: 0;
-      z-index: 10000;
-      background: rgba(0, 0, 0, 0.9);
-      backdrop-filter: blur(15px);
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 999999;
+      transition: opacity 0.8s ease, visibility 0.8s;
       cursor: pointer;
+    }
+
+    .pre-load-bg {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 999997;
       transition: opacity 0.8s ease, visibility 0.8s;
     }
 
-    #entry-screen.hidden {
+    body.entered .pre-load-bg {
       opacity: 0;
       visibility: hidden;
     }
 
-    .entry-content {
-      text-align: center;
+    body:not(.entered) #visual {
+      z-index: 999998;
+      opacity: 0.7;
     }
 
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-30px); }
-      to { opacity: 1; transform: translateY(0); }
+    #pre-load.hidden {
+      opacity: 0;
+      visibility: hidden;
     }
 
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+    #pre-load .loader-inner {
+      --loader-background: linear-gradient(0deg, rgba(176, 125, 125, 0.15) 0%, rgba(212, 140, 93, 0.15) 100%);
+      position: relative;
+      height: 250px;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+      perspective: 1000px;
+      transform-style: preserve-3d;
     }
 
-    .entry-title {
-      font-family: var(--font-serif);
-      font-size: 5rem;
-      font-style: italic;
-      font-weight: 900;
-      color: var(--text-primary);
-      margin-bottom: 1rem;
-      letter-spacing: -2px;
-      animation: fadeInDown 1.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    #pre-load.ready-to-enter .loader-inner {
+      transform: scale(1.1);
     }
 
-    .intro-loader {
-      width: 200px;
-      height: 2px;
-      background: rgba(255, 255, 255, 0.1);
-      margin: 20px auto;
-      border-radius: 2px;
+    #pre-load.ready-to-enter .loader-inner .loader-logo {
+      animation: logo-pulse 3s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+      border-color: rgba(255, 255, 255, 0.5);
+      box-shadow: 0 0 60px rgba(212, 140, 93, 0.4);
+    }
+
+    @keyframes logo-pulse {
+      0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0; }
+      15% { transform: translate(-50%, -50%) scale(2.2); opacity: 1; } /* Fast pulse to big red circle size */
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; } /* Slow pulse back to initial small size */
+    }
+
+    #pre-load .loader-inner .loader-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      border-radius: 50%;
       overflow: hidden;
-      transition: opacity 0.5s ease;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+      transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+      will-change: transform, opacity;
     }
 
-    .loader-bar {
-      width: 0%;
+    #pre-load .loader-inner .loader-logo img {
+      width: 100%;
       height: 100%;
-      background: var(--text-primary);
-      box-shadow: 0 0 15px var(--text-primary);
-      transition: width 0.3s ease;
+      object-fit: cover;
+    }
+
+    #pre-load .loader-inner .box {
+      position: absolute;
+      background: var(--loader-background);
+      border-radius: 50%;
+      border-top: 1px solid rgba(176, 125, 125, 0.4);
+      box-shadow: rgba(0, 0, 0, .2) 0 10px 10px 0;
+      backdrop-filter: blur(5px);
+      animation: ripple 2s infinite ease-in-out;
+      transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+      will-change: transform, opacity;
+    }
+
+    /* Portal loop animation triggered when site is ready */
+    #pre-load.ready-to-enter .loader-inner .box {
+      animation: portal-out 2s infinite linear !important;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 50px rgba(212, 140, 93, 0.2);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    #pre-load.ready-to-enter .loader-inner .box:nth-child(1) { animation-delay: 0s !important; }
+    #pre-load.ready-to-enter .loader-inner .box:nth-child(2) { animation-delay: 0.4s !important; }
+    #pre-load.ready-to-enter .loader-inner .box:nth-child(3) { animation-delay: 0.8s !important; }
+    #pre-load.ready-to-enter .loader-inner .box:nth-child(4) { animation-delay: 1.2s !important; }
+    #pre-load.ready-to-enter .loader-inner .box:nth-child(5) { animation-delay: 1.6s !important; }
+
+    @keyframes portal-out {
+      0% {
+        transform: scale(0.4);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        transform: scale(12);
+        opacity: 0;
+      }
+    }
+
+    #pre-load .loader-inner .box:nth-child(1) {
+      width: 25%;
+      aspect-ratio: 1/1;
+      z-index: 99;
+      border-color: rgba(176, 125, 125, 0.8);
+    }
+
+    #pre-load .loader-inner .box:nth-child(2) {
+      inset: 30%;
+      z-index: 98;
+      border-color: rgba(176, 125, 125, 0.6);
+      animation-delay: .2s;
+    }
+
+    #pre-load .loader-inner .box:nth-child(3) {
+      inset: 20%;
+      z-index: 97;
+      border-color: rgba(176, 125, 125, 0.4);
+      animation-delay: .4s;
+    }
+
+    #pre-load .loader-inner .box:nth-child(4) {
+      inset: 10%;
+      z-index: 96;
+      border-color: rgba(176, 125, 125, 0.3);
+      animation-delay: .6s;
+    }
+
+    #pre-load .loader-inner .box:nth-child(5) {
+      inset: 0;
+      z-index: 95;
+      border-color: rgba(176, 125, 125, 0.2);
+      animation-delay: .8s;
+    }
+
+    @keyframes ripple {
+      0% {
+        transform: scale(0.8);
+        opacity: 0.3;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.6;
+      }
+      100% {
+        transform: scale(0.8);
+        opacity: 0.3;
+      }
+    }
+
+    @keyframes color-change {
+      0% {
+        opacity: .7;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: .7;
+      }
+    }
+
+    #pre-load.entering .loader-logo {
+      animation: logo-flip 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards !important;
+    }
+
+    @keyframes logo-flip {
+      0% { transform: translate(-50%, -50%) rotateY(0) scale(1); }
+      100% { transform: translate(-50%, -50%) rotateY(1440deg) scale(1); }
+    }
+
+    #pre-load.entering .loader-inner {
+      animation: warp-zoom 1.2s cubic-bezier(0.7, 0, 0.84, 0) forwards;
+    }
+
+    @keyframes warp-zoom {
+      0% { transform: scale(1.1); filter: brightness(1); }
+      100% { transform: scale(20); filter: brightness(5); }
+    }
+
+    #pre-load .flash-overlay {
+      position: absolute;
+      inset: 0;
+      background: white;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 2000;
+      transition: opacity 0.3s ease;
+    }
+
+    #pre-load.entering .flash-overlay {
+      animation: flash-in 0.4s ease 0.9s forwards;
+    }
+
+    @keyframes flash-in {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
     }
 
     .entry-prompt {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.5em;
       color: var(--text-primary);
       opacity: 0;
       display: none;
+      z-index: 1000;
+      pointer-events: none;
     }
 
     .entry-prompt.ready {
@@ -228,44 +401,120 @@
     .profile-section { transform: scale(0.5) translateY(40px); }
 
     .main-content {
-      width: 100%;
-      max-width: 800px;
-      padding: 40px 20px;
+      width: 95%;
+      max-width: 850px;
+      margin: 20px auto;
+      padding: 30px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      text-align: center;
+      gap: 30px;
       z-index: 10;
       opacity: 0;
-      transition: opacity 1.5s ease;
+      transform: translateY(20px);
+      transition: opacity 1.5s ease, transform 1.5s cubic-bezier(0.23, 1, 0.32, 1);
+      position: relative;
     }
 
     body.entered .main-content {
       opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Staggered Entry Initial States */
+    .profile-section, .social-icons, .mini-about-me, .bottom-grid, .music-player {
+      opacity: 0;
+      transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    /* Entrance Animations */
+    body.entered .profile-section {
+      opacity: 1;
+      transform: scale(1);
+      animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      animation-delay: 0.3s;
+    }
+
+    body.entered .social-icons {
+      opacity: 1;
+      animation: slideRightIn 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+      animation-delay: 0.6s;
+    }
+
+    body.entered .mini-about-me {
+      opacity: 1;
+      animation: dropDown 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+      animation-delay: 0.9s;
+    }
+
+    body.entered .bottom-grid {
+      opacity: 1;
+      animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      animation-delay: 1.2s;
+    }
+
+    body.entered .music-player {
+      opacity: 1;
+      animation: slideUpLeft 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+      animation-delay: 1.5s;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.6); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes slideRightIn {
+      0% { opacity: 0; transform: translateX(50px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes dropDown {
+      0% { opacity: 0; transform: translateY(-40px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUpLeft {
+      0% { opacity: 0; transform: translate(-20px, 20px); }
+      100% { opacity: 1; transform: translate(0, 0); }
+    }
+
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      width: 100%;
+      border-bottom: 1px solid;
+      border-image: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.6), transparent) 1;
+      padding-bottom: 0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .header-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
     }
 
     .profile-section {
-      margin-bottom: 40px;
+      margin-bottom: 0;
+      transform: scale(0.6);
     }
 
     .profile-img-container {
-      width: 140px;
-      height: 140px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       overflow: hidden;
-      margin-bottom: 20px;
-      background: rgba(255, 255, 255, 0.01);
-      backdrop-filter: blur(8px) saturate(120%);
-      -webkit-backdrop-filter: blur(8px) saturate(120%);
+      margin-bottom: 0;
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05), 0 12px 40px rgba(0, 0, 0, 0.2);
-      transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease;
-      will-change: transform;
-      cursor: pointer;
-    }
-
-    .profile-img-container:hover {
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     }
 
     .profile-img {
@@ -275,43 +524,117 @@
     }
 
     .aka-text {
+      font-size: 24px;
+      text-transform: none;
+      letter-spacing: -0.5px;
+      opacity: 1;
+      margin-bottom: 0;
+      font-weight: 700;
+      font-family: var(--font-serif);
+      font-style: italic;
+    }
+
+    .age-text {
       font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.3em;
-      opacity: 0.6;
-      margin-bottom: 30px;
-      font-weight: 600;
+      margin-bottom: 0;
+      opacity: 0.5;
     }
 
     .social-icons {
       display: flex;
-      gap: 24px;
-      background: rgba(255, 255, 255, 0.01);
-      backdrop-filter: blur(8px) saturate(120%);
-      -webkit-backdrop-filter: blur(8px) saturate(120%);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05), 0 12px 40px rgba(0, 0, 0, 0.2);
-      padding: 20px 32px;
-      border-radius: 40px;
-      margin-bottom: 48px;
-      flex-wrap: wrap;
-      justify-content: center;
+      gap: 12px;
+      background: none;
+      backdrop-filter: none;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      margin-bottom: 6px;
+      flex-wrap: nowrap;
+      margin-top: 0;
+    }
+
+    .social-icons a {
+      font-size: 18px;
+    }
+
+    .mini-about-me {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .mini-about-text {
+      font-size: 0.95rem;
+      opacity: 0.8;
+      line-height: 1.6;
+    }
+
+    .music-player {
+      position: absolute;
+      bottom: 30px;
+      left: 30px;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow:
+              10px 10px 20px rgba(0, 0, 0, 0.4),
+              -10px -10px 20px rgba(255, 255, 255, 0.02),
+              inset 1px 1px 2px rgba(255, 255, 255, 0.05);
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+      z-index: 100;
+      overflow: hidden;
+      margin: 0;
+    }
+
+    .music-player:not(.collapsed):hover {
+      transform: scale(1.02) translateY(-5px);
+      box-shadow:
+              15px 15px 30px rgba(0, 0, 0, 0.5),
+              -12px -12px 30px rgba(255, 255, 255, 0.05);
+    }
+
+    .music-player:active {
+      transform: scale(0.98);
+      box-shadow:
+              inset 4px 4px 10px rgba(0, 0, 0, 0.4),
+              inset -4px -4px 10px rgba(255, 255, 255, 0.05);
+    }
+
+    .bottom-grid {
+      margin-top: 20px;
+      padding-bottom: 80px; /* Space for music player */
     }
 
     .social-icons a {
       color: var(--text-primary);
-      font-size: 26px;
-      transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s;
-      opacity: 0.8;
+      width: 44px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 14px;
+      font-size: 20px;
+      transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+      opacity: 0.85;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1), -4px -4px 10px rgba(255, 255, 255, 0.03);
     }
 
     .social-icons a:hover {
-      transform: scale(1.2) translateY(-4px);
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.08);
       opacity: 1;
+      box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.15), -6px -6px 15px rgba(255, 255, 255, 0.05);
     }
 
     .bottom-grid {
@@ -337,27 +660,39 @@
     .grid-card {
       width: 160px;
       height: 160px;
-      background: rgba(255, 255, 255, 0.01);
-      backdrop-filter: blur(8px) saturate(120%);
-      -webkit-backdrop-filter: blur(8px) saturate(120%);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05), 0 12px 40px rgba(0, 0, 0, 0.2);
-      border-radius: 36px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      box-shadow:
+              10px 10px 20px rgba(0, 0, 0, 0.3),
+              -10px -10px 20px rgba(255, 255, 255, 0.05);
+      border-radius: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
       text-decoration: none;
-      transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
       opacity: 0;
+      cursor: pointer;
     }
 
     body.entered .grid-card {
       animation: entryReveal 1.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-      animation-delay: 0.9s;
+      animation-delay: 1s;
     }
 
     .grid-card:hover {
-      transform: scale(1.04);
+      transform: translateY(-5px) scale(1.02);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow:
+              15px 15px 30px rgba(0, 0, 0, 0.4),
+              -12px -12px 30px rgba(255, 255, 255, 0.08);
+    }
+
+    .grid-card:active {
+      transform: translateY(-2px) scale(0.98);
+      box-shadow:
+              inset 4px 4px 10px rgba(0, 0, 0, 0.4),
+              inset -4px -4px 10px rgba(255, 255, 255, 0.05);
     }
 
     .grid-card img {
@@ -404,27 +739,7 @@
       100% { bottom: -100px; }
     }
 
-    .music-player {
-      position: relative;
-      margin-top: 24px;
-      background: rgba(255, 255, 255, 0.01);
-      backdrop-filter: blur(8px) saturate(120%);
-      -webkit-backdrop-filter: blur(8px) saturate(120%);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05), 0 12px 40px rgba(0, 0, 0, 0.2);
-      border-radius: 40px;
-      display: flex;
-      align-items: center;
-      transition: width 0.5s cubic-bezier(0.25, 1, 0.5, 1),
-      height 0.5s cubic-bezier(0.25, 1, 0.5, 1),
-      padding 0.5s cubic-bezier(0.25, 1, 0.5, 1),
-      transform 0.3s ease,
-      opacity 1.5s ease;
-      z-index: 100;
-      overflow: hidden;
-      margin-left: auto;
-      margin-right: auto;
-    }
+
 
     .music-player.collapsed {
       width: 60px;
@@ -769,12 +1084,30 @@
       color: var(--accent);
     }
 
-    .liquid-glass {
+    .neumorphic-panel {
+      position: relative;
       background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(24px) saturate(180%);
-      -webkit-backdrop-filter: blur(24px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05), 0 12px 40px rgba(0, 0, 0, 0.2);
+      border-radius: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow:
+              10px 10px 20px rgba(0, 0, 0, 0.4),
+              -10px -10px 20px rgba(255, 255, 255, 0.02),
+              inset 1px 1px 2px rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    /* Simplified entrance for content */
+    .main-content {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1.2s ease, transform 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    body.entered .main-content {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .ref-modal {
@@ -1502,89 +1835,50 @@
 
 <div class="bg-text-overlay" id="bg-text"></div>
 
-<div id="entry-screen">
-  <div class="entry-content">
-    <h1 class="entry-title">runeskate</h1>
-    <div class="intro-loader" id="intro-loader">
-      <div class="loader-bar"></div>
+<div class="pre-load-bg" id="pre-load-bg"></div>
+<div id="pre-load">
+  <div class="flash-overlay"></div>
+  <div class="loader-inner">
+    <div class="loader-logo">
+      <img src="https://media.bio.site/sites/236dd1f6-0640-47ed-a55b-bdaac973cf03/Uc5gHtkVtx8SvZwAbBhQxF.png" alt="logo" class="profile-img">
     </div>
-    <p class="entry-prompt" id="entry-prompt">Click to enter</p>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
   </div>
+  <p class="entry-prompt" id="entry-prompt"></p>
 </div>
 
-<div class="main-content">
-  <div class="profile-section">
-    <div class="profile-img-container" id="pfp-btn" title="View OC Reference Sheets">
-      <img src="https://media.bio.site/sites/236dd1f6-0640-47ed-a55b-bdaac973cf03/Uc5gHtkVtx8SvZwAbBhQxF.png" alt="runeskate" class="profile-img">
+<div class="main-content neumorphic-panel">
+  <div class="main-header">
+    <div class="header-left">
+      <div class="profile-section">
+        <div class="profile-img-container" id="pfp-btn" title="View OC Reference Sheets">
+          <img src="https://media.bio.site/sites/236dd1f6-0640-47ed-a55b-bdaac973cf03/Uc5gHtkVtx8SvZwAbBhQxF.png" alt="runeskate" class="profile-img">
+        </div>
+      </div>
+      <div class="header-info">
+        <div class="aka-text" id="about-me-btn" style="cursor: pointer; transition: transform 0.3s ease; display: inline-block;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">runeskate</div>
+        <div class="age-text" id="runeskate-age" style="cursor: pointer;"></div>
+      </div>
+    </div>
+
+    <div class="social-icons">
+      <a data-hash="eqqmp7,,_phv+^mm,molcfib,`^kfkborkb+_phv+pl`f^i" title="BlueSky"><i class="fa fa-cloud"></i></a>
+      <a href="https://www.youtube.com/@runeskatee" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a data-hash="eqqmp7,,u+`lj,`^kfkborkb" title="X"><i class="fa fa-twitter"></i></a>
+      <a href="https://open.spotify.com/artist/27VTriHuDxNYlfLPa2KRx5" target="_blank" title="Spotify"><i class="fa fa-spotify"></i></a>
+      <a href="https://soundcloud.com/runeskate" target="_blank" title="SoundCloud"><i class="fa fa-soundcloud"></i></a>
+      <a href="https://discord.com/users/1280652814217117696" target="_blank" title="Discord"><i class="fa fa-comments"></i></a>
+      <a href="https://runeskate.bandcamp.com/" target="_blank" title="Bandcamp"><i class="fa fa-bandcamp"></i></a>
+      <a href="https://vrchat.com/home/user/usr_0e7cd2a2-f06d-42c2-a27c-63d96593acf0" target="_blank" title="VRChat"><i class="fa fa-gamepad"></i></a>
     </div>
   </div>
 
-  <div class="aka-text" id="dev-toggle" style="cursor: pointer;">runeskate</div>
-  <div class="age-text" id="runeskate-age" style="font-size: 10px; margin-bottom: 30px; opacity: 0.6; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3em;"></div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const devToggle = document.getElementById('dev-toggle');
-      let devClicks = 0;
-
-      devToggle.addEventListener('click', () => {
-        devClicks++;
-        if (devClicks >= 5) {
-          window.isDevMode = !window.isDevMode;
-          devClicks = 0;
-          document.body.classList.toggle('dev-mode', window.isDevMode);
-          alert("Developer Mode: " + (window.isDevMode ? "ENABLED" : "DISABLED"));
-        }
-      });
-
-      document.querySelectorAll('.skip-stage').forEach(btn => {
-        btn.addEventListener('click', () => {
-          initSubStage(parseInt(btn.getAttribute('data-target')));
-        });
-      });
-    });
-  </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-  <script>
-    function calculateAge(birthDate) {
-      const today = new Date();
-      const birth = new Date(birthDate);
-      let age = today.getFullYear() - birth.getFullYear();
-      const m = today.getMonth() - birth.getMonth();
-      if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
-        age--;
-      }
-      return age;
-    }
-
-    function isBirthday(birthDate) {
-      const today = new Date();
-      const birth = new Date(birthDate);
-      return today.getMonth() === birth.getMonth() && today.getDate() === birth.getDate();
-    }
-
-    const birthDate = '2005-01-15';
-    document.getElementById('runeskate-age').innerText = `${calculateAge(birthDate)} years old`;
-
-    if (isBirthday(birthDate)) {
-      confetti({
-        particleCount: 150,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
-    }
-  </script>
-
-  <div class="social-icons">
-    <a data-hash="eqqmp7,,_phv+^mm,molcfib,`^kfkborkb+_phv+pl`f^i" title="BlueSky"><i class="fa fa-cloud"></i></a>
-    <a href="https://www.youtube.com/@runeskatee" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
-    <a data-hash="eqqmp7,,u+`lj,`^kfkborkb" title="X"><i class="fa fa-twitter"></i></a>
-    <a href="https://open.spotify.com/artist/27VTriHuDxNYlfLPa2KRx5" target="_blank" title="Spotify"><i class="fa fa-spotify"></i></a>
-    <a href="https://soundcloud.com/runeskate" target="_blank" title="SoundCloud"><i class="fa fa-soundcloud"></i></a>
-    <a href="https://discord.com/users/1280652814217117696" target="_blank" title="Discord"><i class="fa fa-comments"></i></a>
-    <a href="https://runeskate.bandcamp.com/" target="_blank" title="Bandcamp"><i class="fa fa-bandcamp"></i></a>
-    <a href="https://vrchat.com/home/user/usr_0e7cd2a2-f06d-42c2-a27c-63d96593acf0" target="_blank" title="VRChat"><i class="fa fa-gamepad"></i></a>
+  <div class="mini-about-me">
+    <p class="mini-about-text">Digital artist & character designer. Creating visual worlds and curating digital spaces. Welcome to the portal.</p>
   </div>
 
   <div class="bottom-grid">
@@ -1639,7 +1933,7 @@
 <iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/runeskate/tracks&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" style="display:none;"></iframe>
 
 <div class="ref-modal" id="ref-modal">
-  <div class="ref-modal-content liquid-glass">
+  <div class="ref-modal-content neumorphic-panel">
     <button class="close-modal" id="close-modal"><i class="fa fa-times"></i></button>
     <div class="modal-header-container">
       <button class="back-btn" id="back-to-ocs-btn" style="display: none;"><i class="fa fa-arrow-left"></i> Back</button>
@@ -1655,12 +1949,75 @@
   </div>
 </div>
 
+<div class="ref-modal" id="about-modal">
+  <div class="ref-modal-content neumorphic-panel" style="max-width: 600px; height: auto; max-height: 85vh; padding-bottom: 40px;">
+    <button class="close-modal" id="close-about-modal"><i class="fa fa-times"></i></button>
+    <div class="modal-header-container" style="padding: 0; margin-bottom: 30px; min-height: auto;">
+      <h2 style="text-align: center; font-family: var(--font-serif); font-size: 2.8rem; margin: 0; font-style: italic; letter-spacing: -1px;">About Me</h2>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 24px; text-align: left; line-height: 1.7; opacity: 0.95; padding: 0 10px;">
+      <p style="font-size: 1.1rem;">Hello! I'm <strong>Runeskate</strong>, a digital artist and character designer driven by storytelling and aesthetic world-building.</p>
+
+      <div style="background: rgba(255,255,255,0.06); padding: 24px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
+        <h3 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 18px; color: var(--accent); font-weight: 800;">Creative Focus</h3>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 14px; font-size: 0.95rem;">
+          <li style="display: flex; align-items: center; gap: 15px;">
+            <div style="width: 32px; height: 32px; background: rgba(255,255,255,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center;"><i class="fa fa-paint-brush" style="color: var(--accent);"></i></div>
+            Character design & Digital Illustration
+          </li>
+          <li style="display: flex; align-items: center; gap: 15px;">
+            <div style="width: 32px; height: 32px; background: rgba(255,255,255,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center;"><i class="fa fa-music" style="color: var(--accent);"></i></div>
+            Music curation and collaborative projects
+          </li>
+          <li style="display: flex; align-items: center; gap: 15px;">
+            <div style="width: 32px; height: 32px; background: rgba(255,255,255,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center;"><i class="fa fa-users" style="color: var(--accent);"></i></div>
+            Building tools and spaces for fellow creators
+          </li>
+        </ul>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.06); padding: 24px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
+        <h3 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 18px; color: var(--accent); font-weight: 800;">Top Projects</h3>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+          <a href="https://github.com/hollyntt/XOSC" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 15px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 16px; transition: background 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">
+            <div style="width: 32px; height: 32px; background: rgba(0,0,0,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center;"><i class="fa fa-github" style="color: #fff;"></i></div>
+            <div style="display: flex; flex-direction: column;">
+              <span style="font-weight: 700; font-size: 0.9rem;">XOSC</span>
+              <span style="font-size: 0.75rem; opacity: 0.6;">GitHub Repository</span>
+            </div>
+          </a>
+          <a href="https://thunderstore.io/c/atlyss/p/s0apy/" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 15px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 16px; transition: background 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">
+            <div style="width: 32px; height: 32px; background: rgba(0,0,0,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center;"><i class="fa fa-bolt" style="color: #fbbf24;"></i></div>
+            <div style="display: flex; flex-direction: column;">
+              <span style="font-weight: 700; font-size: 0.9rem;">s0apy Mods</span>
+              <span style="font-size: 0.75rem; opacity: 0.6;">Thunderstore Collection</span>
+            </div>
+          </a>
+          <a href="https://thunderstore.io/c/atlyss/p/s0apysfederati0n/" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 15px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 16px; transition: background 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">
+            <div style="width: 32px; height: 32px; background: rgba(0,0,0,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center;"><i class="fa fa-bolt" style="color: #fbbf24;"></i></div>
+            <div style="display: flex; flex-direction: column;">
+              <span style="font-weight: 700; font-size: 0.9rem;">Federation</span>
+              <span style="font-size: 0.75rem; opacity: 0.6;">collection of extended s0apymods</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <p style="font-size: 0.95rem; opacity: 0.8;">This bio-site serves as a portal to my character archives, recent tracks, and social footprints. I'm always looking for new ways to blend visual art with digital experiences.</p>
+
+      <div style="text-align: center; margin-top: 10px;">
+        <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.5;">Thanks for stopping by.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="full-image-overlay" id="full-image-overlay">
   <img id="full-image" src="" alt="Full Reference">
 </div>
 
 <div class="age-verification-overlay" id="age-verification-overlay">
-  <div class="age-verification-modal liquid-glass">
+  <div class="age-verification-modal neumorphic-panel">
 
     <!-- STEP 1: AGE CHECK -->
     <div id="age-step-1" class="age-step">
@@ -1868,6 +2225,7 @@
     let allSounds = [];
     let seenTrackIds = new Set();
     let isShuffled = true;
+    let isSiteEntered = false;
 
     function shuffleArray(array) {
       const shuffled = [...array];
@@ -1954,9 +2312,15 @@
 
       setProgress(100);
       setTimeout(() => {
-        document.getElementById('intro-loader').style.opacity = '0';
-        entryPrompt.classList.add('ready');
-      }, 500);
+        if (entryPrompt) entryPrompt.classList.add('ready');
+        if (entryScreen) entryScreen.classList.add('ready-to-enter');
+        playReadySound();
+
+        // Auto enter after 3 seconds
+        setTimeout(() => {
+          enterSite();
+        }, 3000);
+      }, 1000);
     }
 
     function playTrackAtIndex(index) {
@@ -1992,63 +2356,58 @@
       }
     }
 
-    const entryScreen = document.getElementById('entry-screen');
+    const entryScreen = document.getElementById('pre-load');
     const entryPrompt = document.getElementById('entry-prompt');
-    const introLoader = document.getElementById('intro-loader');
+
+    function playReadySound() {
+      const audio = new Audio('https://raw.githubusercontent.com/hollyntt/hollyntt.github.io/main/audio/loaded.wav');
+      audio.volume = 0.4;
+      audio.play().catch(e => console.warn("Ready sound play blocked/failed", e));
+    }
 
     function playEnterSound() {
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const frequencies = [523.25, 659.25, 783.99];
-
-      frequencies.forEach((freq, i) => {
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-
-        oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.25);
-        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime + i * 0.25);
-        gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + i * 0.25 + 0.2);
-
-        oscillator.start(audioCtx.currentTime + i * 0.25);
-        oscillator.stop(audioCtx.currentTime + i * 0.25 + 0.2);
-      });
+      const audio = new Audio('https://raw.githubusercontent.com/hollyntt/hollyntt.github.io/main/audio/entered.wav');
+      audio.volume = 0.4;
+      audio.play().catch(e => console.warn("Enter sound play blocked/failed", e));
     }
 
     function enterSite(e) {
-      if (e && e.isTrusted === false) {
-        console.warn("Automation detected.");
-        return;
-      }
+      if (e && e.isTrusted === false) return;
       if (entryScreen.classList.contains('hidden')) return;
       if (!entryPrompt.classList.contains('ready')) return;
-      playEnterSound();
-      playTrackAtIndex(0);
-      widget.setVolume(15);
-      entryScreen.classList.add('hidden');
-      document.body.classList.add('entered');
 
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-      for (let i = 0; i < 50; i++) {
-        const p = new Particle(centerX, centerY, true);
-        p.speedX = (Math.random() - 0.5) * 15;
-        p.speedY = (Math.random() - 0.5) * 15;
-        particles.push(p);
-      }
+      // Add pressed state immediately
+      entryScreen.classList.add('pressed');
+
+      // Transition to warp zoom after a tiny delay to feel the click
+      setTimeout(() => {
+        entryScreen.classList.remove('pressed');
+        entryScreen.classList.add('entering');
+        playEnterSound();
+      }, 150);
+
+      // Delay the actual site entry to match the climax of the warp zoom and flash
+      setTimeout(() => {
+        isSiteEntered = true;
+        playTrackAtIndex(0);
+        widget.setVolume(15);
+        entryScreen.classList.add('hidden');
+        document.body.classList.add('entered');
+
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        for (let i = 0; i < 50; i++) {
+          const p = new Particle(centerX, centerY, true);
+          p.speedX = (Math.random() - 0.5) * 15;
+          p.speedY = (Math.random() - 0.5) * 15;
+          particles.push(p);
+        }
+
+      }, 2500); // Extended to match slower flip animation
     }
 
-    // Keep event listener for manual entry
-    entryScreen.addEventListener('click', enterSite);
-
-    // Initial loading tracking logic
     function setProgress(percent) {
-      const loaderBar = document.querySelector('.loader-bar');
-      if (loaderBar) {
-        loaderBar.style.width = percent + '%';
-      }
+      // Progress bar removed in new design
     }
 
     window.addEventListener('load', () => {
@@ -2081,14 +2440,12 @@
       });
     }
 
-    entryScreen.addEventListener('click', enterSite);
-
     const bgTextContainer = document.getElementById('bg-text');
     const nameText = "Hollyn ";
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 15; i++) {
       const div = document.createElement('div');
       div.className = `bg-text-item ${i % 2 === 0 ? 'scroll-left' : 'scroll-right'}`;
-      div.textContent = nameText.repeat(40);
+      div.textContent = nameText.repeat(25);
       bgTextContainer.appendChild(div);
     }
 
@@ -2111,20 +2468,25 @@
     });
 
     function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = window.innerWidth + 'px';
+      canvas.style.height = window.innerHeight + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
     class Particle {
-      constructor(x, y, isTemporary = false) {
+      constructor(x, y, isTemporary = false, color = '#ffffff') {
         this.isTemporary = isTemporary;
         this.life = isTemporary ? 100 : Infinity;
         this.symbol = symbols[Math.floor(Math.random() * symbols.length)];
+        this.color = color;
         this.init(x, y);
       }
       init(x, y) {
-        this.x = x || Math.random() * canvas.width;
-        this.y = y || Math.random() * canvas.height;
+        this.x = x || Math.random() * window.innerWidth;
+        this.y = y || Math.random() * window.innerHeight;
         this.size = Math.random() * 15 + 5;
         this.baseX = this.x;
         this.baseY = this.y;
@@ -2139,24 +2501,21 @@
         this.y += this.speedY;
         this.rotation += this.rotationSpeed;
 
-        if (this.x > canvas.width + 50) this.x = -50;
-        else if (this.x < -50) this.x = canvas.width + 50;
-        if (this.y > canvas.height + 50) this.y = -50;
-        else if (this.y < -50) this.y = canvas.height + 50;
+        if (this.x > window.innerWidth + 50) this.x = -50;
+        else if (this.x < -50) this.x = window.innerWidth + 50;
+        if (this.y > window.innerHeight + 50) this.y = -50;
+        else if (this.y < -50) this.y = window.innerHeight + 50;
 
+        this.mouseDistance = Infinity;
         if (mouse.x != null && mouse.y != null) {
           let dx = mouse.x - this.x;
           let dy = mouse.y - this.y;
-          let distance = Math.sqrt(dx * dx + dy * dy);
-          if (distance < mouse.radius) {
-            const forceDirectionX = dx / distance;
-            const forceDirectionY = dy / distance;
-            const maxDistance = mouse.radius;
-            const force = (maxDistance - distance) / maxDistance;
-            const directionX = forceDirectionX * force * this.density;
-            const directionY = forceDirectionY * force * this.density;
-            this.x -= directionX;
-            this.y -= directionY;
+          this.mouseDistance = Math.sqrt(dx * dx + dy * dy);
+
+          if (this.mouseDistance < mouse.radius) {
+            const force = (mouse.radius - this.mouseDistance) / mouse.radius;
+            this.x -= (dx / this.mouseDistance) * force * this.density;
+            this.y -= (dy / this.mouseDistance) * force * this.density;
           }
         }
 
@@ -2167,19 +2526,15 @@
       draw() {
         let opacity = this.isTemporary ? this.life / 100 : 0.4;
 
-        if (mouse.x != null && mouse.y != null) {
-          let dx = mouse.x - this.x;
-          let dy = mouse.y - this.y;
-          let distance = Math.sqrt(dx * dx + dy * dy);
-          if (distance < 150) {
-            opacity = Math.min(0.8, opacity + (1 - distance / 150) * 0.4);
-          }
+        if (this.mouseDistance < 150) {
+          opacity = Math.min(0.8, opacity + (1 - this.mouseDistance / 150) * 0.4);
         }
 
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(this.rotation);
-        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+        ctx.globalAlpha = opacity;
+        ctx.fillStyle = this.color;
         ctx.font = `${this.size}px serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -2198,12 +2553,42 @@
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      particles = particles.filter(p => !p.isTemporary || p.life > 0);
+      // Pre-calculate pulse cycle once
+      const now = performance.now();
+      const pulseCycle = (now % 2000) / 2000;
+      const isEntering = entryScreen && entryScreen.classList.contains('entering');
 
-      particles.forEach(p => {
+      if (entryScreen && entryScreen.classList.contains('ready-to-enter') && !entryScreen.classList.contains('hidden')) {
+        const shouldEmit = isEntering || ((pulseCycle % 0.2) < 0.05);
+
+        if (shouldEmit && Math.random() > (isEntering ? 0.5 : 0.75)) {
+          const batchSize = isEntering ? 4 : 1;
+          const speedMultiplier = isEntering ? 35 : 12;
+          const centerX = window.innerWidth / 2;
+          const centerY = window.innerHeight / 2;
+          const portalColors = ['#d48c5d', '#b07d7d', '#f5e6d3'];
+
+          for (let i = 0; i < batchSize; i++) {
+            const color = portalColors[Math.floor(Math.random() * portalColors.length)];
+            const p = new Particle(centerX, centerY, true, color);
+            p.speedX = (Math.random() - 0.5) * speedMultiplier;
+            p.speedY = (Math.random() - 0.5) * speedMultiplier;
+            if (isEntering) p.life = 150;
+            particles.push(p);
+          }
+        }
+      }
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        if (p.isTemporary && p.life <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+        if (!isSiteEntered && !p.isTemporary) continue;
         p.update();
         p.draw();
-      });
+      }
 
       requestAnimationFrame(animate);
     }
@@ -2214,62 +2599,14 @@
     animate();
 
     const mainContent = document.querySelector('.main-content');
-    let magneticElements = document.querySelectorAll('.social-icons a, .grid-card, .profile-img-container, .music-player, .ref-modal-content');
 
     document.addEventListener('mousemove', (e) => {
       const x = e.clientX;
       const y = e.clientY;
 
-      const moveX = (x - window.innerWidth / 2) / 50;
-      const moveY = (y - window.innerHeight / 2) / 50;
+      const moveX = (x - window.innerWidth / 2) / 80;
+      const moveY = (y - window.innerHeight / 2) / 80;
       mainContent.style.transform = `translate(${moveX}px, ${moveY}px)`;
-
-      const bgItems = document.querySelectorAll('.bg-text-item');
-      bgItems.forEach((item, index) => {
-        const depth = (index % 5 + 1) * 2;
-        const shiftX = (x - window.innerWidth / 2) / (100 / depth);
-        item.style.transform = `translateX(${shiftX}px)`;
-      });
-
-      magneticElements.forEach(el => {
-        const rect = el.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        const dx = x - centerX;
-        const dy = y - centerY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        const threshold = Math.max(150, rect.width / 2 + 50);
-
-        if (distance < threshold) {
-          if (el.classList.contains('music-player') && !el.classList.contains('collapsed')) {
-            el.style.transform = '';
-            return;
-          }
-
-          const strength = 15;
-          const magX = (dx / distance) * strength * (1 - distance / threshold);
-          const magY = (dy / distance) * strength * (1 - distance / threshold);
-
-          let transform = `translate(${magX}px, ${magY}px)`;
-
-          if (el.classList.contains('grid-card') || el.classList.contains('profile-img-container') || el.classList.contains('music-player') || el.classList.contains('ref-image-card') || el.classList.contains('ref-modal-content')) {
-            const tiltX = (dy / (rect.height / 2)) * (el.classList.contains('ref-modal-content') ? 2 : 10);
-            const tiltY = -(dx / (rect.width / 2)) * (el.classList.contains('ref-modal-content') ? 2 : 10);
-
-            const maxTilt = el.classList.contains('ref-modal-content') ? 5 : 15;
-            const cappedTiltX = Math.max(-maxTilt, Math.min(maxTilt, tiltX));
-            const cappedTiltY = Math.max(-maxTilt, Math.min(maxTilt, tiltY));
-
-            const scale = el.classList.contains('ref-modal-content') ? 1.01 : 1.02;
-            transform += ` perspective(1000px) rotateX(${cappedTiltX}deg) rotateY(${cappedTiltY}deg) scale(${scale})`;
-          }
-
-          el.style.transform = transform;
-        } else {
-          el.style.transform = '';
-        }
-      });
     });
 
     const musicPlayerContainer = document.getElementById('music-player');
@@ -2493,15 +2830,27 @@
       // Check cache
       const cached = localStorage.getItem(GITHUB_TREE_CACHE_KEY);
       if (cached) {
-        console.log("Using cached GitHub tree");
-        const data = JSON.parse(cached);
-        allImageFiles = data.tree.filter(item =>
-                item.type === 'blob' &&
-                item.path.startsWith(refSheetsPrefix) &&
-                item.path.match(imageRegex)
-        );
-        githubTreePromise = Promise.resolve(data);
-        return githubTreePromise;
+        try {
+          const parsed = JSON.parse(cached);
+          // Handle both old format ({tree: [...]}) and new format (filtered array)
+          if (Array.isArray(parsed)) {
+            allImageFiles = parsed;
+            githubTreePromise = Promise.resolve({ tree: allImageFiles });
+          } else if (parsed && Array.isArray(parsed.tree)) {
+            allImageFiles = parsed.tree.filter(item =>
+                    item.type === 'blob' &&
+                    item.path.startsWith(refSheetsPrefix) &&
+                    item.path.match(imageRegex)
+            );
+            githubTreePromise = Promise.resolve(parsed);
+          }
+          if (githubTreePromise) {
+            console.log("Using cached character metadata");
+            return githubTreePromise;
+          }
+        } catch (e) {
+          console.warn("Error parsing cache:", e);
+        }
       }
 
       githubTreePromise = fetch('https://api.github.com/repos/hollyntt/hollyntt.github.io/git/trees/main?recursive=1')
@@ -2511,14 +2860,17 @@
               })
               .then(data => {
                 if (data && data.tree) {
-                  // Save to cache
-                  localStorage.setItem(GITHUB_TREE_CACHE_KEY, JSON.stringify(data));
-
-                  allImageFiles = data.tree.filter(item =>
-                          item.type === 'blob' &&
+                  // Keep only images and folder structure for Character Refs
+                  const filteredTree = data.tree.filter(item =>
                           item.path.startsWith(refSheetsPrefix) &&
-                          item.path.match(imageRegex)
+                          (item.type === 'tree' || (item.type === 'blob' && item.path.match(imageRegex)))
                   );
+
+                  allImageFiles = filteredTree.filter(item => item.type === 'blob');
+
+                  // Save optimized tree to cache
+                  localStorage.setItem(GITHUB_TREE_CACHE_KEY, JSON.stringify({ tree: filteredTree }));
+                  return { tree: filteredTree };
                 }
                 return data;
               })
@@ -3858,11 +4210,12 @@
       ocFoldersContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7;">Loading characters...</p>';
       try {
         const data = await preloadGithubTree();
-        if (!data || !data.tree) throw new Error('Not found');
+        if (!data || !Array.isArray(data.tree)) throw new Error('Invalid data');
 
         const refSheetsPrefix = 'images/ref sheets/';
         const imageRegex = /\.(jpg|jpeg|png|gif|webp|svg|bmp|ico|tiff|tif|avif|apng|heic|heif|jxl|jfif|pjpeg|pjp)$/i;
 
+        // Ensure allImageFiles is updated (it might be already from preloadGithubTree but let's be safe)
         allImageFiles = data.tree.filter(item =>
                 item.type === 'blob' &&
                 item.path.startsWith(refSheetsPrefix) &&
@@ -4128,6 +4481,91 @@
     }
 
   })();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Age Calculation
+    function calculateAge(birthDate) {
+      const today = new Date();
+      const birth = new Date(birthDate);
+      let age = today.getFullYear() - birth.getFullYear();
+      const m = today.getMonth() - birth.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+        age--;
+      }
+      return age;
+    }
+
+    function isBirthday(birthDate) {
+      const today = new Date();
+      const birth = new Date(birthDate);
+      return today.getMonth() === birth.getMonth() && today.getDate() === birth.getDate();
+    }
+
+    const birthDate = '2005-01-15';
+    const ageEl = document.getElementById('runeskate-age');
+    if (ageEl) {
+      ageEl.innerText = `${calculateAge(birthDate)} years old`;
+    }
+
+    if (isBirthday(birthDate)) {
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    }
+
+    // Modal Logic
+    const aboutMeBtn = document.getElementById('about-me-btn');
+    const aboutMeModal = document.getElementById('about-modal');
+    const closeAboutMeModal = document.getElementById('close-about-modal');
+
+    if (aboutMeBtn && aboutMeModal && closeAboutMeModal) {
+      aboutMeBtn.addEventListener('click', () => {
+        aboutMeModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+
+      closeAboutMeModal.addEventListener('click', () => {
+        aboutMeModal.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+
+      window.addEventListener('click', (e) => {
+        if (e.target === aboutMeModal) {
+          aboutMeModal.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+
+    // Developer Mode logic
+    const devToggle = document.getElementById('runeskate-age');
+    let devClicks = 0;
+    if (devToggle) {
+      devToggle.addEventListener('click', () => {
+        devClicks++;
+        if (devClicks >= 5) {
+          window.isDevMode = !window.isDevMode;
+          devClicks = 0;
+          document.body.classList.toggle('dev-mode', window.isDevMode);
+          alert("Developer Mode: " + (window.isDevMode ? "ENABLED" : "DISABLED"));
+        }
+      });
+    }
+
+    // Skip stage logic restoration
+    document.querySelectorAll('.skip-stage').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const subStageId = btn.getAttribute('data-target');
+        if (typeof initSubStage === 'function') {
+          initSubStage(parseInt(subStageId));
+        }
+      });
+    });
+  });
 </script>
 </body>
 </html>

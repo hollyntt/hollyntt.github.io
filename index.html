@@ -2352,11 +2352,11 @@
         if (entryScreen) entryScreen.classList.add('ready-to-enter');
         playReadySound();
 
-        // Auto enter after 3 seconds for a snappier transition
+        // Auto enter after 1.8 seconds for a snappier transition
         setTimeout(() => {
           enterSite();
-        }, 3000);
-      }, 800);
+        }, 1800);
+      }, 400);
     }
 
     function playTrackAtIndex(index) {
@@ -2429,29 +2429,30 @@
       // Delay the actual site entry to match the climax of the warp zoom and flash
       setTimeout(() => {
         isSiteEntered = true;
-
-        // Initialize music player only on entry
-        if (widgetIframe && widgetIframe.dataset.src) {
-          widgetIframe.src = widgetIframe.dataset.src;
-          widget = SC.Widget(widgetIframe);
-          setupMusicEvents();
-        }
-
-        // Initialize music playback ONLY when main content is fully visible
-        setTimeout(() => {
-          if (document.body.classList.contains('entered')) {
-            playTrackAtIndex(0);
-            if (widget) widget.setVolume(15);
-
-            // Fetch full playlists strictly in background after entry
-            fetchAllPlaylistsParallel(() => {
-              mergedQueue = shuffleArray(allSounds);
-            });
-          }
-        }, 800); // Wait for the main reveal animation to start finishing 
-
         entryScreen.classList.add('hidden');
         document.body.classList.add('entered');
+
+        // Initialize music player only AFTER the loading screen is completely gone
+        setTimeout(() => {
+          if (widgetIframe && widgetIframe.dataset.src) {
+            widgetIframe.src = widgetIframe.dataset.src;
+            widget = SC.Widget(widgetIframe);
+            setupMusicEvents();
+          }
+
+          // Delay playback slightly to let the reveal animation finish
+          setTimeout(() => {
+            if (document.body.classList.contains('entered')) {
+              playTrackAtIndex(0);
+              if (widget) widget.setVolume(15);
+
+              // Fetch everything else in true background
+              fetchAllPlaylistsParallel(() => {
+                mergedQueue = shuffleArray(allSounds);
+              });
+            }
+          }, 600);
+        }, 100);
 
         const centerX = window.innerWidth / 2;
         const centerY = window.innerHeight / 2;
@@ -2461,8 +2462,7 @@
           p.speedY = (Math.random() - 0.5) * 15;
           particles.push(p);
         }
-
-      }, 1200); // Matches the warp zoom duration
+      }, 1000);
     }
 
     function setProgress(percent) {
@@ -2474,7 +2474,7 @@
       // No SoundCloud activity allowed during this sequence
       setTimeout(() => {
         initQueue();
-      }, 1200);
+      }, 600);
     });
 
     function fadeVolume(target, duration) {

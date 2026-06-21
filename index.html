@@ -2270,6 +2270,7 @@
     }
 
     function fetchAllPlaylistsParallel(callback) {
+      if (!isSiteEntered) return;
       let completedCount = 0;
       const totalPlaylists = playlists.length;
 
@@ -2280,7 +2281,7 @@
 
       playlists.forEach((url, index) => {
         const tempIframe = document.createElement('iframe');
-        tempIframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&auto_play=false&show_comments=false&visual=false`;
+        tempIframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false&show_teaser=false`;
         tempContainer.appendChild(tempIframe);
 
         const tempWidget = SC.Widget(tempIframe);
@@ -2345,19 +2346,21 @@
 
       setProgress(100);
       setTimeout(() => {
-        if (entryPrompt) entryPrompt.classList.add('ready');
+        if (entryPrompt) {
+          entryPrompt.classList.add('ready');
+        }
         if (entryScreen) entryScreen.classList.add('ready-to-enter');
         playReadySound();
 
-        // Auto enter after 3 seconds
+        // Auto enter after 3 seconds for a snappier transition
         setTimeout(() => {
           enterSite();
         }, 3000);
-      }, 1000);
+      }, 800);
     }
 
     function playTrackAtIndex(index) {
-      if (!widget) return;
+      if (!widget || !isSiteEntered) return;
       const listToPlay = isShuffled ? mergedQueue : allSounds;
       if (listToPlay.length === 0) return;
 
@@ -2434,16 +2437,18 @@
           setupMusicEvents();
         }
 
-        // Initialize music playback only when entering main content
+        // Initialize music playback ONLY when main content is fully visible
         setTimeout(() => {
-          playTrackAtIndex(0);
-          if (widget) widget.setVolume(15);
+          if (document.body.classList.contains('entered')) {
+            playTrackAtIndex(0);
+            if (widget) widget.setVolume(15);
 
-          // Fetch full playlists in background now that we've entered
-          fetchAllPlaylistsParallel(() => {
-            mergedQueue = shuffleArray(allSounds);
-          });
-        }, 500); // Give it a moment to load the iframe
+            // Fetch full playlists strictly in background after entry
+            fetchAllPlaylistsParallel(() => {
+              mergedQueue = shuffleArray(allSounds);
+            });
+          }
+        }, 800); // Wait for the main reveal animation to start finishing 
 
         entryScreen.classList.add('hidden');
         document.body.classList.add('entered');
@@ -2466,9 +2471,10 @@
 
     window.addEventListener('load', () => {
       // Show landing screen for a fixed duration for visual immersion
+      // No SoundCloud activity allowed during this sequence
       setTimeout(() => {
         initQueue();
-      }, 2000);
+      }, 1200);
     });
 
     function fadeVolume(target, duration) {
@@ -2774,6 +2780,7 @@
       if (!widget) return;
 
       widget.bind(SC.Widget.Events.READY, () => {
+        if (!isSiteEntered) return;
         widget.setVolume(15);
         volumeSlider.value = 15;
         updateVolumeIcon(15);

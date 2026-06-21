@@ -123,8 +123,13 @@
       align-items: center;
       justify-content: center;
       z-index: 999999;
-      transition: opacity 0.8s ease, visibility 0.8s;
+      transition: opacity 0.8s ease, visibility 0.8s, filter 1.5s cubic-bezier(0.23, 1, 0.32, 1);
       cursor: pointer;
+      filter: grayscale(100%);
+    }
+
+    #pre-load.ready-to-enter {
+      filter: grayscale(0%);
     }
 
     .pre-load-bg {
@@ -177,6 +182,10 @@
       box-shadow: 0 0 40px rgba(212, 140, 93, 0.3);
     }
 
+    #pre-load.ready-to-enter .loader-inner .loader-logo img {
+      /* filter: grayscale(0%); integrated in parent */
+    }
+
     #pre-load .loader-inner .loader-logo {
       position: absolute;
       top: 50%;
@@ -198,6 +207,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: filter 1.5s cubic-bezier(0.23, 1, 0.32, 1);
     }
 
     #pre-load .loader-inner .box {

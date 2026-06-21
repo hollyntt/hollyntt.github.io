@@ -123,13 +123,14 @@
       align-items: center;
       justify-content: center;
       z-index: 999999;
-      transition: opacity 0.8s ease, visibility 0.8s, filter 1.5s cubic-bezier(0.23, 1, 0.32, 1);
+      transition: opacity 0.8s ease, visibility 0.8s;
       cursor: pointer;
-      filter: grayscale(100%);
+      will-change: opacity;
     }
 
+    /* Remove heavy filter from main container to avoid GPU lag during transitions */
     #pre-load.ready-to-enter {
-      filter: grayscale(0%);
+      /* filter: grayscale(0%); */
     }
 
     .pre-load-bg {
@@ -153,6 +154,7 @@
     #pre-load.hidden {
       opacity: 0;
       visibility: hidden;
+      display: none;
     }
 
     #pre-load .loader-inner {
@@ -163,11 +165,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+      transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1), filter 1.5s cubic-bezier(0.23, 1, 0.32, 1);
+      filter: grayscale(100%);
+      will-change: transform, filter;
     }
 
     #pre-load.ready-to-enter .loader-inner {
       transform: scale(1.1);
+      filter: grayscale(0%);
     }
 
     @keyframes slow-bounce {
@@ -368,23 +373,21 @@
       }
     }
 
-    #pre-load .flash-overlay {
-      position: absolute;
+
+
+    .site-flash-overlay {
+      position: fixed;
       inset: 0;
       background: white;
+      z-index: 1000000;
       opacity: 0;
       pointer-events: none;
-      z-index: 2000;
-      transition: opacity 0.3s ease;
+      transition: opacity 1.5s cubic-bezier(0.23, 1, 0.32, 1);
+      will-change: opacity;
     }
-
-    #pre-load.entering .flash-overlay {
-      animation: flash-in 0.4s ease 0.9s forwards;
-    }
-
-    @keyframes flash-in {
-      0% { opacity: 0; }
-      100% { opacity: 1; }
+    .site-flash-overlay.active {
+      opacity: 1;
+      transition: opacity 0.2s ease;
     }
 
     .entry-prompt {
@@ -1878,9 +1881,9 @@
 
 <div class="bg-text-overlay" id="bg-text"></div>
 
+<div class="site-flash-overlay" id="site-flash-overlay"></div>
 <div class="pre-load-bg" id="pre-load-bg"></div>
 <div id="pre-load">
-  <div class="flash-overlay"></div>
   <div class="loader-inner">
     <div class="loader-logo">
       <img src="https://media.bio.site/sites/236dd1f6-0640-47ed-a55b-bdaac973cf03/Uc5gHtkVtx8SvZwAbBhQxF.png" alt="logo" class="profile-img">
@@ -2287,7 +2290,18 @@
       tempContainer.style.display = 'none';
       document.body.appendChild(tempContainer);
 
-      playlists.forEach((url, index) => {
+      const fetchNext = (index) => {
+        if (index >= totalPlaylists) {
+          setTimeout(() => {
+            if (document.body.contains(tempContainer)) {
+              document.body.removeChild(tempContainer);
+            }
+            callback();
+          }, 100);
+          return;
+        }
+
+        const url = playlists[index];
         const tempIframe = document.createElement('iframe');
         tempIframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false&show_teaser=false`;
         tempContainer.appendChild(tempIframe);
@@ -2300,25 +2314,16 @@
           loaded = true;
           completedCount++;
 
-          const progressPercent = Math.min(95, Math.floor((completedCount / totalPlaylists) * 90) + 5);
-          setProgress(progressPercent);
-
-          if (completedCount === totalPlaylists) {
-            setTimeout(() => {
-              if (document.body.contains(tempContainer)) {
-                document.body.removeChild(tempContainer);
-              }
-              callback();
-            }, 100);
-          }
+          // Sequential fetch with delay to keep UI smooth
+          setTimeout(() => fetchNext(index + 1), 600);
         };
 
         const timeout = setTimeout(() => {
           if (!loaded) {
-            console.warn("Parallel fetch timeout for " + url);
+            console.warn("Fetch timeout for " + url);
             checkAndProceed();
           }
-        }, 4000);
+        }, 5000);
 
         tempWidget.bind(SC.Widget.Events.READY, () => {
           setTimeout(() => {
@@ -2336,7 +2341,9 @@
             });
           }, 150);
         });
-      });
+      };
+
+      fetchNext(0);
     }
 
     function initQueue() {
@@ -2434,11 +2441,23 @@
       entryScreen.classList.add('entering');
       playEnterSound();
 
+      const siteFlash = document.getElementById('site-flash-overlay');
+
+      // Trigger white out at climax of warp
+      setTimeout(() => {
+        if (siteFlash) siteFlash.classList.add('active');
+      }, 800);
+
       // Delay the actual site entry to match the climax of the warp zoom and flash
       setTimeout(() => {
         isSiteEntered = true;
         entryScreen.classList.add('hidden');
         document.body.classList.add('entered');
+
+        // Start fading out the white overlay after state change is complete
+        setTimeout(() => {
+          if (siteFlash) siteFlash.classList.remove('active');
+        }, 150);
 
         // Initialize music player only AFTER the loading screen is completely gone
         // Create the widget iframe dynamically only now
@@ -2457,19 +2476,21 @@
           widget = SC.Widget(widgetIframe);
           setupMusicEvents();
 
-          // Delay playback slightly to let the reveal animation finish
+          // Delay playback and heavy background fetching even more to ensure UI responsiveness
           setTimeout(() => {
             if (document.body.classList.contains('entered')) {
               playTrackAtIndex(0);
               if (widget) widget.setVolume(15);
 
-              // Fetch everything else in true background
-              fetchAllPlaylistsParallel(() => {
-                mergedQueue = shuffleArray(allSounds);
-              });
+              // Queue heavy fetching for when the CPU is potentially idle
+              setTimeout(() => {
+                fetchAllPlaylistsParallel(() => {
+                  mergedQueue = shuffleArray(allSounds);
+                });
+              }, 2000);
             }
-          }, 600);
-        }, 100);
+          }, 800);
+        }, 500);
 
         const centerX = window.innerWidth / 2;
         const centerY = window.innerHeight / 2;

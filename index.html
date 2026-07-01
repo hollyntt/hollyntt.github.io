@@ -4202,9 +4202,26 @@
   }
 
   const decodeLink = (hash) => {
-    return hash.split('').map(c => String.fromCharCode(c.charCodeAt(0) + 3)).join('');
+    // Anti-debugging protection: if a debugger is attached or DevTools has paused execution,
+    // the dynamic debugger constructor triggers a pause. Measuring the execution time detects this.
+    const start = performance.now();
+    try {
+      (function() {}.constructor("debugger")());
+    } catch (e) {}
+    const end = performance.now();
+
+    // If it took longer than 30ms, a debugger is actively pausing/debugging the code.
+    if (end - start > 30) {
+      // Return a completely fake link to mislead/brick debuggers
+      return "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+    }
+
+    let decoded = '';
+    for (let i = 0; i < hash.length; i++) {
+      decoded += String.fromCharCode(hash.charCodeAt(i) + 3);
+    }
+    return decoded;
   };
-  window.decodeLink = decodeLink;
 
   document.querySelectorAll('.social-icons a').forEach(a => {
     const dataHash = a.getAttribute('data-hash');

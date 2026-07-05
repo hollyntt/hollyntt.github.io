@@ -4,11 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CURSED.</title>
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -22,27 +20,13 @@
             }
         }
     </script>
-
     <script src="https://unpkg.com/lucide@latest"></script>
-
     <style>
-        ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0a0a0a;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #262626;
-            border-radius: 2px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #404040;
-        }
-        textarea:focus {
-            outline: none;
-        }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #262626; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #404040; }
+        textarea:focus { outline: none; }
     </style>
 </head>
 <body class="h-full flex flex-col font-mono selection:bg-neutral-800 selection:text-white">
@@ -50,34 +34,28 @@
 <header class="border-b border-neutral-900 bg-neutral-950 sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
         <div class="flex items-center space-x-3">
-            <div class="w-8 h-8">
-                <img src="images/logos/cursed.png" alt="CURSED Logo" class="w-full h-full object-contain" />
+            <div class="w-8 h-8 bg-emerald-950/50 border border-emerald-500/30 rounded flex items-center justify-center text-emerald-400 font-bold text-base select-none shadow-[0_0_15px_rgba(16,185,129,0.1)] font-mono">
+                C
             </div>
             <div>
                 <div class="flex items-center space-x-2">
                     <h1 class="text-lg font-bold tracking-tight text-white uppercase">CURSED.</h1>
-                    <span class="text-[9px] font-mono bg-neutral-900 border border-neutral-800 text-neutral-400 px-1.5 py-0.5 rounded">
-              v3.0 Stable
-            </span>
+                    <span class="text-[9px] font-mono bg-neutral-900 border border-neutral-800 text-neutral-400 px-1.5 py-0.5 rounded font-bold">
+                        v3.0 Stable
+                    </span>
                 </div>
                 <p class="text-[11px] text-neutral-500">Zero-dependency, client-only html polymorphic obfuscator</p>
             </div>
         </div>
-
-        <div class="flex items-center space-x-2">
-            <button
-                    onclick="toggleExplanation()"
-                    class="flex items-center space-x-1.5 px-3 py-1.5 bg-neutral-900 border border-neutral-800 text-xs text-neutral-300 hover:text-white transition-colors"
-            >
-                <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
-                <span>Details</span>
-            </button>
-        </div>
+        <button onclick="toggleExplanation()" class="flex items-center space-x-1.5 px-3 py-1.5 bg-neutral-900 border border-neutral-800 text-xs text-neutral-300 hover:text-white transition-colors rounded">
+            <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
+            <span>Details</span>
+        </button>
     </div>
 </header>
 
 <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
-
+    <!-- Specifications Drawer -->
     <div id="explanation-drawer" class="hidden p-5 bg-neutral-900 border border-neutral-800 rounded">
         <div class="flex items-start space-x-3">
             <i data-lucide="info" class="w-5 h-5 text-neutral-400 shrink-0 mt-0.5"></i>
@@ -90,34 +68,30 @@
                     <div class="p-3 bg-neutral-950 border border-neutral-800">
                         <span class="text-xs font-bold text-neutral-300 block uppercase">Symmetric Cipher</span>
                         <span class="text-[11px] text-neutral-500 mt-1 block">
-                XOR scrambling obscures structures with randomized byte offset values and transforms text nodes after document load.
-              </span>
+                            XOR scrambling obscures structures with randomized byte offset values and transforms text nodes after document load.
+                        </span>
                     </div>
                     <div class="p-3 bg-neutral-950 border border-neutral-800">
                         <span class="text-xs font-bold text-neutral-300 block uppercase">Runtime Disruption</span>
                         <span class="text-[11px] text-neutral-500 mt-1 block">
-                Injects active devtools interrupts, blocking default key commands, selection, right-click, and inspector access.
-              </span>
+                            Injects active devtools interrupts, blocking default key commands, selection, right-click, and inspector access.
+                        </span>
                     </div>
                     <div class="p-3 bg-neutral-950 border border-neutral-800">
                         <span class="text-xs font-bold text-neutral-300 block uppercase">Domain Containment</span>
                         <span class="text-[11px] text-neutral-500 mt-1 block">
-                Restricts script parsing to target hostnames. If duplicated, scraped, or run offline, execution ceases automatically.
-              </span>
+                            Restricts script parsing to target hostnames. If duplicated, scraped, or run offline, execution ceases automatically.
+                        </span>
                     </div>
                 </div>
-
                 <div class="mt-4 p-3 bg-neutral-950 border border-neutral-800/60 rounded flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div class="flex items-center space-x-2">
                         <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400 shrink-0"></i>
                         <span class="text-[11px] text-neutral-300 font-mono">
-                <strong class="text-emerald-400 font-bold uppercase">100% Hardened Criteria:</strong> Use the <strong>Dynamic XOR Symmetric Cipher</strong> algorithm (80 pts) combined with all 5 <strong>Active Defensive Layers</strong> (20 pts) enabled.
-              </span>
+                            <strong class="text-emerald-400 font-bold uppercase">100% Hardened Criteria:</strong> Use the <strong>Dynamic XOR Symmetric Cipher</strong> algorithm (80 pts) combined with all 5 <strong>Active Defensive Layers</strong> (20 pts) enabled.
+                        </span>
                     </div>
-                    <button
-                            onclick="maximizeHardening(); toggleExplanation()"
-                            class="px-2.5 py-1 bg-emerald-950 border border-emerald-800 text-emerald-300 hover:text-white transition-colors text-[10px] uppercase font-bold self-start sm:self-auto shrink-0"
-                    >
+                    <button onclick="maximizeHardening(); toggleExplanation()" class="px-2.5 py-1.5 bg-emerald-950 border border-emerald-800 text-emerald-300 hover:text-white transition-colors text-[10px] uppercase font-bold self-start sm:self-auto shrink-0 rounded">
                         Apply Instantly
                     </button>
                 </div>
@@ -125,17 +99,17 @@
         </div>
     </div>
 
+    <!-- Quick Presets -->
     <div class="flex flex-col space-y-2">
-        <label class="text-[10px] uppercase font-bold text-neutral-500 tracking-wider">
-            Quick Load Sandboxes
-        </label>
+        <label class="text-[10px] uppercase font-bold text-neutral-500 tracking-wider">Quick Load Sandboxes</label>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2" id="preset-container"></div>
     </div>
 
+    <!-- Work Area Dashboard -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
+        <!-- Left Column: Source Input, Backups Vault & settings -->
         <div class="lg:col-span-7 flex flex-col space-y-6">
-
+            <!-- Raw HTML Input -->
             <div class="flex flex-col bg-neutral-900 border border-neutral-800 rounded">
                 <div class="px-4 py-2 bg-neutral-950 border-b border-neutral-800 flex items-center justify-between">
                     <div class="flex items-center space-x-2">
@@ -144,110 +118,69 @@
                     </div>
                     <div class="flex items-center space-x-2">
                         <span id="char-counter-original" class="text-[10px] text-neutral-500">0 chars</span>
-                        <button
-                                onclick="clearOriginalCode()"
-                                class="p-1 text-neutral-400 hover:text-white transition-colors"
-                                title="Clear input"
-                        >
+                        <button onclick="clearOriginalCode()" class="p-1 text-neutral-400 hover:text-white transition-colors" title="Clear input">
                             <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
                         </button>
                     </div>
                 </div>
-
                 <div class="relative">
-            <textarea
-                    id="original-code-input"
-                    oninput="onCodeInput()"
-                    placeholder="Paste HTML source code to scramble..."
-                    class="w-full h-[240px] bg-neutral-950 p-4 font-mono text-xs text-neutral-200 placeholder-neutral-700 focus:outline-none resize-none leading-relaxed"
-            ></textarea>
+                    <textarea id="original-code-input" oninput="onCodeInput()" placeholder="Paste HTML source code to scramble..." class="w-full h-[240px] bg-neutral-950 p-4 font-mono text-xs text-neutral-200 placeholder-neutral-700 focus:outline-none resize-none leading-relaxed"></textarea>
                 </div>
             </div>
 
-            <!-- PRIVATE HTML BACKUP VAULT -->
+            <!-- Private HTML Backup Vault -->
             <div class="flex flex-col bg-neutral-900 border border-neutral-800 rounded">
                 <div class="px-4 py-2 bg-neutral-950 border-b border-neutral-800 flex items-center justify-between">
                     <div class="flex items-center space-x-2">
                         <i data-lucide="archive" class="w-4 h-4 text-neutral-400"></i>
                         <span class="text-xs font-bold uppercase tracking-wider text-neutral-300">Private HTML Backup Vault</span>
                     </div>
-                    <div class="flex items-center space-x-2">
-              <span class="text-[9px] bg-neutral-950 border border-neutral-800 text-neutral-400 px-1.5 py-0.5 font-bold uppercase tracking-widest flex items-center space-x-1">
-                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full inline-block animate-pulse"></span>
-                <span>Active Vault</span>
-              </span>
+                    <div>
+                        <span class="text-[9px] bg-neutral-950 border border-neutral-800 text-neutral-400 px-1.5 py-0.5 font-bold uppercase tracking-widest flex items-center space-x-1">
+                            <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full inline-block animate-pulse"></span>
+                            <span>Active Vault</span>
+                        </span>
                     </div>
                 </div>
-
                 <div class="p-4 space-y-3.5">
                     <p class="text-[10px] text-neutral-500 leading-normal">
                         Store a snapshot of your current raw HTML securely inside your browser's Local Storage. Ideal for recovering previous states or restoring your un-obfuscated layout later if you lose it.
                     </p>
-
                     <div class="flex flex-col sm:flex-row gap-2">
-                        <input
-                                id="vault-save-name"
-                                type="text"
-                                placeholder="Give your backup a name..."
-                                class="flex-1 bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs font-mono text-neutral-200 placeholder-neutral-700 focus:outline-none focus:border-neutral-700"
-                        />
-                        <button
-                                onclick="saveToVault()"
-                                class="px-4 py-2 bg-neutral-950 border border-neutral-800 hover:bg-neutral-900 text-neutral-300 hover:text-white transition-colors text-xs font-bold flex items-center justify-center space-x-1.5 shrink-0"
-                        >
+                        <input id="vault-save-name" type="text" placeholder="Give your backup a name..." class="flex-1 bg-neutral-950 border border-neutral-800 px-3 py-2 text-xs font-mono text-neutral-200 placeholder-neutral-700 focus:outline-none focus:border-neutral-700" />
+                        <button onclick="saveToVault()" class="px-4 py-2 bg-neutral-950 border border-neutral-800 hover:bg-neutral-900 text-neutral-300 hover:text-white transition-colors text-xs font-bold flex items-center justify-center space-x-1.5 shrink-0">
                             <i data-lucide="save" class="w-3.5 h-3.5"></i>
                             <span>Save Snapshot</span>
                         </button>
                     </div>
-
-                    <div id="vault-empty-state" class="p-4 text-center border border-dashed border-neutral-800/80 bg-neutral-950/40 text-neutral-600 text-xs">
+                    <div id="vault-empty-state" class="p-4 text-center border border-dashed border-neutral-800/85 bg-neutral-950/40 text-neutral-600 text-xs">
                         No private backups found in browser memory.
                     </div>
-
-                    <div id="vault-list" class="max-h-[180px] overflow-y-auto space-y-1.5 hidden pr-1">
-                        <!-- Dynamically populated -->
-                    </div>
+                    <div id="vault-list" class="max-h-[180px] overflow-y-auto space-y-1.5 hidden pr-1"></div>
                 </div>
             </div>
 
+            <!-- Compilation Settings -->
             <div class="bg-neutral-900 border border-neutral-800 p-5 space-y-5 rounded">
                 <div class="flex items-center justify-between pb-3 border-b border-neutral-800">
                     <div class="flex items-center space-x-2">
                         <i data-lucide="sliders" class="w-4 h-4 text-neutral-400"></i>
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-neutral-300">
-                            Compilation Settings
-                        </h3>
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-neutral-300">Compilation Settings</h3>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <button
-                                onclick="maximizeHardening()"
-                                type="button"
-                                class="text-[11px] text-emerald-400 hover:text-emerald-300 transition-colors uppercase font-bold flex items-center space-x-1"
-                        >
+                        <button onclick="maximizeHardening()" type="button" class="text-[11px] text-emerald-400 hover:text-emerald-300 transition-colors uppercase font-bold flex items-center space-x-1">
                             <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
                             <span>Max Hardening</span>
                         </button>
                         <span class="text-neutral-800">|</span>
-                        <button
-                                onclick="resetToDefaults()"
-                                type="button"
-                                class="text-[11px] text-neutral-400 hover:text-white transition-colors uppercase"
-                        >
-                            Reset
-                        </button>
+                        <button onclick="resetToDefaults()" type="button" class="text-[11px] text-neutral-400 hover:text-white transition-colors uppercase">Reset</button>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="space-y-1.5">
-                        <label class="text-[11px] font-bold text-neutral-400 uppercase block">
-                            Scrambling Method
-                        </label>
-                        <select
-                                id="opt-method"
-                                onchange="onOptionsChanged()"
-                                class="w-full bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-xs font-mono text-neutral-200 focus:border-neutral-700 focus:outline-none"
-                        >
+                        <label class="text-[11px] font-bold text-neutral-400 uppercase block">Scrambling Method</label>
+                        <select id="opt-method" onchange="onOptionsChanged()" class="w-full bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-xs font-mono text-neutral-200 focus:border-neutral-700 focus:outline-none">
                             <option value="js-eval-xor">Dynamic XOR Symmetric Cipher</option>
                             <option value="js-eval-base64">Polymorphic Base64 Array Builder</option>
                             <option value="js-hex-lookup">Hex Lookup Character Mapping</option>
@@ -255,520 +188,268 @@
                             <option value="html-entities-random">Native Decimal & Hex Entities</option>
                         </select>
                     </div>
-
                     <div class="space-y-1.5">
                         <div id="param-container-xor" class="space-y-1.5">
-                            <label class="text-[11px] font-bold text-neutral-400 uppercase block">
-                                XOR Salt Value (1-255)
-                            </label>
+                            <label class="text-[11px] font-bold text-neutral-400 uppercase block">XOR Salt Value (1-255)</label>
                             <div class="flex space-x-2">
-                                <input
-                                        id="opt-xor-key"
-                                        type="number"
-                                        min="1"
-                                        max="255"
-                                        value="157"
-                                        oninput="onOptionsChanged()"
-                                        class="flex-1 bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-xs font-mono text-neutral-200 focus:border-neutral-700 focus:outline-none"
-                                />
-                                <button
-                                        type="button"
-                                        onclick="randomizeXorKey()"
-                                        class="px-3 py-2 bg-neutral-950 border border-neutral-800 hover:bg-neutral-900 text-neutral-300 hover:text-white transition-colors text-xs font-mono rounded flex items-center justify-center space-x-1"
-                                        title="Generate random XOR salt value"
-                                >
+                                <input id="opt-xor-key" type="number" min="1" max="255" value="157" oninput="onOptionsChanged()" class="flex-1 bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-xs font-mono text-neutral-200 focus:border-neutral-700 focus:outline-none" />
+                                <button type="button" onclick="randomizeXorKey()" class="px-3 py-2 bg-neutral-950 border border-neutral-800 hover:bg-neutral-900 text-neutral-300 hover:text-white transition-colors text-xs font-mono rounded flex items-center justify-center space-x-1" title="Generate random XOR salt value">
                                     <i data-lucide="shuffle" class="w-3.5 h-3.5"></i>
                                     <span>Rand</span>
                                 </button>
                             </div>
                         </div>
-
                         <div id="param-container-base64" class="hidden space-y-1.5">
-                            <label class="text-[11px] font-bold text-neutral-400 uppercase block">
-                                Base64 Segments count
-                            </label>
-                            <select
-                                    id="opt-split-factor"
-                                    onchange="onOptionsChanged()"
-                                    class="w-full bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-xs font-mono text-neutral-200 focus:outline-none"
-                            >
+                            <label class="text-[11px] font-bold text-neutral-400 uppercase block">Base64 Segments count</label>
+                            <select id="opt-split-factor" onchange="onOptionsChanged()" class="w-full bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-xs font-mono text-neutral-200 focus:outline-none">
                                 <option value="2">2 segments</option>
                                 <option value="3" selected>3 segments</option>
                                 <option value="4">4 segments</option>
                                 <option value="5">5 segments</option>
                             </select>
                         </div>
-
                         <div id="param-container-none" class="hidden space-y-1.5">
-                            <label class="text-[11px] font-bold text-neutral-400 uppercase block">
-                                Method Parameters
-                            </label>
-                            <div class="bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-xs text-neutral-600 font-mono">
-                                No parameter adjustment needed
-                            </div>
+                            <label class="text-[11px] font-bold text-neutral-400 uppercase block">Method Parameters</label>
+                            <div class="bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-xs text-neutral-600 font-mono">No parameter adjustment needed</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="pt-1">
-                    <label class="flex items-start cursor-pointer p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 transition-colors">
-                        <input
-                                id="opt-b64-padding"
-                                type="checkbox"
-                                onchange="onCodeInput()"
-                                class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0 cursor-pointer"
-                        />
+                <!-- Toggle Options -->
+                <div class="space-y-3 pt-1">
+                    <label class="flex items-start cursor-pointer p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 transition-colors rounded">
+                        <input id="opt-b64-padding" type="checkbox" onchange="onCodeInput()" class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0 cursor-pointer" />
                         <div class="ml-3">
                             <span class="text-xs font-bold text-neutral-300 block">Randomized Base64 Entropy Padding</span>
-                            <span class="text-[10px] text-neutral-500 block leading-normal mt-0.5">
-                  Injects an optional layer of high-entropy randomized Base64 comment sequences into the output, raising entropy metrics without altering core execution.
-                </span>
+                            <span class="text-[10px] text-neutral-500 block mt-0.5 leading-normal">Injects randomized Base64 comments into outputs to baffle scanners without breaking logic.</span>
                         </div>
                     </label>
-                </div>
-
-                <div class="pt-1">
-                    <label class="flex items-start cursor-pointer p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 transition-colors">
-                        <input
-                                id="opt-dead-code"
-                                type="checkbox"
-                                onchange="onCodeInput()"
-                                class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0 cursor-pointer"
-                        />
+                    <label class="flex items-start cursor-pointer p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 transition-colors rounded">
+                        <input id="opt-dead-code" type="checkbox" onchange="onCodeInput()" class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0 cursor-pointer" />
                         <div class="ml-3">
                             <span class="text-xs font-bold text-neutral-300 block">Inject Dead Code</span>
-                            <span class="text-[10px] text-neutral-500 block leading-normal mt-0.5">
-                  Generates non-functional, randomized JavaScript functions and variable declarations inside the runtime wrapper to further confuse static analysis.
-                </span>
+                            <span class="text-[10px] text-neutral-500 block mt-0.5 leading-normal">Generates non-functional static variables and random loops inside runtime wrappers.</span>
                         </div>
                     </label>
-                </div>
-
-                <div class="pt-1">
-                    <label class="flex items-start cursor-pointer p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 transition-colors">
-                        <input
-                                id="opt-string-splitting"
-                                type="checkbox"
-                                onchange="onCodeInput()"
-                                class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0 cursor-pointer"
-                        />
+                    <label class="flex items-start cursor-pointer p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 transition-colors rounded">
+                        <input id="opt-string-splitting" type="checkbox" onchange="onCodeInput()" class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0 cursor-pointer" />
                         <div class="ml-3">
                             <span class="text-xs font-bold text-neutral-300 block">Auto String Splitting</span>
-                            <span class="text-[10px] text-neutral-500 block leading-normal mt-0.5">
-                  Automatically splits long string literals in the source wrapper into smaller, randomized chunks reconstructed at runtime to defeat static scanning.
-                </span>
+                            <span class="text-[10px] text-neutral-500 block mt-0.5 leading-normal">Splits long string structures into tiny randomized array blocks assembled dynamically.</span>
                         </div>
                     </label>
-                </div>
-
-                <div class="pt-1">
-                    <label class="flex items-start cursor-pointer p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 transition-colors">
-                        <input
-                                id="opt-compatibility-shim"
-                                type="checkbox"
-                                onchange="onCodeInput()"
-                                class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0 cursor-pointer"
-                        />
+                    <label class="flex items-start cursor-pointer p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 transition-colors rounded">
+                        <input id="opt-compatibility-shim" type="checkbox" onchange="onCodeInput()" class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0 cursor-pointer" />
                         <div class="ml-3">
                             <span class="text-xs font-bold text-neutral-300 block">Compatibility Shim Injection</span>
-                            <span class="text-[10px] text-neutral-500 block leading-normal mt-0.5">
-                  Appends a minimal, randomized polyfill script that patches essential modern APIs (atob, Array.map, etc.) to guarantee execution across older engines.
-                </span>
+                            <span class="text-[10px] text-neutral-500 block mt-0.5 leading-normal">Appends a minimal, randomized script of common modern web polyfills for older browsers.</span>
                         </div>
                     </label>
-                </div>
-
-                <div class="pt-1">
-                    <label class="flex items-start cursor-pointer p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 transition-colors">
-                        <input
-                                id="opt-strip-comments"
-                                type="checkbox"
-                                checked="checked"
-                                onchange="onCodeInput()"
-                                class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0 cursor-pointer"
-                        />
+                    <label class="flex items-start cursor-pointer p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 transition-colors rounded">
+                        <input id="opt-strip-comments" type="checkbox" checked onchange="onCodeInput()" class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0 cursor-pointer" />
                         <div class="ml-3">
                             <span class="text-xs font-bold text-neutral-300 block">Strip HTML Comments</span>
-                            <span class="text-[10px] text-neutral-500 block leading-normal mt-0.5">
-                  Removes all standard HTML comment declarations (&lt;!-- comments --&gt;) from the source before obfuscation to reduce file size and remove developer notes.
-                </span>
+                            <span class="text-[10px] text-neutral-500 block mt-0.5 leading-normal font-sans">Cleans out standard &lt;!-- comments --&gt; tags to save space and remove developer logs.</span>
                         </div>
                     </label>
-                </div>
-
-                <div class="pt-1">
-                    <label class="flex items-start cursor-pointer p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 transition-colors">
-                        <input
-                                id="opt-advanced-minification"
-                                type="checkbox"
-                                onchange="onCodeInput()"
-                                class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0 cursor-pointer"
-                        />
+                    <label class="flex items-start cursor-pointer p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 transition-colors rounded">
+                        <input id="opt-advanced-minification" type="checkbox" onchange="onCodeInput()" class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0 cursor-pointer" />
                         <div class="ml-3">
                             <span class="text-xs font-bold text-neutral-300 block">Advanced Minification</span>
-                            <span class="text-[10px] text-neutral-500 block leading-normal mt-0.5">
-                  Compresses the final obfuscated HTML output by removing all non-essential whitespaces, empty lines, and carriage returns.
-                </span>
+                            <span class="text-[10px] text-neutral-500 block mt-0.5 leading-normal font-sans">Compresses spaces, breaks, and indentations from the final outputs for max byte savings.</span>
                         </div>
                     </label>
-                </div>
-
-                <div class="pt-1">
-                    <label class="flex items-start cursor-pointer p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 transition-colors">
-                        <input
-                                id="opt-obfuscate-css"
-                                type="checkbox"
-                                onchange="onCodeInput()"
-                                class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0 cursor-pointer"
-                        />
+                    <label class="flex items-start cursor-pointer p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 transition-colors rounded">
+                        <input id="opt-obfuscate-css" type="checkbox" onchange="onCodeInput()" class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0 cursor-pointer" />
                         <div class="ml-3">
                             <span class="text-xs font-bold text-neutral-300 block">Obfuscate CSS Styles</span>
-                            <span class="text-[10px] text-neutral-500 block leading-normal mt-0.5">
-                  Parses embedded &lt;style&gt; tags, obfuscates selectors/values, and injects a runtime decoder.
-                </span>
+                            <span class="text-[10px] text-neutral-500 block mt-0.5 leading-normal font-sans">Reverses, encodes, and inserts styles via a custom runtime generator stylesheet block.</span>
                         </div>
                     </label>
-                </div>
-
-                <div class="pt-1">
-                    <label class="flex items-start cursor-pointer p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 transition-colors">
-                        <input
-                                id="opt-symbol-randomization"
-                                type="checkbox"
-                                onchange="onCodeInput()"
-                                class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0 cursor-pointer"
-                        />
+                    <label class="flex items-start cursor-pointer p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 transition-colors rounded">
+                        <input id="opt-symbol-randomization" type="checkbox" onchange="onCodeInput()" class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0 cursor-pointer" />
                         <div class="ml-3">
                             <span class="text-xs font-bold text-neutral-300 block">Symbol Randomization</span>
-                            <span class="text-[10px] text-neutral-500 block leading-normal mt-0.5">
-                  Renames all variables and function declarations in the runtime wrapper to random, meaningless alphanumeric strings to prevent static analysis of symbol names.
-                </span>
+                            <span class="text-[10px] text-neutral-500 block mt-0.5 leading-normal font-sans">Scrambles all wrapper functions and variables to random alphanumeric strings.</span>
                         </div>
                     </label>
                 </div>
 
-                <div class="p-3 bg-neutral-950 border border-neutral-800 space-y-1">
+                <div class="p-3 bg-neutral-950 border border-neutral-800 rounded space-y-1">
                     <div class="flex items-center justify-between">
-                        <label class="text-[11px] font-bold text-neutral-400 uppercase">
-                            Obfuscation Intensity
-                        </label>
+                        <label class="text-[11px] font-bold text-neutral-400 uppercase">Obfuscation Intensity</label>
                         <span id="intensity-val" class="text-[11px] font-bold text-emerald-400 font-mono">1x (Default)</span>
                     </div>
-                    <input
-                            id="opt-intensity"
-                            type="range"
-                            min="1"
-                            max="5"
-                            value="1"
-                            oninput="onIntensityInput(this.value)"
-                            class="w-full accent-emerald-500 bg-neutral-900 border border-neutral-800 rounded h-1.5 cursor-pointer appearance-none"
-                    />
-                    <span class="text-[9px] text-neutral-500 block leading-normal mt-1">
-              Adjusts the number of nesting layers or encoding iterations applied to scramble the payload.
-            </span>
+                    <input id="opt-intensity" type="range" min="1" max="5" value="1" oninput="onIntensityInput(this.value)" class="w-full accent-emerald-500 bg-neutral-900 border border-neutral-800 rounded h-1.5 cursor-pointer appearance-none" />
                 </div>
 
+                <!-- Execution Injection Wrappers -->
                 <div id="wrapper-method-section" class="space-y-1.5">
-                    <label class="text-[11px] font-bold text-neutral-400 uppercase block">
-                        Execution Injection Pattern
-                    </label>
+                    <label class="text-[11px] font-bold text-neutral-400 uppercase block">Execution Injection Pattern</label>
                     <div class="grid grid-cols-3 gap-2">
-                        <button
-                                id="wrap-doc-write"
-                                type="button"
-                                onclick="setWrapperType('document-write')"
-                                class="p-2 border text-left bg-neutral-950 border-neutral-800 text-neutral-400 font-mono text-xs"
-                        >
+                        <button id="wrap-doc-write" type="button" onclick="setWrapperType('document-write')" class="p-2 border text-left bg-neutral-950 border-neutral-800 text-neutral-400 font-mono text-xs rounded">
                             <span class="font-bold block text-neutral-300">document.write</span>
-                            <span class="text-[10px] text-neutral-500 block mt-0.5">Loads inline</span>
+                            <span class="text-[9px] text-neutral-500 block mt-0.5">Loads inline</span>
                         </button>
-                        <button
-                                id="wrap-inner-html"
-                                type="button"
-                                onclick="setWrapperType('inner-html')"
-                                class="p-2 border text-left bg-neutral-950 border-neutral-800 text-neutral-400 font-mono text-xs"
-                        >
+                        <button id="wrap-inner-html" type="button" onclick="setWrapperType('inner-html')" class="p-2 border text-left bg-neutral-950 border-neutral-800 text-neutral-400 font-mono text-xs rounded">
                             <span class="font-bold block text-neutral-300">innerHTML replace</span>
-                            <span class="text-[10px] text-neutral-500 block mt-0.5">Inserts inside parent</span>
+                            <span class="text-[9px] text-neutral-500 block mt-0.5">Replaces root</span>
                         </button>
-                        <button
-                                id="wrap-doc-replace"
-                                type="button"
-                                onclick="setWrapperType('document-replace')"
-                                class="p-2 border text-left bg-neutral-950 border-neutral-800 text-neutral-400 font-mono text-xs"
-                        >
+                        <button id="wrap-doc-replace" type="button" onclick="setWrapperType('document-replace')" class="p-2 border text-left bg-neutral-950 border-neutral-800 text-neutral-400 font-mono text-xs rounded">
                             <span class="font-bold block text-neutral-300">document.open</span>
-                            <span class="text-[10px] text-neutral-500 block mt-0.5">Flushes completely</span>
+                            <span class="text-[9px] text-neutral-500 block mt-0.5">Flushes body</span>
                         </button>
                     </div>
                 </div>
 
+                <!-- Defensive Layer Configuration -->
                 <div class="space-y-2.5">
-                    <label class="text-[11px] font-bold text-neutral-400 uppercase block">
-                        Active Defensive Layers
-                    </label>
-
+                    <label class="text-[11px] font-bold text-neutral-400 uppercase block">Active Defensive Monitors</label>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <label class="flex items-start p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 cursor-pointer transition-colors">
-                            <input
-                                    id="opt-right-click"
-                                    type="checkbox"
-                                    checked
-                                    onchange="onOptionsChanged()"
-                                    class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0"
-                            />
+                        <label class="flex items-start p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 rounded cursor-pointer transition-colors">
+                            <input id="opt-right-click" type="checkbox" checked onchange="onOptionsChanged()" class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0" />
                             <div class="ml-3">
                                 <span class="text-xs font-bold text-neutral-300 block">Block Right-Click</span>
-                                <span class="text-[10px] text-neutral-500 block leading-normal mt-0.5">Disable browser context menus</span>
+                                <span class="text-[10px] text-neutral-500 block mt-0.5">Disable standard browser context menus</span>
                             </div>
                         </label>
-
-                        <label class="flex items-start p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 cursor-pointer transition-colors">
-                            <input
-                                    id="opt-text-selection"
-                                    type="checkbox"
-                                    checked
-                                    onchange="onOptionsChanged()"
-                                    class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0"
-                            />
+                        <label class="flex items-start p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 rounded cursor-pointer transition-colors">
+                            <input id="opt-text-selection" type="checkbox" checked onchange="onOptionsChanged()" class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0" />
                             <div class="ml-3">
-                                <span class="text-xs font-bold text-neutral-300 block">Block Select & Copy</span>
-                                <span class="text-[10px] text-neutral-500 block leading-normal mt-0.5">Disable highlighting and clipboard</span>
+                                <span class="text-xs font-bold text-neutral-300 block">Block Selection / Copy</span>
+                                <span class="text-[10px] text-neutral-500 block mt-0.5">Block user highlighting and clipboards</span>
                             </div>
                         </label>
-
-                        <label class="flex items-start p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 cursor-pointer transition-colors">
-                            <input
-                                    id="opt-f12"
-                                    type="checkbox"
-                                    checked
-                                    onchange="onOptionsChanged()"
-                                    class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0"
-                            />
+                        <label class="flex items-start p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 rounded cursor-pointer transition-colors">
+                            <input id="opt-f12" type="checkbox" checked onchange="onOptionsChanged()" class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0" />
                             <div class="ml-3">
-                                <span class="text-xs font-bold text-neutral-300 block">Block F12 / Inspector Keys</span>
-                                <span class="text-[10px] text-neutral-500 block leading-normal mt-0.5">Intercept view-source commands</span>
+                                <span class="text-xs font-bold text-neutral-300 block">Block Key Inspectors</span>
+                                <span class="text-[10px] text-neutral-500 block mt-0.5">Disable F12, Ctrl+Shift+I, view-source</span>
                             </div>
                         </label>
-
-                        <label class="flex items-start p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 cursor-pointer transition-colors">
-                            <input
-                                    id="opt-anti-devtools"
-                                    type="checkbox"
-                                    onchange="onOptionsChanged()"
-                                    class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0"
-                            />
+                        <label class="flex items-start p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 rounded cursor-pointer transition-colors">
+                            <input id="opt-anti-devtools" type="checkbox" onchange="onOptionsChanged()" class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0" />
                             <div class="ml-3">
-                                <span class="text-xs font-bold text-neutral-300 block">Active DevTools Interrupt</span>
-                                <span class="text-[10px] text-neutral-500 block leading-normal mt-0.5">Continuous debugger breakpoint loop</span>
+                                <span class="text-xs font-bold text-neutral-300 block">DevTools Interrupts</span>
+                                <span class="text-[10px] text-neutral-500 block mt-0.5">Spawns loop of debugger breakpoints</span>
                             </div>
                         </label>
-
-                        <label class="flex items-start p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 cursor-pointer transition-colors">
-                            <input
-                                    id="opt-timer-debugger"
-                                    type="checkbox"
-                                    onchange="onOptionsChanged()"
-                                    class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0"
-                            />
+                        <label class="flex items-start p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 rounded cursor-pointer transition-colors">
+                            <input id="opt-timer-debugger" type="checkbox" onchange="onOptionsChanged()" class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0" />
                             <div class="ml-3">
-                                <span class="text-xs font-bold text-neutral-300 block">Polymorphic Timer-Debugger</span>
-                                <span class="text-[10px] text-neutral-500 block leading-normal mt-0.5">Randomized timer-based timing checker to alert/break execution on Inspector detection</span>
+                                <span class="text-xs font-bold text-neutral-300 block">Timer-Debugger Delay</span>
+                                <span class="text-[10px] text-neutral-500 block mt-0.5">Checks loop speed to block DevTools lag</span>
                             </div>
                         </label>
-
-                        <label class="flex items-start p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 cursor-pointer transition-colors">
-                            <input
-                                    id="opt-clear-console"
-                                    type="checkbox"
-                                    onchange="onOptionsChanged()"
-                                    class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0"
-                            />
+                        <label class="flex items-start p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 rounded cursor-pointer transition-colors">
+                            <input id="opt-clear-console" type="checkbox" onchange="onOptionsChanged()" class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0" />
                             <div class="ml-3">
-                                <span class="text-xs font-bold text-neutral-300 block">Clear Console on Detection</span>
-                                <span class="text-[10px] text-neutral-500 block leading-normal mt-0.5">Continuously invoke console.clear() and override console.log to block inspection</span>
+                                <span class="text-xs font-bold text-neutral-300 block">Console Lockout</span>
+                                <span class="text-[10px] text-neutral-500 block mt-0.5">Continuously triggers console.clear() overrides</span>
                             </div>
                         </label>
-
-                        <label class="flex items-start p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 cursor-pointer transition-colors">
-                            <input
-                                    id="opt-file-integrity"
-                                    type="checkbox"
-                                    onchange="onOptionsChanged()"
-                                    class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0"
-                            />
+                        <label class="flex items-start p-3 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 rounded cursor-pointer transition-colors">
+                            <input id="opt-file-integrity" type="checkbox" onchange="onOptionsChanged()" class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0" />
                             <div class="ml-3">
-                                <span class="text-xs font-bold text-neutral-300 block">Enable File Integrity Check</span>
-                                <span class="text-[10px] text-neutral-500 block leading-normal mt-0.5">Generate a randomized SHA-256 payload hash and inject runtime anti-tampering verification</span>
+                                <span class="text-xs font-bold text-neutral-300 block">File Integrity Hash Checks</span>
+                                <span class="text-[10px] text-neutral-500 block mt-0.5">Generates and confirms self SHA-256 signatures</span>
                             </div>
                         </label>
                     </div>
 
-                    <div class="p-3.5 bg-neutral-950 border border-neutral-800 space-y-3">
+                    <div class="p-3.5 bg-neutral-950 border border-neutral-800 rounded space-y-3">
                         <div class="flex items-start">
-                            <input
-                                    id="opt-domain-lock-enabled"
-                                    type="checkbox"
-                                    onchange="toggleDomainLockInput()"
-                                    class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0 cursor-pointer"
-                            />
+                            <input id="opt-domain-lock-enabled" type="checkbox" onchange="toggleDomainLockInput()" class="mt-1 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0 cursor-pointer" />
                             <label for="opt-domain-lock-enabled" class="ml-3 cursor-pointer">
                                 <span class="text-xs font-bold text-neutral-300 block">Restrict Hostnames</span>
-                                <span class="text-[10px] text-neutral-500 block leading-normal mt-0.5">
-                    Halt processing automatically if current origin is not authorized.
-                  </span>
+                                <span class="text-[10px] text-neutral-500 block mt-0.5">Halt processing automatically if current origin is not authorized.</span>
                             </label>
                         </div>
-
                         <div id="domain-lock-input-container" class="hidden flex items-center space-x-2">
                             <span class="text-[10px] text-neutral-500">Host Domain:</span>
-                            <input
-                                    id="opt-allowed-domain"
-                                    type="text"
-                                    placeholder="e.g. site.com"
-                                    oninput="onCodeInput()"
-                                    class="flex-1 bg-neutral-900 border border-neutral-800 px-2.5 py-1 text-xs text-white placeholder-neutral-700 focus:outline-none"
-                            />
+                            <input id="opt-allowed-domain" type="text" placeholder="e.g. site.com" oninput="onCodeInput()" class="flex-1 bg-neutral-900 border border-neutral-800 px-2.5 py-1 text-xs text-white placeholder-neutral-700 focus:outline-none rounded" />
                         </div>
                     </div>
 
-                    <div class="p-3.5 bg-neutral-950 border border-neutral-800 space-y-3">
+                    <div class="p-3.5 bg-neutral-950 border border-neutral-800 rounded space-y-3">
                         <div class="flex items-center space-x-2">
                             <i data-lucide="sparkles" class="w-4 h-4 text-neutral-300"></i>
                             <span class="text-xs font-bold uppercase tracking-wider text-neutral-300">GitHub Pages / Path Correction</span>
                         </div>
-
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
                             <label class="flex items-start cursor-pointer">
-                                <input
-                                        id="opt-gh-friendly"
-                                        type="checkbox"
-                                        checked
-                                        onchange="toggleGhFriendlyOptions()"
-                                        class="mt-0.5 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0"
-                                />
+                                <input id="opt-gh-friendly" type="checkbox" checked onchange="toggleGhFriendlyOptions()" class="mt-0.5 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0" />
                                 <div class="ml-2.5">
                                     <span class="text-xs font-bold text-neutral-300 block">Root Path Resolution</span>
-                                    <span class="text-[10px] text-neutral-500 block leading-normal mt-0.5">
-                      Ensures proper stylesheet and script queries when hosted in repository subfolders.
-                    </span>
+                                    <span class="text-[10px] text-neutral-500 block mt-0.5">Ensures proper stylesheet and script queries when hosted in repository subfolders.</span>
                                 </div>
                             </label>
-
                             <label class="flex items-start cursor-pointer">
-                                <input
-                                        id="opt-base-href-detect"
-                                        type="checkbox"
-                                        checked
-                                        onchange="onCodeInput()"
-                                        class="mt-0.5 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0"
-                                />
+                                <input id="opt-base-href-detect" type="checkbox" checked onchange="onCodeInput()" class="mt-0.5 h-3.5 w-3.5 text-neutral-200 border-neutral-800 rounded bg-neutral-900 focus:ring-0" />
                                 <div class="ml-2.5">
                                     <span id="label-base-href" class="text-xs font-bold text-neutral-300 block">Auto-detect base href</span>
-                                    <span class="text-[10px] text-neutral-500 block leading-normal mt-0.5">
-                      Dynamically queries current path to insert a document base anchor.
-                    </span>
+                                    <span class="text-[10px] text-neutral-500 block mt-0.5">Dynamically queries current path to insert a document base anchor.</span>
                                 </div>
                             </label>
                         </div>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
 
+        <!-- Right Column: Scrambled Outputs & Execution Simulators -->
         <div class="lg:col-span-5 flex flex-col space-y-6">
-
+            <!-- Scrambled Outputs -->
             <div class="flex flex-col bg-neutral-900 border border-neutral-800 rounded">
                 <div class="px-4 py-2 bg-neutral-950 border-b border-neutral-800 flex items-center justify-between">
                     <div class="flex items-center space-x-2">
                         <i data-lucide="lock" class="w-4 h-4 text-neutral-400"></i>
                         <span class="text-xs font-bold uppercase tracking-wider text-neutral-300">Scrambled Source</span>
                     </div>
-
                     <div class="flex items-center space-x-1.5">
                         <span id="char-counter-obfuscated" class="text-[10px] text-neutral-500 mr-1.5">0 chars</span>
-                        <button
-                                id="btn-copy"
-                                onclick="copyObfuscatedOutput()"
-                                class="flex items-center space-x-1 px-2.5 py-1 bg-neutral-950 border border-neutral-800 text-xs font-bold text-neutral-300 hover:text-white transition-colors"
-                        >
+                        <button id="btn-copy" onclick="copyObfuscatedOutput()" class="flex items-center space-x-1 px-2.5 py-1 bg-neutral-950 border border-neutral-800 text-xs font-bold text-neutral-300 hover:text-white transition-colors rounded">
                             <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                             <span id="btn-copy-text">Copy Output</span>
                         </button>
                     </div>
                 </div>
-
                 <div class="relative">
-            <textarea
-                    id="obfuscated-code-output"
-                    readonly
-                    placeholder="Resulting markup will be compiled dynamically..."
-                    class="w-full h-[240px] bg-neutral-950 p-4 font-mono text-xs text-neutral-300 placeholder-neutral-800 focus:outline-none resize-none leading-relaxed"
-            ></textarea>
+                    <textarea id="obfuscated-code-output" readonly placeholder="Resulting markup will be compiled dynamically..." class="w-full h-[240px] bg-neutral-950 p-4 font-mono text-xs text-neutral-300 placeholder-neutral-800 focus:outline-none resize-none leading-relaxed"></textarea>
                 </div>
             </div>
 
+            <!-- Preview Sandbox Environment -->
             <div class="space-y-2">
                 <div class="flex items-center justify-between">
-                    <label class="text-[10px] uppercase font-bold text-neutral-500 tracking-wider">
-                        Sandbox execution environment
-                    </label>
+                    <label class="text-[10px] uppercase font-bold text-neutral-500 tracking-wider">Sandbox execution environment</label>
                     <span class="text-[10px] text-neutral-500">Live preview emulated</span>
                 </div>
-
                 <div class="flex flex-col bg-neutral-900 border border-neutral-800 rounded">
                     <div class="flex flex-wrap items-center justify-between px-4 py-2 bg-neutral-950 border-b border-neutral-800 gap-3">
-                        <div class="flex bg-neutral-900 p-0.5 border border-neutral-800">
-                            <button
-                                    id="tab-obfuscated-render"
-                                    onclick="setRenderSource(true)"
-                                    class="flex items-center space-x-1 px-2.5 py-1 text-xs font-medium transition-all bg-neutral-800 text-white"
-                            >
+                        <div class="flex bg-neutral-900 p-0.5 border border-neutral-800 rounded">
+                            <button id="tab-obfuscated-render" onclick="setRenderSource(true)" class="flex items-center space-x-1 px-2.5 py-1 text-xs font-medium transition-all bg-neutral-800 text-white rounded">
                                 <i data-lucide="eye" class="w-3.5 h-3.5"></i>
                                 <span>Protected</span>
                             </button>
-                            <button
-                                    id="tab-original-render"
-                                    onclick="setRenderSource(false)"
-                                    class="flex items-center space-x-1 px-2.5 py-1 text-xs font-medium transition-all text-neutral-400 hover:text-white"
-                            >
+                            <button id="tab-original-render" onclick="setRenderSource(false)" class="flex items-center space-x-1 px-2.5 py-1 text-xs font-medium transition-all text-neutral-400 hover:text-white rounded">
                                 <i data-lucide="eye-off" class="w-3.5 h-3.5"></i>
                                 <span>Original</span>
                             </button>
                         </div>
-
-                        <div class="flex items-center space-x-1 bg-neutral-900 p-0.5 border border-neutral-800">
-                            <button
-                                    id="btn-device-desktop"
-                                    onclick="setDeviceType('desktop')"
-                                    class="p-1.5 transition-colors bg-neutral-800 text-white"
-                            >
+                        <div class="flex items-center space-x-1 bg-neutral-900 p-0.5 border border-neutral-800 rounded">
+                            <button id="btn-device-desktop" onclick="setDeviceType('desktop')" class="p-1.5 transition-colors bg-neutral-800 text-white rounded">
                                 <i data-lucide="laptop" class="w-3.5 h-3.5"></i>
                             </button>
-                            <button
-                                    id="btn-device-tablet"
-                                    onclick="setDeviceType('tablet')"
-                                    class="p-1.5 transition-colors text-neutral-500 hover:text-neutral-300"
-                            >
+                            <button id="btn-device-tablet" onclick="setDeviceType('tablet')" class="p-1.5 transition-colors text-neutral-500 hover:text-neutral-300 rounded">
                                 <i data-lucide="tablet" class="w-3.5 h-3.5"></i>
                             </button>
-                            <button
-                                    id="btn-device-mobile"
-                                    onclick="setDeviceType('mobile')"
-                                    class="p-1.5 transition-colors text-neutral-500 hover:text-neutral-300"
-                            >
+                            <button id="btn-device-mobile" onclick="setDeviceType('mobile')" class="p-1.5 transition-colors text-neutral-500 hover:text-neutral-300 rounded">
                                 <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
                             </button>
                         </div>
-
                         <div>
-                            <button
-                                    onclick="reloadSandboxFrame()"
-                                    class="flex items-center space-x-1 px-2.5 py-1 bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white transition-colors text-xs"
-                            >
+                            <button onclick="reloadSandboxFrame()" class="flex items-center space-x-1 px-2.5 py-1 bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white transition-colors text-xs rounded">
                                 <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
                                 <span>Refresh</span>
                             </button>
@@ -776,51 +457,39 @@
                     </div>
 
                     <div class="bg-neutral-950 flex justify-center items-center p-2 min-h-[400px]">
-                        <div id="iframe-outer-container" class="transition-all duration-300 w-full max-w-full h-[520px] bg-white overflow-hidden relative border border-neutral-800">
-                            <iframe
-                                    id="sandbox-iframe"
-                                    title="Execution sandbox"
-                                    class="w-full h-full border-none"
-                                    sandbox="allow-scripts allow-forms allow-modals"
-                                    referrerpolicy="no-referrer"
-                            ></iframe>
+                        <div id="iframe-outer-container" class="transition-all duration-300 w-full max-w-full h-[520px] bg-white overflow-hidden relative border border-neutral-800 rounded">
+                            <iframe id="sandbox-iframe" title="Execution sandbox" class="w-full h-full border-none" sandbox="allow-scripts allow-forms allow-modals" referrerpolicy="no-referrer"></iframe>
                         </div>
                     </div>
-
 
                     <div class="px-4 py-2 bg-neutral-950 border-t border-neutral-800 flex items-center justify-between text-[10px] text-neutral-500 font-mono">
                         <span>SANDBOX STATUS: ACTIVE</span>
                         <span id="device-status-text">VIEWPORT: FULL FLUID</span>
                     </div>
 
+                    <!-- Sandbox Logs -->
                     <div class="bg-neutral-900 border-t border-neutral-800 flex flex-col">
                         <div class="px-4 py-1.5 bg-neutral-950 border-b border-neutral-800 flex items-center justify-between">
                             <span class="text-[10px] uppercase font-bold text-neutral-500 tracking-wider flex items-center gap-1.5"><i data-lucide="terminal" class="w-3 h-3"></i> Console</span>
-                            <button type="button" onclick="clearSandboxConsole()" class="text-[10px] text-neutral-400 hover:text-white flex items-center gap-1"><i data-lucide="trash-2" class="w-3 h-3"></i> Clear</button>
+                            <button type="button" onclick="clearSandboxConsole()" class="text-[10px] text-neutral-400 hover:text-white flex items-center gap-1 cursor-pointer"><i data-lucide="trash-2" class="w-3 h-3"></i> Clear</button>
                         </div>
                         <div id="sandbox-console-output" class="p-2 h-32 overflow-y-auto text-[11px] font-mono bg-[#0a0a0a] text-neutral-300 space-y-1 border-t border-black select-text">
                             <div class="text-neutral-600 italic">Waiting for logs...</div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
+    <!-- Live Performance Metrics -->
     <div id="telemetry-section" class="space-y-2.5">
         <div class="flex items-center justify-between">
-            <label class="text-[10px] uppercase font-bold text-neutral-500 tracking-wider">
-                Performance Metrics
-            </label>
+            <label class="text-[10px] uppercase font-bold text-neutral-500 tracking-wider">Performance Metrics</label>
             <span class="text-[10px] text-neutral-500">Live compilation statistics</span>
         </div>
-
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-neutral-900 border border-neutral-800 p-5 rounded">
-            <div class="flex flex-col justify-between p-4 bg-neutral-950 border border-neutral-800">
+            <div class="flex flex-col justify-between p-4 bg-neutral-950 border border-neutral-800 rounded">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-bold text-neutral-400 uppercase">Protection Rating</span>
                     <i data-lucide="shield" class="w-4 h-4 text-neutral-300"></i>
@@ -830,16 +499,14 @@
                         <span id="stat-security-score" class="text-3xl font-bold text-white tracking-tight">0</span>
                         <span class="text-xs text-neutral-500">/100</span>
                     </div>
-                    <span id="stat-security-label" class="inline-block mt-2 text-[10px] uppercase border px-2 py-0.5 border-neutral-800 bg-neutral-900 text-neutral-400">
-              Idle
-            </span>
+                    <span id="stat-security-label" class="inline-block mt-2 text-[10px] uppercase border px-2 py-0.5 border-neutral-800 bg-neutral-900 text-neutral-400 rounded">Idle</span>
                 </div>
                 <div class="mt-4 w-full bg-neutral-900 h-1 rounded overflow-hidden">
                     <div id="stat-security-bar" class="h-full bg-neutral-100 transition-all duration-300" style="width: 0%"></div>
                 </div>
             </div>
 
-            <div class="flex flex-col justify-between p-4 bg-neutral-950 border border-neutral-800">
+            <div class="flex flex-col justify-between p-4 bg-neutral-950 border border-neutral-800 rounded">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-bold text-neutral-400 uppercase">Input / Output Weight</span>
                     <i data-lucide="database" class="w-4 h-4 text-neutral-400"></i>
@@ -847,60 +514,69 @@
                 <div class="mt-4">
                     <div id="stat-payload-size" class="text-xl font-bold text-white">0 B</div>
                     <p class="text-[11px] text-neutral-500 mt-1">
-                        Input length: <span id="stat-original-size" class="text-neutral-300">0 B</span>
+                        Input length: <span id="stat-original-size" class="text-neutral-300 font-mono">0 B</span>
                     </p>
                 </div>
-                <div id="stat-size-ratio" class="mt-4 text-[11px] text-neutral-500">
-                    0% scale factor
-                </div>
+                <div id="stat-size-ratio" class="mt-4 text-[11px] text-neutral-500">0% scale factor</div>
             </div>
 
-            <div class="flex flex-col justify-between p-4 bg-neutral-950 border border-neutral-800">
+            <div class="flex flex-col justify-between p-4 bg-neutral-950 border border-neutral-800 rounded">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-bold text-neutral-400 uppercase">Scramble Density</span>
                     <i data-lucide="fingerprint" class="w-4 h-4 text-neutral-400"></i>
                 </div>
                 <div class="mt-4">
                     <div id="stat-entropy" class="text-2xl font-bold text-white">0%</div>
-                    <p class="text-[11px] text-neutral-500 mt-1">
-                        Scattered pattern index
-                    </p>
+                    <p class="text-[11px] text-neutral-500 mt-1">Scattered pattern index</p>
                 </div>
                 <div class="mt-4 w-full bg-neutral-900 h-1 rounded overflow-hidden">
                     <div id="stat-entropy-bar" class="h-full bg-neutral-300 transition-all duration-300" style="width: 0%"></div>
                 </div>
             </div>
 
-            <div class="flex flex-col justify-between p-4 bg-neutral-950 border border-neutral-800">
+            <div class="flex flex-col justify-between p-4 bg-neutral-950 border border-neutral-800 rounded">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-bold text-neutral-400 uppercase">Interference Blockers</span>
                     <i data-lucide="ban" class="w-4 h-4 text-neutral-400"></i>
                 </div>
                 <div class="mt-4">
                     <div id="stat-blocker-label" class="text-lg font-bold text-white uppercase">None</div>
-                    <p class="text-[11px] text-neutral-500 mt-1">
-                        Active defense monitors loaded
-                    </p>
+                    <p class="text-[11px] text-neutral-500 mt-1">Active defense monitors loaded</p>
                 </div>
-                <div class="mt-4 text-[11px] text-neutral-500">
-                    Randomized namespaces injected
-                </div>
+                <div class="mt-4 text-[11px] text-neutral-500">Randomized namespaces injected</div>
             </div>
         </div>
     </div>
-
 </main>
 
 <footer class="mt-12 border-t border-neutral-900 bg-neutral-950 py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center sm:flex sm:items-center sm:justify-between text-[11px] text-neutral-600">
         <p>© 2026 CURSED. Clean, client-compiled obfuscator.</p>
-        <p class="mt-2 sm:mt-0 flex items-center justify-center">
-            No tracking. Fully local process.
-        </p>
+        <p class="mt-2 sm:mt-0 flex items-center justify-center">No tracking. Fully local process.</p>
     </div>
 </footer>
 
 <script>
+    // Safe localStorage fallback for parent window if blocked or throws in sandbox
+    let safeLocalStorage = null;
+    try {
+        const testKey = '__cursed_test_local_storage__';
+        localStorage.setItem(testKey, '1');
+        localStorage.removeItem(testKey);
+        safeLocalStorage = localStorage;
+    } catch (e) {
+        console.warn('LocalStorage is blocked or unavailable in this environment. Falling back to in-memory vault.');
+        const memoryStorage = {};
+        safeLocalStorage = {
+            getItem: (key) => memoryStorage[key] !== undefined ? memoryStorage[key] : null,
+            setItem: (key, val) => { memoryStorage[key] = String(val); },
+            removeItem: (key) => { delete memoryStorage[key]; },
+            clear: () => { for (const k in memoryStorage) delete memoryStorage[k]; },
+            length: 0,
+            key: (idx) => Object.keys(memoryStorage)[idx] || null
+        };
+    }
+
     const TEMPLATES = [
         {
             id: 'portfolio-card',
@@ -931,12 +607,12 @@
         </div>
 
         <div class="mt-6 pt-6 border-t border-neutral-800 flex justify-between items-center">
-          <button onclick="alert('Message pipeline activated')" class="px-4 py-2 text-xs font-bold text-black bg-white rounded hover:bg-neutral-200 transition-colors">
+          <button onclick="console.log('Message pipeline activated')" class="px-4 py-2 text-xs font-bold text-black bg-white rounded hover:bg-neutral-200 transition-colors">
             Contact
           </button>
-          <div class="flex space-x-3 text-neutral-500">
-            <span class="text-xs hover:text-white cursor-pointer" onclick="alert('Primary repo')">Source</span>
-            <span class="text-xs hover:text-white cursor-pointer" onclick="alert('Global feed')">Profile</span>
+          <div class="flex space-x-3 text-neutral-500 font-mono">
+            <span class="text-xs hover:text-white cursor-pointer font-bold" onclick="console.warn('Simulated check')">Source</span>
+            <span class="text-xs hover:text-white cursor-pointer font-bold" onclick="console.error('Triggered error event')">Profile</span>
           </div>
         </div>
       </div>
@@ -956,10 +632,10 @@
   <div class="max-w-md w-full bg-neutral-900 border border-neutral-800 p-8 rounded shadow-xl">
     <div class="text-center">
       <h2 class="text-xl font-bold text-white uppercase tracking-tight">System Intel</h2>
-      <p class="mt-2 text-neutral-500 text-xs">Minimalist pipeline for cybersecurity news and code briefings.</p>
+      <p class="mt-2 text-neutral-500 text-xs font-sans">Minimalist pipeline for cybersecurity news and code briefings.</p>
     </div>
 
-    <form onsubmit="event.preventDefault(); alert('Logged: ' + document.getElementById('email').value)" class="mt-8 space-y-4">
+    <form onsubmit="event.preventDefault(); console.log('Subscriber email logged: ' + document.getElementById('email').value)" class="mt-8 space-y-4">
       <div>
         <label for="email" class="block text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Email Address</label>
         <input type="email" id="email" required placeholder="user@domain.com" class="mt-2 block w-full px-4 py-2.5 bg-neutral-950 border border-neutral-800 rounded text-white placeholder-neutral-700 focus:outline-none focus:border-neutral-700 text-xs">
@@ -980,10 +656,10 @@
             code: `<div style="background-color: #000000; font-family: monospace; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; color: #d4d4d4;">
   <div style="background: #0a0a0a; border: 1px solid #262626; border-radius: 4px; max-width: 400px; width: 100%; padding: 24px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5);">
     <h1 style="color: #ffffff; margin-top: 0; font-size: 16px; font-weight: bold; text-transform: uppercase;">Protected Terminal</h1>
-    <p style="color: #a3a3a3; font-size: 12px; line-height: 1.6; margin-bottom: 20px;">
+    <p style="color: #a3a3a3; font-size: 12px; line-height: 1.6; margin-bottom: 20px; font-family: sans-serif;">
       This simple node represents standard html structured nodes. Convert it using HTML entities to protect structure while retaining crawler readability, or compile via dynamic javascript vectors.
     </p>
-    <a href="#" onclick="alert('Access permitted')" style="display: inline-block; background-color: #ffffff; color: #000000; padding: 8px 16px; text-decoration: none; font-size: 11px; font-weight: bold; text-transform: uppercase;">Authorize</a>
+    <a href="#" onclick="console.log('Access authorization loop triggered')" style="display: inline-block; background-color: #ffffff; color: #000000; padding: 8px 16px; text-decoration: none; font-size: 11px; font-weight: bold; text-transform: uppercase;">Authorize</a>
   </div>
 </div>`
         }
@@ -1029,19 +705,19 @@
             btn.type = 'button';
             btn.onclick = () => loadTemplate(template.id);
 
-            btn.className = `flex items-start text-left p-2.5 border transition-all ${
+            btn.className = `flex items-start text-left p-2.5 border transition-all rounded cursor-pointer ${
                 isActive
                     ? 'bg-neutral-800 border-neutral-700 text-white'
                     : 'bg-neutral-900 border-neutral-800 text-neutral-400 hover:bg-neutral-800 hover:border-neutral-700'
             }`;
 
             btn.innerHTML = `
-          <div class="p-1.5 bg-neutral-950 border border-neutral-800 mr-2.5 mt-0.5 shrink-0">
+          <div class="p-1.5 bg-neutral-950 border border-neutral-800 mr-2.5 mt-0.5 shrink-0 rounded">
             <i data-lucide="${template.iconName}" class="w-4 h-4 text-neutral-300"></i>
           </div>
           <div class="min-w-0">
             <p class="text-xs font-bold uppercase truncate leading-none">${template.name}</p>
-            <p class="text-[10px] text-neutral-500 truncate mt-1 leading-none">${template.description}</p>
+            <p class="text-[10px] text-neutral-500 truncate mt-1.5 leading-none">${template.description}</p>
           </div>
         `;
             container.appendChild(btn);
@@ -1124,14 +800,15 @@
 
         ['wrap-doc-write', 'wrap-inner-html', 'wrap-doc-replace'].forEach(id => {
             const btn = document.getElementById(id);
-            btn.className = 'p-2 border text-left bg-neutral-950 border-neutral-800 text-neutral-400 font-mono text-xs';
+            btn.className = 'p-2 border text-left bg-neutral-950 border-neutral-800 text-neutral-400 font-mono text-xs rounded cursor-pointer';
         });
 
         const activeBtnId = type === 'document-write' ? 'wrap-doc-write' : type === 'inner-html' ? 'wrap-inner-html' : 'wrap-doc-replace';
-        document.getElementById(activeBtnId).className = 'p-2 border text-left bg-neutral-800 border-neutral-700 text-white font-mono text-xs';
+        document.getElementById(activeBtnId).className = 'p-2 border text-left bg-neutral-800 border-neutral-700 text-white font-mono text-xs rounded cursor-pointer';
 
         onCodeInput();
     }
+
     function resetToDefaults() {
         document.getElementById('opt-method').value = 'js-eval-xor';
         document.getElementById('opt-xor-key').value = '157';
@@ -1156,11 +833,11 @@
         document.getElementById('opt-advanced-minification').checked = false;
         document.getElementById('opt-obfuscate-css').checked = false;
         document.getElementById('opt-intensity').value = '1';
-        if (document.getElementById('opt-intensity-val')) document.getElementById('opt-intensity-val').innerText = '1';
+        if (document.getElementById('opt-intensity-val')) document.getElementById('opt-intensity-val').innerText = '1x (Default)';
 
         document.getElementById('domain-lock-input-container').classList.add('hidden');
         toggleGhFriendlyOptions();
-        setWrapperType('document-write');
+        setWrapperType('document-replace');
         onOptionsChanged();
     }
 
@@ -1183,7 +860,7 @@
         document.getElementById('opt-advanced-minification').checked = true;
         document.getElementById('opt-obfuscate-css').checked = true;
         document.getElementById('opt-intensity').value = '3';
-        if (document.getElementById('opt-intensity-val')) document.getElementById('opt-intensity-val').innerText = '3';
+        if (document.getElementById('opt-intensity-val')) document.getElementById('opt-intensity-val').innerText = '3x (3 Iterations)';
 
         const domainInput = document.getElementById('opt-allowed-domain');
         if (!domainInput.value.trim()) {
@@ -1191,6 +868,7 @@
         }
 
         document.getElementById('domain-lock-input-container').classList.remove('hidden');
+        setWrapperType('document-replace');
         onOptionsChanged();
     }
 
@@ -1243,7 +921,7 @@
     }
 
     function generateDeadCode(symbolRandomization) {
-        const statementCount = Math.floor(Math.random() * 4) + 3; // 3 to 6 statements
+        const statementCount = Math.floor(Math.random() * 4) + 3;
         let deadStatements = [];
 
         const variablePool = [];
@@ -1254,24 +932,20 @@
         for (let i = 0; i < statementCount; i++) {
             const type = Math.floor(Math.random() * 4);
             if (type === 0) {
-                // Variable assignment with simple math/strings
                 const v1 = variablePool[Math.floor(Math.random() * variablePool.length)];
                 const v2 = variablePool[Math.floor(Math.random() * variablePool.length)];
                 const val = Math.floor(Math.random() * 1000);
                 const op = ['+', '-', '*', '/'][Math.floor(Math.random() * 4)];
                 deadStatements.push(`var ${v1} = ${val}; var ${v2} = ${v1} ${op} ${Math.floor(Math.random() * 50)};`);
             } else if (type === 1) {
-                // Dummy function declaration
                 const fnName = getVarName(`dead_func_${i}`, symbolRandomization);
                 const argName = getVarName(`input_arg`, symbolRandomization);
                 const localVal = getVarName(`local_val`, symbolRandomization);
                 deadStatements.push(`function ${fnName}(${argName}){ var ${localVal} = ${argName} ? ${argName}.toString() : ""; return ${localVal} + "${Math.floor(Math.random() * 100)}"; }`);
             } else if (type === 2) {
-                // Impossible branch conditional block
                 const v1 = variablePool[Math.floor(Math.random() * variablePool.length)];
                 deadStatements.push(`if (1 === 2 || !window) { var ${v1} = Math.sin(${Math.floor(Math.random() * 10)}); }`);
             } else {
-                // Static dictionary initialization & lookup
                 const dictName = getVarName(`dead_dictionary_${i}`, symbolRandomization);
                 const key1 = getVarName(`prop_a`, symbolRandomization);
                 const key2 = getVarName(`prop_b`, symbolRandomization);
@@ -1358,45 +1032,46 @@
         if (stripComments) {
             result = result.replace(/<!--[\s\S]*?-->/g, '');
         }
-        return result
+
+        // Preserve script, style, pre, and textarea blocks to prevent breaking comments/regex/whitespaces
+        const placeholders = [];
+        const tagsToPreserve = [
+            /<script[\s\S]*?<\/script>/gi,
+            /<style[\s\S]*?<\/style>/gi,
+            /<pre[\s\S]*?<\/pre>/gi,
+            /<textarea[\s\S]*?<\/textarea>/gi
+        ];
+
+        let placeholderIndex = 0;
+        tagsToPreserve.forEach(regex => {
+            result = result.replace(regex, (match) => {
+                const placeholder = `___PRESERVE_TAG_PLACEHOLDER_${placeholderIndex}___`;
+                placeholders.push({ placeholder, content: match });
+                placeholderIndex++;
+                return placeholder;
+            });
+        });
+
+        // Minify the external HTML safely
+        result = result
             .replace(/\s+/g, ' ')
             .replace(/>\s+</g, '><')
             .trim();
+
+        // Restore preserved blocks
+        placeholders.forEach(item => {
+            result = result.replace(item.placeholder, item.content);
+        });
+
+        return result;
     }
 
     async function obfuscateCss(html) {
         let newHtml = html;
-
-        // Process <style>
         newHtml = newHtml.replace(/<style>([\s\S]*?)<\/style>/g, (match, css) => {
             const encodedCss = btoa(unescape(encodeURIComponent(css.split('').reverse().join(''))));
             return '<scr' + 'ipt>(function(){var s=document.createElement(\'style\');s.innerHTML=decodeURIComponent(escape(atob(\'' + encodedCss + '\'))).split(\'\').reverse().join(\'\');document.head.appendChild(s);})();<\/scr' + 'ipt>';
         });
-
-        // Process <link>
-        const links = [];
-        const linkRegex = /<link\s+[^>]*rel=["']stylesheet["'][^>]*>/gi;
-        let match;
-        while ((match = linkRegex.exec(newHtml)) !== null) {
-            links.push(match[0]);
-        }
-
-        for (const linkTag of links) {
-            const hrefMatch = linkTag.match(/href=["'](.*?)["']/i);
-            if (hrefMatch) {
-                const href = hrefMatch[1];
-                try {
-                    const response = await fetch(href);
-                    const css = await response.text();
-                    const encodedCss = btoa(unescape(encodeURIComponent(css.split('').reverse().join(''))));
-                    const replacement = '<scr' + 'ipt>(function(){var s=document.createElement(\'style\');s.innerHTML=decodeURIComponent(escape(atob(\'' + encodedCss + '\'))).split(\'\').reverse().join(\'\');document.head.appendChild(s);})();<\/scr' + 'ipt>';
-                    newHtml = newHtml.replace(linkTag, replacement);
-                } catch (e) {
-                    console.error('Failed to fetch CSS', href, e);
-                }
-            }
-        }
-
         return newHtml;
     }
 
@@ -1416,7 +1091,7 @@
         const chunks = [];
         let index = 0;
         while (index < str.length) {
-            const chunkSize = Math.floor(Math.random() * 9) + 4; // chunks of 4 to 12 characters
+            const chunkSize = Math.floor(Math.random() * 9) + 4;
             chunks.push(str.substring(index, index + chunkSize));
             index += chunkSize;
         }
@@ -1451,8 +1126,15 @@
             "var str = String(input).replace(/=+$/, ''); " +
             "var output = ''; " +
             "if (str.length % 4 === 1) throw new Error('Invalid base64'); " +
-            "for (var bc = 0, bs, r1, r2, idx = 0; char = str.charAt(idx++); ~char && (bs = bc % 4 ? bs * 64 + char : char, bc++ % 4) ? output += String.fromCharCode(255 & bs >> (-2 * bc & 6)) : 0) { " +
-            "char = " + b64CharsVar + ".indexOf(char); " +
+            "var bc = 0, bs = 0, idx = 0; " +
+            "while (idx < str.length) { " +
+            "var chr = str.charAt(idx++); " +
+            "var val = " + b64CharsVar + ".indexOf(chr); " +
+            "if (val === -1) continue; " +
+            "bs = bc % 4 ? bs * 64 + val : val; " +
+            "if (bc++ % 4) { " +
+            "output += String.fromCharCode(255 & bs >> (-2 * bc & 6)); " +
+            "} " +
             "} " +
             "return output; " +
             "}; " +
@@ -1486,8 +1168,6 @@
         const trimShim = "if (!String.prototype.trim) { " +
             "String.prototype.trim = function() { " +
             "return this.replace(/^\\\\s+|\\\\s+$/g, ''); " +
-            "String.prototype.trim = function() { " +
-            "return this.replace(/^\\\\s+|\\\\s+$/g, ''); " +
             "}; " +
             "}";
         codeParts.push(trimShim);
@@ -1499,7 +1179,6 @@
             "if (Object.prototype.hasOwnProperty.call(obj, key)) { " +
             "keys.push(key); " +
             "} " +
-            "keys.push(key); " +
             "} " +
             "return keys; " +
             "}; " +
@@ -1557,7 +1236,6 @@
 
         for (let iter = 1; iter <= intensity; iter++) {
             const isInnermost = (iter === 1);
-            const isOutermost = (iter === intensity);
             const currentWrapperType = isInnermost ? wrapperType : 'document-write';
 
             if (method === 'js-eval-xor') {
@@ -1736,8 +1414,8 @@
                 const fnName = getVarName('check_debugger_status', symbolRandomization);
                 const startVar = getVarName('timer_start', symbolRandomization);
                 const endVar = getVarName('timer_end', symbolRandomization);
-                const intervalVal = Math.floor(Math.random() * 200) + 150; // randomized 150 to 350ms
-                const thresholdVal = Math.floor(Math.random() * 40) + 30; // randomized 30 to 70ms
+                const intervalVal = Math.floor(Math.random() * 200) + 150;
+                const thresholdVal = Math.floor(Math.random() * 40) + 30;
                 const alertMsg = "Security Policy: Active debugger or inspector tools detected. Thread suspended.";
                 const obfuscatedAlertMsg = obfuscateString(alertMsg, stringSplitting);
                 const haltHtml = "<div style='background-color:#050505;color:#ef4444;font-family:monospace;padding:40px;border:1px solid #dc2626;margin:40px auto;border-radius:2px;max-width:550px;box-shadow:0 10px 30px rgba(0,0,0,0.5);'><h1 style='font-size:18px;font-weight:bold;margin:0 0 12px 0;letter-spacing:-0.5px;text-transform:uppercase;'>Security Halt</h1><p style='font-size:12px;color:#a3a3a3;line-height:1.6;margin:0 0 20px 0;'>Execution suspended. Active debugging tools detected in this session.</p></div>";
@@ -1789,7 +1467,7 @@
 
         let paddingComment = '';
         if (b64Padding) {
-            const randLen = Math.floor(Math.random() * 256) + 256; // 256 to 511 chars
+            const randLen = Math.floor(Math.random() * 256) + 256;
             paddingComment = `\n<!-- METADATA COMPILATION INTEGRITY: ${generateRandomBase64(randLen)} -->`;
         }
 
@@ -1925,7 +1603,6 @@
         return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
     }
 
-
     window.addEventListener('message', (event) => {
         if (event.data && event.data.source === 'sandbox-console') {
             const consoleOutput = document.getElementById('sandbox-console-output');
@@ -1968,9 +1645,38 @@
         const targetHtml = useObfuscated ? obfuscated : input;
 
         try {
-
             const consoleOverride = `<script>
         (function() {
+          // Polyfill to prevent SecurityErrors when accessing localStorage, sessionStorage, or cookies in sandboxed iframe
+          try {
+            const mockStorage = {
+              getItem: function() { return null; },
+              setItem: function() {},
+              removeItem: function() {},
+              clear: function() {},
+              length: 0,
+              key: function() { return null; }
+            };
+            Object.defineProperty(window, 'localStorage', {
+              get: function() { return mockStorage; },
+              configurable: true,
+              enumerable: true
+            });
+            Object.defineProperty(window, 'sessionStorage', {
+              get: function() { return mockStorage; },
+              configurable: true,
+              enumerable: true
+            });
+          } catch (e) {}
+          try {
+            Object.defineProperty(document, 'cookie', {
+              get: function() { return ''; },
+              set: function() {},
+              configurable: true,
+              enumerable: true
+            });
+          } catch (e) {}
+
           const originalConsole = {
             log: console.log,
             warn: console.warn,
@@ -2025,11 +1731,11 @@
         const tabOrig = document.getElementById('tab-original-render');
 
         if (obf) {
-            tabObf.className = 'flex items-center space-x-1 px-2.5 py-1 text-xs font-medium bg-neutral-800 text-white';
-            tabOrig.className = 'flex items-center space-x-1 px-2.5 py-1 text-xs font-medium text-neutral-400 hover:text-white';
+            tabObf.className = 'flex items-center space-x-1 px-2.5 py-1 text-xs font-medium bg-neutral-800 text-white rounded cursor-pointer';
+            tabOrig.className = 'flex items-center space-x-1 px-2.5 py-1 text-xs font-medium text-neutral-400 hover:text-white rounded cursor-pointer';
         } else {
-            tabObf.className = 'flex items-center space-x-1 px-2.5 py-1 text-xs font-medium text-neutral-400 hover:text-white';
-            tabOrig.className = 'flex items-center space-x-1 px-2.5 py-1 text-xs font-medium bg-neutral-800 text-white';
+            tabObf.className = 'flex items-center space-x-1 px-2.5 py-1 text-xs font-medium text-neutral-400 hover:text-white rounded cursor-pointer';
+            tabOrig.className = 'flex items-center space-x-1 px-2.5 py-1 text-xs font-medium bg-neutral-800 text-white rounded cursor-pointer';
         }
 
         updateSandboxView();
@@ -2044,20 +1750,20 @@
         const container = document.getElementById('iframe-outer-container');
         const statusText = document.getElementById('device-status-text');
 
-        btnDesktop.className = 'p-1.5 transition-colors text-neutral-500 hover:text-neutral-300';
-        btnTablet.className = 'p-1.5 transition-colors text-neutral-500 hover:text-neutral-300';
-        btnMobile.className = 'p-1.5 transition-colors text-neutral-500 hover:text-neutral-300';
+        btnDesktop.className = 'p-1.5 transition-colors text-neutral-500 hover:text-neutral-300 rounded cursor-pointer';
+        btnTablet.className = 'p-1.5 transition-colors text-neutral-500 hover:text-neutral-300 rounded cursor-pointer';
+        btnMobile.className = 'p-1.5 transition-colors text-neutral-500 hover:text-neutral-300 rounded cursor-pointer';
 
         if (device === 'desktop') {
-            btnDesktop.className = 'p-1.5 transition-colors bg-neutral-800 text-white';
+            btnDesktop.className = 'p-1.5 transition-colors bg-neutral-800 text-white rounded cursor-pointer';
             container.style.maxWidth = '100%';
             statusText.innerText = 'VIEWPORT: FULL FLUID';
         } else if (device === 'tablet') {
-            btnTablet.className = 'p-1.5 transition-colors bg-neutral-800 text-white';
+            btnTablet.className = 'p-1.5 transition-colors bg-neutral-800 text-white rounded cursor-pointer';
             container.style.maxWidth = '768px';
             statusText.innerText = 'VIEWPORT: TABLET (768px)';
         } else if (device === 'mobile') {
-            btnMobile.className = 'p-1.5 transition-colors bg-neutral-800 text-white';
+            btnMobile.className = 'p-1.5 transition-colors bg-neutral-800 text-white rounded cursor-pointer';
             container.style.maxWidth = '375px';
             statusText.innerText = 'VIEWPORT: MOBILE (375px)';
         }
@@ -2076,7 +1782,7 @@
         });
     }
 
-    // --- PRIVATE HTML BACKUP VAULT LOGIC ---
+    // --- Private Backups LocalStorage Vault Logic ---
     function loadVaultBackups() {
         const listContainer = document.getElementById('vault-list');
         const emptyState = document.getElementById('vault-empty-state');
@@ -2084,7 +1790,7 @@
 
         let backups = [];
         try {
-            const stored = localStorage.getItem('cursed_html_backups');
+            const stored = safeLocalStorage.getItem('cursed_html_backups');
             if (stored) {
                 backups = JSON.parse(stored);
             }
@@ -2103,10 +1809,9 @@
         listContainer.classList.remove('hidden');
         listContainer.innerHTML = '';
 
-        // Render backups sorted by timestamp descending
         backups.sort((a, b) => b.id - a.id).forEach(backup => {
             const row = document.createElement('div');
-            row.className = 'flex items-center justify-between p-2.5 bg-neutral-950 border border-neutral-800 hover:border-neutral-700 transition-colors text-xs font-mono';
+            row.className = 'flex items-center justify-between p-2.5 bg-neutral-950 border border-neutral-800 hover:border-neutral-700 transition-colors text-xs font-mono rounded';
 
             const infoDiv = document.createElement('div');
             infoDiv.className = 'min-w-0 pr-2';
@@ -2125,30 +1830,27 @@
             const actionsDiv = document.createElement('div');
             actionsDiv.className = 'flex items-center space-x-1 shrink-0';
 
-            // Restore Button
             const restoreBtn = document.createElement('button');
             restoreBtn.title = 'Restore to input editor';
-            restoreBtn.className = 'p-1.5 bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-emerald-400 hover:border-emerald-900 transition-colors';
+            restoreBtn.className = 'p-1.5 bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-emerald-400 hover:border-emerald-900 transition-colors rounded cursor-pointer';
             restoreBtn.innerHTML = '<i data-lucide="corner-left-up" class="w-3.5 h-3.5"></i>';
             restoreBtn.onclick = () => {
                 restoreFromVault(backup.id);
             };
 
-            // Copy Button
             const copyBtn = document.createElement('button');
             copyBtn.title = 'Copy code';
             const copyBtnId = `copy-vault-${backup.id}`;
             copyBtn.id = copyBtnId;
-            copyBtn.className = 'p-1.5 bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white transition-colors';
+            copyBtn.className = 'p-1.5 bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white transition-colors rounded cursor-pointer';
             copyBtn.innerHTML = '<i data-lucide="copy" class="w-3.5 h-3.5"></i>';
             copyBtn.onclick = () => {
                 copyFromVault(backup.id, copyBtnId);
             };
 
-            // Delete Button
             const deleteBtn = document.createElement('button');
             deleteBtn.title = 'Delete backup';
-            deleteBtn.className = 'p-1.5 bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-red-400 hover:border-red-900 transition-colors';
+            deleteBtn.className = 'p-1.5 bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-red-400 hover:border-red-900 transition-colors rounded cursor-pointer';
             deleteBtn.innerHTML = '<i data-lucide="trash-2" class="w-3.5 h-3.5"></i>';
             deleteBtn.onclick = () => {
                 deleteFromVault(backup.id);
@@ -2179,7 +1881,7 @@
 
         if (!backupName) {
             const now = new Date();
-            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
             backupName = `Backup ${now.toISOString().split('T')[0]} ${timeStr}`;
         }
 
@@ -2196,7 +1898,7 @@
 
         let backups = [];
         try {
-            const stored = localStorage.getItem('cursed_html_backups');
+            const stored = safeLocalStorage.getItem('cursed_html_backups');
             if (stored) {
                 backups = JSON.parse(stored);
             }
@@ -2205,7 +1907,11 @@
         }
 
         backups.push(newBackup);
-        localStorage.setItem('cursed_html_backups', JSON.stringify(backups));
+        try {
+            safeLocalStorage.setItem('cursed_html_backups', JSON.stringify(backups));
+        } catch (e) {
+            console.error(e);
+        }
 
         nameInput.value = '';
         loadVaultBackups();
@@ -2214,7 +1920,7 @@
     function restoreFromVault(id) {
         let backups = [];
         try {
-            const stored = localStorage.getItem('cursed_html_backups');
+            const stored = safeLocalStorage.getItem('cursed_html_backups');
             if (stored) {
                 backups = JSON.parse(stored);
             }
@@ -2234,7 +1940,7 @@
     function copyFromVault(id, btnId) {
         let backups = [];
         try {
-            const stored = localStorage.getItem('cursed_html_backups');
+            const stored = safeLocalStorage.getItem('cursed_html_backups');
             if (stored) {
                 backups = JSON.parse(stored);
             }
@@ -2262,7 +1968,7 @@
     function deleteFromVault(id) {
         let backups = [];
         try {
-            const stored = localStorage.getItem('cursed_html_backups');
+            const stored = safeLocalStorage.getItem('cursed_html_backups');
             if (stored) {
                 backups = JSON.parse(stored);
             }
@@ -2271,7 +1977,11 @@
         }
 
         backups = backups.filter(b => b.id !== id);
-        localStorage.setItem('cursed_html_backups', JSON.stringify(backups));
+        try {
+            safeLocalStorage.setItem('cursed_html_backups', JSON.stringify(backups));
+        } catch (e) {
+            console.error(e);
+        }
         loadVaultBackups();
     }
 </script>

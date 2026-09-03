@@ -7048,6 +7048,8 @@
     const AGE_VERIFIED_TOKEN_KEY = '__rp_age_verified_token';
     const AGEONCE_START_API_URL = 'https://hollynttbackend.vercel.app/api/ageonce-start';
     const AGEONCE_CLAIM_API_URL = 'https://hollynttbackend.vercel.app/api/ageonce-claim';
+    // AgeOnce must return to the GitHub Pages frontend, not the Vercel API.
+    const AGEONCE_REDIRECT_URI = 'https://hollyntt.github.io/?ageonce_callback=1';
     const DISCORD_REFRESH_URL = 'https://hollynttbackend.vercel.app/api/discord-refresh';
 
     // Deploy detection: only reload after GitHub Actions run is COMPLETED + success
@@ -9800,6 +9802,8 @@
     (function handleAgeOnceReturn() {
         const params = new URLSearchParams(location.search || '');
         const isCallback = params.get('ageonce_callback') === '1';
+        // This page is the registered AgeOnce OAuth redirect target.
+        // Do not redirect this callback to the Vercel backend directly.
         const code = params.get('code');
         const returnedState = params.get('state');
         if (!isCallback && !code) return;

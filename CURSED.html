@@ -2508,9 +2508,16 @@ setTimeout(runAudit, 100);
                     if (window.self !== window.top) return;
                     if (document.hidden) return;
                     
+                    // --- ADD THIS BLOCK TO FIX MOBILE ---
+                    // If it's a touch device or mobile UA, skip this check entirely
+                    var isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || ('ontouchstart' in window);
+                    if (isMobileDevice) return;
+                    // -------------------------------------
+
                     var ratio = window.devicePixelRatio || 1;
                     var widthDiff = Math.abs(window.outerWidth - window.innerWidth * ratio);
                     var heightDiff = Math.abs(window.outerHeight - window.innerHeight * ratio);
+                    
                     
                     // Docked DevTools usually adds a large pane. Browser chrome alone
                     // rarely sustains >420px on one axis; require many consecutive hits.

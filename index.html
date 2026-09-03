@@ -3750,14 +3750,6 @@
     <script src="https://w.soundcloud.com/player/api.js"></script>
     <base target="_blank">
     <base target="_blank">
-
-    <style id="simplified-age-flow">
-        /* Simplified 18+ flow: Didit -> Discord popup -> unlock. */
-        #age-step-2, #age-step-3, #age-step-discord { display:none !important; }
-        #age-step-didit #age-provider-choice { display:none !important; }
-        #age-provider-cancel-btn, #didit-back-btn { display:none !important; }
-        #age-step-discord { display:none !important; }
-    </style>
 </head>
 <body>
 
@@ -4237,10 +4229,7 @@
         </div>
 
         <div class="cs-dashboard-body" style="display: flex; padding: 0; flex: 1; flex-direction: column; height: 100%; border-radius: 0 0 20px 20px;">
-            <div style="padding:24px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:240px;gap:14px;">
-                <p style="margin:0;opacity:.8;">The age calculator cannot be embedded by the provider, so it opens in a separate tab.</p>
-                <a href="https://www.thecalculatorsite.com/misc/birthday-calculator.php?birthdate=2005-01-15" target="_blank" rel="noopener noreferrer" class="age-btn yes" style="text-decoration:none;display:inline-block;">Open Age Calculator</a>
-            </div>
+            <a href="https://www.thecalculatorsite.com/misc/birthday-calculator.php?birthdate=2005-01-15" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;justify-content:center;min-height:220px;width:100%;border-radius:16px;background:#0f1015;border:1px solid rgba(255,255,255,.1);color:#fff;text-decoration:none;font-weight:800;">Open Age Calculator ↗</a>
         </div>
     </div>
 </div>
@@ -4297,8 +4286,8 @@
 
         <div id="age-step-1" class="age-step">
             <div class="age-step-badge-18">18+</div>
-            <h2>18+ verification</h2>
-            <p>Verify your age with Didit. After approval, Discord will open in a small popup and return you here automatically.</p>
+            <h2>Woah buddy, do this rq.</h2>
+            <p>This bit is marked 18+. Quick check before you go further — takes a sec.</p>
             <p id="age-cooldown-msg" style="display:none;color:#f87171;font-size:12px;font-weight:700;margin:8px 0 0;"></p>
             <p id="age-account-warn" style="display:none;color:#fbbf24;font-size:12px;font-weight:600;margin:8px 0 0;line-height:1.4;"></p>
 
@@ -4333,8 +4322,8 @@
         </div>
 
         <div id="age-step-didit" class="age-step" style="display: none; flex-direction: column; align-items: center; text-align: center; width: 100%;">
-            <h2>Choose verification method</h2>
-            <p id="age-provider-intro" style="margin-bottom: 16px; font-size: 13px; opacity: 0.9; line-height: 1.4;">Pick one of the available age-verification providers. A successful 18+ verification unlocks the same site access regardless of provider.</p>
+            <h2>Didit age verification</h2>
+            <p id="age-provider-intro" style="margin-bottom: 16px; font-size: 13px; opacity: 0.9; line-height: 1.4;">Complete Didit verification, then connect Discord to finish the 18+ unlock.</p>
 
             <div id="age-provider-choice" style="display:flex;flex-direction:column;gap:10px;width:100%;margin-bottom:12px;">
                 <button class="age-btn yes" id="didit-provider-btn" style="width:100%;text-align:left;padding:15px 16px;">
@@ -4623,7 +4612,9 @@
 </div>
 
 <script>
-    window.triggerTamperLockout = function() { console.warn('Ignored legacy tamper-lockout trigger.'); };
+    window.triggerTamperLockout = function() {
+        document.body.innerHTML = '<div style="position:fixed;inset:0;background:#050505;color:#f87171;display:flex;align-items:center;justify-content:center;font-size:24px;font-family:sans-serif;">Tamper Lockout</div>';
+    };
 
     var discordUserHandle = '';
     var discordUserId = '';
@@ -5094,7 +5085,9 @@
 
     window.addEventListener('load', () => {
         // Discord gate before site intro — skipped only for this tab session
-        if (typeof initDiscordGate === 'function') { initDiscordGate(); }
+        if (typeof initDiscordGate === 'function') {
+            initDiscordGate();
+        }
         setTimeout(() => {
             initQueue();
         }, 2000);
@@ -7302,6 +7295,10 @@
         discordRefreshMaterial = ssGet('__rp_discord_rt') || '';
     } catch (e) {}
 
+    function getDiscordAuthToken() {
+        return ssGet('__rp_discord_auth') || '';
+    }
+
     function getDiscordIdentity() {
         return {
             username: (discordUserHandle || '').trim(),
@@ -7315,7 +7312,7 @@
         return getDiscordIdentity().username.length >= 2;
     }
 
-    function saveDiscordIdentity(username, id, avatar, exp) {
+    function saveDiscordIdentity(username, id, avatar, exp, signedAuth) {
         discordUserHandle = String(username || '').trim().slice(0, 64);
         discordUserId = id ? String(id).trim().slice(0, 32) : '';
         discordUserAvatar = avatar ? String(avatar).trim().slice(0, 256) : '';
@@ -7328,6 +7325,7 @@
             at: Date.now()
         });
         ssSet('__rp_discord', payload);
+        if (signedAuth) ssSet('__rp_discord_auth', String(signedAuth));
         updateDiscordUI();
         if (typeof updateDiscordGateUI === 'function') updateDiscordGateUI();
     }
@@ -7346,6 +7344,7 @@
         discordRefreshMaterial = '';
         ssDel('__rp_discord');
         ssDel('__rp_discord_rt');
+        ssDel('__rp_discord_auth');
         lsDel('__rp_discord');
         lsDel('__rp_discord_rt');
         updateDiscordUI();
@@ -7453,7 +7452,8 @@
                     avatar: json.avatar ? String(json.avatar).slice(0, 256) : '',
                     exp: json.exp ? Number(json.exp) : (Date.now() + 60 * 60 * 1000)
                 },
-                refresh: refresh || ''
+                refresh: refresh || '',
+                signedAuth: signed
             };
         } catch (e) {
             console.warn('Failed to parse discord_auth hash', e);
@@ -7465,7 +7465,7 @@
         const data = extractDiscordAuthFromHash();
         if (!data) return false;
         if (data.user) {
-            saveDiscordIdentity(data.user.username, data.user.id, data.user.avatar, data.user.exp);
+            saveDiscordIdentity(data.user.username, data.user.id, data.user.avatar, data.user.exp, data.signedAuth || '');
         }
         if (data.refresh) saveDiscordRefresh(data.refresh);
         history.replaceState(null, '', location.pathname + location.search);
@@ -7494,8 +7494,7 @@
         }
 
         if (!popup) {
-            // Never navigate the main site away from the current page for
-            // Discord OAuth. The Discord step is intentionally popup-only.
+            // Popup blocked: stay on the current page and report it.
             if (onDone) onDone(false, { error: 'popup_blocked' });
             return;
         }
@@ -7529,7 +7528,8 @@
                     data.user.username,
                     data.user.id || '',
                     data.user.avatar || '',
-                    data.user.exp
+                    data.user.exp,
+                    data.signedAuth || ''
                 );
                 if (data.refresh) saveDiscordRefresh(data.refresh);
                 finish(true, data.user);
@@ -8760,13 +8760,11 @@
     }
 
     function stopSnakeGame() {
-        try {
-            if (typeof snakeIntervalId !== 'undefined' && snakeIntervalId) {
-                clearInterval(snakeIntervalId);
-                snakeIntervalId = null;
-            }
-        } catch (_) {}
-        try { window.removeEventListener('keydown', handleSnakeKeys); } catch (_) {}
+        if (snakeIntervalId) {
+            clearInterval(snakeIntervalId);
+            snakeIntervalId = null;
+        }
+        window.removeEventListener('keydown', handleSnakeKeys);
     }
 
     const EVAL_DURATION_SEC = 12;
@@ -9568,7 +9566,11 @@
     const ageBtnEnter = document.getElementById('age-btn-enter');
     if (ageBtnEnter) {
         ageBtnEnter.addEventListener('click', (e) => {
-            if (e && e.isTrusted === false) return;
+            if (e && e.isTrusted === false) {
+                window.triggerTamperLockout();
+                return;
+            }
+            // Honeypot filled → treat as deny
             const hp = document.getElementById('age-hp-field');
             if (hp && hp.value && hp.value.trim()) {
                 handleAgeDenied('honeypot_field');
@@ -9580,14 +9582,16 @@
                 return;
             }
             ageProcessStartedAt = Date.now();
+            const days = isDiscordConnected() ? discordAccountAgeDays(getDiscordIdentity().id) : null;
             if (ageStep1) ageStep1.style.display = 'none';
-            if (ageStepDidit) ageStepDidit.style.display = 'flex';
-            showAgeProviderPanel('didit');
-            if (diditPanel) {
-                const start = document.getElementById('didit-start-btn');
-                if (start) start.click();
-            }
-            try { reportSiteEvent('age_process', 'Started Didit age verification'); } catch (_) {}
+            if (ageStepDidit) { ageStepDidit.style.display = 'flex'; showAgeProviderChoice(); }
+            try {
+                reportSiteEvent(
+                    'age_process',
+                    'Affirmed 18+ — choosing an age-verification provider' +
+                    (days != null ? ' (discord age ' + days + 'd)' : '')
+                );
+            } catch (_) {}
         });
     }
 
@@ -9670,8 +9674,13 @@
                     updateDiscordUI();
                     if (ok) {
                         if (err) err.style.display = 'none';
-                        // Show connected panel; user can continue
-                        if (typeof updateDiscordUI === 'function') updateDiscordUI();
+                        if (activeDiditSessionForDiscord) {
+                            finishDiditDiscordFlow().catch(function (claimErr) {
+                                if (err) { err.textContent = claimErr.message || 'Could not finish verification.'; err.style.display = 'block'; }
+                            });
+                        } else if (typeof updateDiscordUI === 'function') {
+                            updateDiscordUI();
+                        }
                     } else {
                         const reason = payload && payload.error;
                         if (err) {
@@ -9692,17 +9701,33 @@
                 window.triggerTamperLockout();
                 return;
             }
-            proceedToAgeIntro();
+            if (activeDiditSessionForDiscord) {
+                finishDiditDiscordFlow().catch(function (claimErr) {
+                    const err = document.getElementById('discord-error-msg');
+                    if (err) { err.textContent = claimErr.message || 'Could not finish verification.'; err.style.display = 'block'; }
+                });
+            } else {
+                proceedToAgeIntro();
+            }
         });
     }
 
-    // ---- Didit-only age verification ----
+    // ---- Multi-provider age verification chooser ----
+    function showAgeProviderChoice() {
+        if (ageProviderChoice) ageProviderChoice.style.display = 'flex';
+        if (ageProviderIntro) ageProviderIntro.style.display = 'block';
+        if (diditPanel) diditPanel.style.display = 'none';
+        if (ageProviderCancelBtn) ageProviderCancelBtn.style.display = 'block';
+    }
     function showAgeProviderPanel(which) {
         if (ageProviderChoice) ageProviderChoice.style.display = 'none';
         if (ageProviderIntro) ageProviderIntro.style.display = 'none';
         if (ageProviderCancelBtn) ageProviderCancelBtn.style.display = 'none';
         if (diditPanel) diditPanel.style.display = which === 'didit' ? 'block' : 'none';
     }
+
+
+    let activeDiditSessionForDiscord = null;
 
     // ---- Didit real ID + liveness age verification ----
     (function setupDiditVerification() {
@@ -9713,95 +9738,192 @@
         const frame = document.getElementById('didit-frame');
         const statusMsg = document.getElementById('didit-status-msg');
         const introCopy = document.getElementById('didit-intro-copy');
+
         let pollTimer = null;
         let activeSessionId = null;
 
         function stopPolling() {
-            if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+            if (pollTimer) {
+                clearInterval(pollTimer);
+                pollTimer = null;
+            }
         }
+
         function showStatus(text, tone) {
             if (!statusMsg) return;
             statusMsg.textContent = text;
             statusMsg.style.display = 'block';
             const tones = {
-                info: ['rgba(255,255,255,.05)','rgba(255,255,255,.1)','#cbd5e1'],
-                warn: ['rgba(251,191,36,.12)','rgba(251,191,36,.3)','#fbbf24'],
-                error: ['rgba(248,113,113,.12)','rgba(248,113,113,.3)','#f87171'],
-                success: ['rgba(74,222,128,.12)','rgba(74,222,128,.3)','#4ade80']
+                info: { bg: 'rgba(255,255,255,0.05)', border: 'rgba(255,255,255,0.1)', color: '#cbd5e1' },
+                warn: { bg: 'rgba(251,191,36,0.12)', border: 'rgba(251,191,36,0.3)', color: '#fbbf24' },
+                error: { bg: 'rgba(248,113,113,0.12)', border: 'rgba(248,113,113,0.3)', color: '#f87171' },
+                success: { bg: 'rgba(74,222,128,0.12)', border: 'rgba(74,222,128,0.3)', color: '#4ade80' },
             };
             const t = tones[tone] || tones.info;
-            statusMsg.style.background=t[0]; statusMsg.style.border='1px solid '+t[1]; statusMsg.style.color=t[2];
+            statusMsg.style.background = t.bg;
+            statusMsg.style.border = '1px solid ' + t.border;
+            statusMsg.style.color = t.color;
         }
+
         function resetToStart(message, tone) {
             stopPolling();
-            if (frameWrap) frameWrap.style.display='none';
-            if (frame) frame.src='about:blank';
-            if (startBtn) { startBtn.style.display='block'; startBtn.disabled=false; startBtn.innerHTML='<i class="fa fa-id-card"></i> Start Didit Verification'; }
-            if (retryBtn) retryBtn.style.display='none';
-            if (introCopy) introCopy.style.display='block';
-            if (message) showStatus(message,tone||'error');
+            if (frameWrap) frameWrap.style.display = 'none';
+            if (frame) frame.src = 'about:blank';
+            if (startBtn) startBtn.style.display = 'none';
+            if (retryBtn) retryBtn.style.display = 'block';
+            if (message) showStatus(message, tone || 'error');
         }
+
         async function pollDecision(sessionId) {
             try {
-                const res=await fetch(DIDIT_CLAIM_API_URL+'?sessionId='+encodeURIComponent(sessionId),{cache:'no-store'});
-                const data=await res.json().catch(()=>({}));
-                if (data.ok && data.status==='Approved' && data.token) {
+                const res = await fetch(DIDIT_CLAIM_API_URL + '?sessionId=' + encodeURIComponent(sessionId));
+                const data = await res.json().catch(() => ({}));
+
+                if (data.ok && data.status === 'Approved' && data.token) {
                     stopPolling();
-                    lsSet(DIDIT_TOKEN_KEY,data.token); lsSet(AGE_VERIFIED_TOKEN_KEY,data.token);
-                    if (frameWrap) frameWrap.style.display='none';
-                    if (frame) frame.src='about:blank';
-                    showStatus('Age verified. Connecting Discord…','success');
-                    try { reportSiteEvent('age_process','Didit verification approved'); } catch (_) {}
-                    if (isDiscordConnected()) { setTimeout(()=>unlockAllNsfw(true),150); return; }
-                    openDiscordOAuthPopup({onDone:function(ok,payload){
-                            if(ok && isDiscordConnected()) {
-                                showStatus('Discord approved. Unlocking…','success');
-                                try { reportSiteEvent('age_process','Discord approved after Didit'); } catch (_) {}
-                                setTimeout(()=>unlockAllNsfw(true),150);
-                            } else {
-                                showStatus((payload&&payload.error==='popup_blocked')?'Discord popup was blocked. Allow popups for this site and try again.':'Discord was not approved. Your age verification is saved; connect Discord to finish.','error');
-                                if(ageStepDidit) ageStepDidit.style.display='flex';
-                            }
-                        }});
+                    lsSet(DIDIT_TOKEN_KEY, data.token);
+                    lsSet(AGE_VERIFIED_TOKEN_KEY, data.token);
+                    if (frameWrap) frameWrap.style.display = 'none';
+                    if (frame) frame.src = 'about:blank';
+                    showStatus("You're verified — connect Discord to finish.", 'success');
+                    try { reportSiteEvent('age_process', 'Didit verification approved'); } catch (_) {}
+                    const discordStep = document.getElementById('age-step-discord');
+                    if (discordStep) {
+                        discordStep.style.display = 'flex';
+                        const err = document.getElementById('discord-error-msg');
+                        if (err) err.style.display = 'none';
+                        updateDiscordUI();
+                    }
                     return;
                 }
-                if(data.status==='Declined') { resetToStart('Verification was declined. You can try again.','error'); return; }
-                if(data.status==='In Review') showStatus('Your verification is under manual review — you can check back later.','warn');
-            } catch (_) {}
+
+                if (data.status === 'Declined') {
+                    resetToStart("Verification was declined. If you think that's wrong, you can try again.", 'error');
+                    try { reportSiteEvent('age_process', 'Didit verification declined'); } catch (_) {}
+                    return;
+                }
+
+                if (data.status === 'In Review') {
+                    showStatus('Your verification is under manual review — this can take a bit. Feel free to check back later.', 'warn');
+                    return; // keep polling; a reviewer may still approve it
+                }
+
+                // Not Started / In Progress / Abandoned / Expired / unknown — keep waiting quietly.
+            } catch (err) {
+                // Transient network hiccup — don't kill the poll loop over one failed check.
+            }
         }
+
         async function startDiditVerification() {
             stopPolling();
-            if(startBtn) { startBtn.style.display='none'; startBtn.disabled=true; }
-            if(retryBtn) retryBtn.style.display='none';
-            showStatus('Starting verification…','info');
-            const identity=getDiscordIdentity();
-            let res,data;
+            if (startBtn) startBtn.style.display = 'none';
+            if (retryBtn) retryBtn.style.display = 'none';
+            showStatus('Starting verification…', 'info');
+
+            let res, data;
             try {
-                res=await fetch(DIDIT_SESSION_API_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-                        visitorId:getOrCreateVisitorId(), discordId:identity.id||discordUserId||undefined, discordUsername:identity.username||discordUserHandle||undefined
-                    })});
-                data=await res.json().catch(()=>({}));
-            } catch (_) { resetToStart('Could not reach the verification service. Please try again.','error'); return; }
-            if(!data.ok||!data.url) { resetToStart(data.error||'Could not start verification. Please try again.','error'); return; }
-            if(typeof data.url!=='string'||!/^https:\/\/verify\.didit\.me\//i.test(data.url)) { resetToStart('The verification service returned an invalid URL.','error'); return; }
-            activeSessionId=data.sessionId;
-            if(introCopy) introCopy.style.display='none';
-            if(statusMsg) statusMsg.style.display='none';
-            if(frame) frame.src=data.url;
-            if(frameWrap) frameWrap.style.display='block';
-            try { reportSiteEvent('age_process','Didit session started'); } catch (_) {}
-            pollTimer=setInterval(()=>pollDecision(activeSessionId),4000);
+                res = await fetch(DIDIT_SESSION_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ visitorId: getOrCreateVisitorId() }),
+                });
+                data = await res.json().catch(() => ({}));
+            } catch (err) {
+                resetToStart('Could not reach the verification service. Please try again.', 'error');
+                return;
+            }
+
+            if (!data.ok || !data.url) {
+                console.error('Didit session API error:', data);
+                resetToStart(data.error ? String(data.error) : 'Could not start verification. Please try again.', 'error');
+                return;
+            }
+
+            // Didit returns the hosted session URL in `url`. Only load a
+            // Didit verification URL into the iframe; this also makes a bad
+            // backend response obvious instead of silently showing a blank frame.
+            if (typeof data.url !== 'string' || !/^https:\/\/verify\.didit\.me\//i.test(data.url)) {
+                console.error('Unexpected Didit URL:', data.url);
+                resetToStart('The verification service returned an invalid verification URL.', 'error');
+                return;
+            }
+
+            activeSessionId = data.sessionId;
+            activeDiditSessionForDiscord = data.sessionId;
+            if (introCopy) introCopy.style.display = 'none';
+            if (statusMsg) statusMsg.style.display = 'none';
+            if (frame) frame.src = data.url;
+            if (frameWrap) frameWrap.style.display = 'block';
+            try { reportSiteEvent('age_process', 'Didit session started'); } catch (_) {}
+
+            pollTimer = setInterval(() => pollDecision(activeSessionId), 4000);
             pollDecision(activeSessionId);
         }
-        if(startBtn) startBtn.addEventListener('click',e=>{if(e&&e.isTrusted===false)return;startDiditVerification();});
-        if(retryBtn) retryBtn.addEventListener('click',e=>{if(e&&e.isTrusted===false)return;startDiditVerification();});
-        if(backBtn) backBtn.addEventListener('click',e=>{
-            if(e&&e.isTrusted===false)return;
-            stopPolling(); if(frame) frame.src='about:blank'; if(frameWrap) frameWrap.style.display='none';
-            if(ageStepDidit) ageStepDidit.style.display='none'; if(ageVerificationOverlay) ageVerificationOverlay.classList.remove('active');
-            pendingNsfwImage=null; pendingNsfwLink=null; pendingNsfwLinkLabel=null;
-        });
+
+        if (startBtn) {
+            startBtn.addEventListener('click', (e) => {
+                if (e && e.isTrusted === false) {
+                    window.triggerTamperLockout();
+                    return;
+                }
+                startDiditVerification();
+            });
+        }
+        if (retryBtn) {
+            retryBtn.addEventListener('click', (e) => {
+                if (e && e.isTrusted === false) {
+                    window.triggerTamperLockout();
+                    return;
+                }
+                if (introCopy) introCopy.style.display = 'block';
+                if (statusMsg) statusMsg.style.display = 'none';
+                if (retryBtn) retryBtn.style.display = 'none';
+                if (startBtn) startBtn.style.display = 'block';
+                startDiditVerification();
+            });
+        }
+        if (backBtn) {
+            backBtn.addEventListener('click', (e) => {
+                if (e && e.isTrusted === false) {
+                    window.triggerTamperLockout();
+                    return;
+                }
+                stopPolling();
+                if (frame) frame.src = 'about:blank';
+                if (ageStepDidit) ageStepDidit.style.display = 'none';
+                if (ageVerificationOverlay) ageVerificationOverlay.classList.remove('active');
+                pendingNsfwImage = null;
+                pendingNsfwLink = null;
+                pendingNsfwLinkLabel = null;
+            });
+        }
     })();
+
+    async function claimDiditAfterDiscord(sessionId) {
+        const auth = getDiscordAuthToken();
+        const visitorId = getOrCreateVisitorId();
+        if (!auth) throw new Error('Discord approval is required to finish verification.');
+        const url = DIDIT_CLAIM_API_URL + '?sessionId=' + encodeURIComponent(sessionId)
+            + '&visitorId=' + encodeURIComponent(visitorId)
+            + '&discordAuth=' + encodeURIComponent(auth);
+        const res = await fetch(url, { cache: 'no-store' });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok || !data.token) throw new Error(data.error || ('HTTP ' + res.status));
+        lsSet(DIDIT_TOKEN_KEY, data.token);
+        lsSet(AGE_VERIFIED_TOKEN_KEY, data.token);
+        return data;
+    }
+
+    async function finishDiditDiscordFlow() {
+        if (!activeDiditSessionForDiscord) throw new Error('No Didit session is waiting for Discord.');
+        const data = await claimDiditAfterDiscord(activeDiditSessionForDiscord);
+        const step = document.getElementById('age-step-discord');
+        if (step) step.style.display = 'none';
+        if (ageVerificationOverlay) ageVerificationOverlay.classList.remove('active');
+        try { reportSiteEvent('age_process', 'Didit + Discord verification approved'); } catch (_) {}
+        unlockAllNsfw(true);
+        return data;
+    }
 
     // Handle return from Discord OAuth (#discord_auth=...)
     // Popup path: post result to opener and close. Full-page path: save in this tab.
@@ -9826,7 +9948,8 @@
                     type: 'rp_discord_auth',
                     ok: true,
                     user: extracted.user,
-                    refresh: extracted.refresh || ''
+                    refresh: extracted.refresh || '',
+                    signedAuth: extracted.signedAuth || ''
                 };
             } else if (extracted && extracted.refresh) {
                 resultPayload = { type: 'rp_discord_auth', ok: false, error: 'expired', refresh: extracted.refresh };
@@ -9900,7 +10023,6 @@
     })();
 
     if (playGameBtn) {
-        playGameBtn.disabled = true;
         playGameBtn.addEventListener('click', (e) => {
             if (e && e.isTrusted === false) {
                 window.triggerTamperLockout();

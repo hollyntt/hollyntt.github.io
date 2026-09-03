@@ -7224,6 +7224,23 @@
         try { localStorage.removeItem(key); } catch (e) {}
     }
 
+    // Anonymous, persistent per-browser id used as the Didit vendor_data
+    // anchor when the user hasn't connected Discord. Lets verification run
+    // standalone, independent of Discord — still stable across visits.
+    const ANON_VISITOR_ID_KEY = '__rp_anon_visitor_id';
+    function getOrCreateVisitorId() {
+        let id = lsGet(ANON_VISITOR_ID_KEY);
+        if (id) return id;
+        try {
+            id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : null;
+        } catch (_) { id = null; }
+        if (!id) {
+            id = 'v' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+        }
+        lsSet(ANON_VISITOR_ID_KEY, id);
+        return id;
+    }
+
     // Long-lived Didit age-verification token — persists across visits so a
     // real, once-completed ID+liveness check isn't repeated every session.
     function b64urlDecodeJson(str) {
@@ -9371,14 +9388,10 @@
         updateDiscordUI();
         updateAgeGateSoftNotices();
 
-        // Discord first. If connected this session, skip straight to age intro.
-        if (isDiscordConnected()) {
-            if (ageStepDiscord) ageStepDiscord.style.display = 'none';
-            if (ageStep1) ageStep1.style.display = 'flex';
-        } else {
-            if (ageStep1) ageStep1.style.display = 'none';
-            if (ageStepDiscord) ageStepDiscord.style.display = 'flex';
-        }
+        // Discord is optional now — Didit verification doesn't need it, so go
+        // straight to the age intro step.
+        if (ageStepDiscord) ageStepDiscord.style.display = 'none';
+        if (ageStep1) ageStep1.style.display = 'flex';
 
         if (ageVerificationOverlay) {
             ageVerificationOverlay.classList.add('active');
@@ -9559,21 +9572,8 @@
                 updateAgeGateSoftNotices();
                 return;
             }
-            // Discord is required before intro; re-check in case storage was cleared
-            if (!isDiscordConnected()) {
-                if (ageStep1) ageStep1.style.display = 'none';
-                const ageStepDiscord = document.getElementById('age-step-discord');
-                if (ageStepDiscord) ageStepDiscord.style.display = 'flex';
-                updateDiscordUI();
-                const err = document.getElementById('discord-error-msg');
-                if (err) {
-                    err.textContent = 'Connect Discord first';
-                    err.style.display = 'block';
-                }
-                return;
-            }
             ageProcessStartedAt = Date.now();
-            const days = discordAccountAgeDays(getDiscordIdentity().id);
+            const days = isDiscordConnected() ? discordAccountAgeDays(getDiscordIdentity().id) : null;
             if (ageStep1) ageStep1.style.display = 'none';
             if (ageStepDidit) ageStepDidit.style.display = 'flex';
             try {
@@ -9770,10 +9770,6 @@
         }
 
         async function startDiditVerification() {
-            if (!isDiscordConnected()) {
-                showStatus('Connect Discord first.', 'error');
-                return;
-            }
             stopPolling();
             if (startBtn) startBtn.style.display = 'none';
             if (retryBtn) retryBtn.style.display = 'none';
@@ -9786,8 +9782,9 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        discordId: identity.id || discordUserId,
-                        discordUsername: identity.username || discordUserHandle,
+                        visitorId: getOrCreateVisitorId(),
+                        discordId: identity.id || discordUserId || undefined,
+                        discordUsername: identity.username || discordUserHandle || undefined,
                     }),
                 });
                 data = await res.json().catch(() => ({}));

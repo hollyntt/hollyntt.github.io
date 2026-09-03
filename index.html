@@ -587,9 +587,9 @@
 
         body.pfp-menu-open .pfp-nav-hub {
             transform: perspective(850px)
-                       rotateX(var(--pfp-tilt-x, 0deg))
-                       rotateY(var(--pfp-tilt-y, 0deg))
-                       scale(1.12);
+            rotateX(var(--pfp-tilt-x, 0deg))
+            rotateY(var(--pfp-tilt-y, 0deg))
+            scale(1.12);
             transition: transform 0.08s ease-out;
         }
 
@@ -602,14 +602,14 @@
         body.pfp-menu-open #visual,
         body.pfp-menu-open .bg-text-overlay {
             transform: perspective(1400px)
-                       rotateX(var(--pfp-tilt-x, 0deg))
-                       rotateY(var(--pfp-tilt-y, 0deg))
-                       scale(1.1);
+            rotateX(var(--pfp-tilt-x, 0deg))
+            rotateY(var(--pfp-tilt-y, 0deg))
+            scale(1.1);
             transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
             will-change: transform;
         }
 
-                /* The PFP Trigger Button */
+        /* The PFP Trigger Button */
         .profile-img-container {
             position: relative;
             width: 120px;
@@ -624,8 +624,8 @@
             z-index: 110;
             outline: none;
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                        box-shadow 0.35s ease,
-                        border-color 0.35s ease;
+            box-shadow 0.35s ease,
+            border-color 0.35s ease;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -721,8 +721,8 @@
             color: #fff;
             font-size: 13px;
             transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-                        opacity 0.25s ease,
-                        background 0.3s ease;
+            opacity 0.25s ease,
+            background 0.3s ease;
             z-index: 5;
             pointer-events: none;
         }
@@ -746,7 +746,7 @@
             transform: scale(0.68) rotate(-18deg);
             opacity: 0;
             transition: transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1),
-                        opacity 0.28s ease;
+            opacity 0.28s ease;
         }
 
         .pfp-nav-hub.active .pfp-blade-wheel {
@@ -967,10 +967,10 @@
             overflow: hidden;
             background: linear-gradient(180deg, #1f2125 0%, #15161a 100%);
             border: 1.5px solid rgba(255, 255, 255, 0.14);
-            box-shadow: 
-                0 30px 90px rgba(0, 0, 0, 0.85),
-                0 0 45px rgba(99, 102, 241, 0.28),
-                inset 0 1px 0 rgba(255, 255, 255, 0.22);
+            box-shadow:
+                    0 30px 90px rgba(0, 0, 0, 0.85),
+                    0 0 45px rgba(99, 102, 241, 0.28),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.22);
             transform: scale(0.92) translateY(20px);
             opacity: 0;
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
@@ -1005,8 +1005,8 @@
             background: rgba(255, 255, 255, 0.04) !important;
             border: 1.5px solid rgba(255, 255, 255, 0.09) !important;
             box-shadow:
-                0 6px 18px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+                    0 6px 18px rgba(0, 0, 0, 0.3),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
             position: relative;
             cursor: pointer;
             overflow: hidden;
@@ -1101,9 +1101,9 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             box-shadow:
-                6px 6px 14px rgba(0, 0, 0, 0.3),
-                -4px -4px 10px rgba(255, 255, 255, 0.03),
-                inset 1px 1px 2px rgba(255, 255, 255, 0.06);
+                    6px 6px 14px rgba(0, 0, 0, 0.3),
+                    -4px -4px 10px rgba(255, 255, 255, 0.03),
+                    inset 1px 1px 2px rgba(255, 255, 255, 0.06);
             color: #fff;
             font-size: 18px;
             display: flex;
@@ -1111,8 +1111,8 @@
             justify-content: center;
             cursor: pointer;
             transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1),
-                        background 0.2s ease,
-                        box-shadow 0.2s ease;
+            background 0.2s ease,
+            box-shadow 0.2s ease;
             text-decoration: none;
             position: relative;
             overflow: hidden;
@@ -1180,9 +1180,9 @@
             border: 1.5px solid rgba(255, 255, 255, 0.14);
             border-radius: 28px;
             box-shadow:
-                0 30px 90px rgba(0, 0, 0, 0.85),
-                0 0 45px rgba(244, 63, 94, 0.25),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+                    0 30px 90px rgba(0, 0, 0, 0.85),
+                    0 0 45px rgba(244, 63, 94, 0.25),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.2);
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
@@ -1426,7 +1426,7 @@
             margin-top: -2px;
         }
 
-.readme-content {
+        .readme-content {
             text-align: left;
             color: var(--text-primary);
             font-family: var(--font-sans);
@@ -1891,7 +1891,7 @@
         }
 
         /* Performance: pause decorative motion when tab is in background */
-        
+
         /* After intro: stop continuous decorative paint */
         body.fx-settled #visual {
             display: none !important;
@@ -2094,10 +2094,10 @@
             overflow: hidden;
             background: linear-gradient(180deg, #1f2125 0%, #15161a 100%);
             border: 1.5px solid rgba(255, 255, 255, 0.14);
-            box-shadow: 
-                0 30px 90px rgba(0, 0, 0, 0.85),
-                0 0 45px var(--blade-glow, rgba(255, 255, 255, 0.08)),
-                inset 0 1px 0 rgba(255, 255, 255, 0.22);
+            box-shadow:
+                    0 30px 90px rgba(0, 0, 0, 0.85),
+                    0 0 45px var(--blade-glow, rgba(255, 255, 255, 0.08)),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.22);
             transform: scale(0.92) translateY(24px);
             transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -2116,9 +2116,9 @@
             justify-content: space-between;
             background: linear-gradient(90deg, var(--blade-c1, #1e293b) 0%, var(--blade-c2, #0f172a) 100%);
             border-bottom: 1.5px solid rgba(255, 255, 255, 0.16);
-            box-shadow: 
-                0 6px 25px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            box-shadow:
+                    0 6px 25px rgba(0, 0, 0, 0.5),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.3);
             overflow: hidden;
             flex-shrink: 0;
             z-index: 10;
@@ -2815,7 +2815,7 @@
             margin: auto;
         }
 
-                .oc-bubble-content {
+        .oc-bubble-content {
             position: absolute;
             inset: 0;
             border-radius: 50%;
@@ -3666,7 +3666,7 @@
             transform: translateY(-1px);
             box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);
         }
-    
+
         /* Xbox 360 Achievement Toast Notification Style */
         .toast-container {
             position: fixed;
@@ -3746,10 +3746,10 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-</style>
+    </style>
     <script src="https://w.soundcloud.com/player/api.js"></script>
-<base target="_blank">
-<base target="_blank">
+    <base target="_blank">
+    <base target="_blank">
 </head>
 <body>
 
@@ -3796,128 +3796,128 @@
     <div class="profile-section" id="profile-section">
         <div class="pfp-nav-hub" id="pfp-nav-hub">
             <!-- Orbital Satellite Navigation Buttons (appear from behind around it in 360° circle) -->
-                                    <!-- Connected Segmented Xbox 360 Blade Wheel (Directly connected to PFP rim) -->
+            <!-- Connected Segmented Xbox 360 Blade Wheel (Directly connected to PFP rim) -->
             <div class="pfp-blade-wheel" id="pfp-blade-wheel" aria-label="Xbox 360 Navigation Blade Ring">
                 <svg viewBox="0 0 240 240" class="pfp-blade-wheel-svg" id="pfp-blade-wheel-svg" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-        <linearGradient id="blade-gloss-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.52" />
-            <stop offset="100%" stop-color="#ffffff" stop-opacity="0.04" />
-        </linearGradient>
-        <linearGradient id="grad-pfp-nav-chars" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#8b5cf6" />
-            <stop offset="45%" stop-color="#8b5cf6" />
-            <stop offset="100%" stop-color="#5b21b6" />
-        </linearGradient>
-        <linearGradient id="grad-pfp-nav-music" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#f59e0b" />
-            <stop offset="45%" stop-color="#f59e0b" />
-            <stop offset="100%" stop-color="#92400e" />
-        </linearGradient>
-        <linearGradient id="grad-pfp-nav-about" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#0ea5e9" />
-            <stop offset="45%" stop-color="#0ea5e9" />
-            <stop offset="100%" stop-color="#075985" />
-        </linearGradient>
-        <linearGradient id="grad-pfp-nav-links" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#6366f1" />
-            <stop offset="45%" stop-color="#6366f1" />
-            <stop offset="100%" stop-color="#3730a3" />
-        </linearGradient>
-        <linearGradient id="grad-pfp-nav-donate" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#f43f5e" />
-            <stop offset="45%" stop-color="#f43f5e" />
-            <stop offset="100%" stop-color="#9f1239" />
-        </linearGradient>
-        <linearGradient id="grad-pfp-nav-cs" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#ea580c" />
-            <stop offset="45%" stop-color="#ea580c" />
-            <stop offset="100%" stop-color="#9a3412" />
-        </linearGradient>
-        <linearGradient id="grad-pfp-nav-age" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#16a34a" />
-            <stop offset="45%" stop-color="#16a34a" />
-            <stop offset="100%" stop-color="#14532d" />
-        </linearGradient>
-        <linearGradient id="grad-pfp-nav-cursed" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#d946ef" />
-            <stop offset="45%" stop-color="#d946ef" />
-            <stop offset="100%" stop-color="#701a75" />
-        </linearGradient>
+                        <linearGradient id="blade-gloss-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.52" />
+                            <stop offset="100%" stop-color="#ffffff" stop-opacity="0.04" />
+                        </linearGradient>
+                        <linearGradient id="grad-pfp-nav-chars" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#8b5cf6" />
+                            <stop offset="45%" stop-color="#8b5cf6" />
+                            <stop offset="100%" stop-color="#5b21b6" />
+                        </linearGradient>
+                        <linearGradient id="grad-pfp-nav-music" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#f59e0b" />
+                            <stop offset="45%" stop-color="#f59e0b" />
+                            <stop offset="100%" stop-color="#92400e" />
+                        </linearGradient>
+                        <linearGradient id="grad-pfp-nav-about" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#0ea5e9" />
+                            <stop offset="45%" stop-color="#0ea5e9" />
+                            <stop offset="100%" stop-color="#075985" />
+                        </linearGradient>
+                        <linearGradient id="grad-pfp-nav-links" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#6366f1" />
+                            <stop offset="45%" stop-color="#6366f1" />
+                            <stop offset="100%" stop-color="#3730a3" />
+                        </linearGradient>
+                        <linearGradient id="grad-pfp-nav-donate" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#f43f5e" />
+                            <stop offset="45%" stop-color="#f43f5e" />
+                            <stop offset="100%" stop-color="#9f1239" />
+                        </linearGradient>
+                        <linearGradient id="grad-pfp-nav-cs" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#ea580c" />
+                            <stop offset="45%" stop-color="#ea580c" />
+                            <stop offset="100%" stop-color="#9a3412" />
+                        </linearGradient>
+                        <linearGradient id="grad-pfp-nav-age" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#16a34a" />
+                            <stop offset="45%" stop-color="#16a34a" />
+                            <stop offset="100%" stop-color="#14532d" />
+                        </linearGradient>
+                        <linearGradient id="grad-pfp-nav-cursed" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#d946ef" />
+                            <stop offset="45%" stop-color="#d946ef" />
+                            <stop offset="100%" stop-color="#701a75" />
+                        </linearGradient>
                     </defs>
                     <g class="pfp-blade-wheel-group">
-            <g class="pfp-blade-slice" id="pfp-nav-chars" data-nav="characters" data-title="Characters • Reference Sheets" data-short="Characters" data-glow="#c084fc" role="button" tabindex="0" aria-label="Characters • Reference Sheets" style="--glow: #c084fc;">
-                <path class="blade-slice-bg" d="M 74.84 10.98 A 118.00 118.00 0 0 1 165.16 10.98 L 142.77 65.03 A 59.50 59.50 0 0 0 97.23 65.03 Z" fill="url(#grad-pfp-nav-chars)" />
-                <path class="blade-slice-shine" d="M 74.84 10.98 A 118.00 118.00 0 0 1 165.16 10.98 L 153.96 38.01 A 88.75 88.75 0 0 0 86.04 38.01 Z" fill="url(#blade-gloss-grad)" pointer-events="none" />
-                <foreignObject x="107.0" y="18.2" width="26" height="26" class="blade-fo">
-                    <div xmlns="http://www.w3.org/1999/xhtml" class="blade-icon-wrap">
-                        <i class="fa fa-paint-brush"></i>
-                    </div>
-                </foreignObject>
-            </g>
-            <g class="pfp-blade-slice" id="pfp-nav-music" data-nav="music" data-title="Music Player" data-short="Music" data-glow="#fbbf24" role="button" tabindex="0" aria-label="Music Player" style="--glow: #fbbf24;">
-                <path class="blade-slice-bg" d="M 165.16 10.98 A 118.00 118.00 0 0 1 229.02 74.84 L 174.97 97.23 A 59.50 59.50 0 0 0 142.77 65.03 Z" fill="url(#grad-pfp-nav-music)" />
-                <path class="blade-slice-shine" d="M 165.16 10.98 A 118.00 118.00 0 0 1 229.02 74.84 L 201.99 86.04 A 88.75 88.75 0 0 0 153.96 38.01 Z" fill="url(#blade-gloss-grad)" pointer-events="none" />
-                <foreignObject x="169.8" y="44.2" width="26" height="26" class="blade-fo">
-                    <div xmlns="http://www.w3.org/1999/xhtml" class="blade-icon-wrap">
-                        <i class="fa fa-music"></i>
-                    </div>
-                </foreignObject>
-            </g>
-            <g class="pfp-blade-slice" id="pfp-nav-about" data-nav="about" data-title="About runeaphobia" data-short="About" data-glow="#38bdf8" role="button" tabindex="0" aria-label="About runeaphobia" style="--glow: #38bdf8;">
-                <path class="blade-slice-bg" d="M 229.02 74.84 A 118.00 118.00 0 0 1 229.02 165.16 L 174.97 142.77 A 59.50 59.50 0 0 0 174.97 97.23 Z" fill="url(#grad-pfp-nav-about)" />
-                <path class="blade-slice-shine" d="M 229.02 74.84 A 118.00 118.00 0 0 1 229.02 165.16 L 201.99 153.96 A 88.75 88.75 0 0 0 201.99 86.04 Z" fill="url(#blade-gloss-grad)" pointer-events="none" />
-                <foreignObject x="195.8" y="107.0" width="26" height="26" class="blade-fo">
-                    <div xmlns="http://www.w3.org/1999/xhtml" class="blade-icon-wrap">
-                        <i class="fa fa-user"></i>
-                    </div>
-                </foreignObject>
-            </g>
-            <g class="pfp-blade-slice" id="pfp-nav-links" data-nav="links" data-title="Links & Socials" data-short="Links" data-glow="#818cf8" role="button" tabindex="0" aria-label="Links & Socials" style="--glow: #818cf8;">
-                <path class="blade-slice-bg" d="M 229.02 165.16 A 118.00 118.00 0 0 1 165.16 229.02 L 142.77 174.97 A 59.50 59.50 0 0 0 174.97 142.77 Z" fill="url(#grad-pfp-nav-links)" />
-                <path class="blade-slice-shine" d="M 229.02 165.16 A 118.00 118.00 0 0 1 165.16 229.02 L 153.96 201.99 A 88.75 88.75 0 0 0 201.99 153.96 Z" fill="url(#blade-gloss-grad)" pointer-events="none" />
-                <foreignObject x="169.8" y="169.8" width="26" height="26" class="blade-fo">
-                    <div xmlns="http://www.w3.org/1999/xhtml" class="blade-icon-wrap">
-                        <i class="fa fa-link"></i>
-                    </div>
-                </foreignObject>
-            </g>
-            <g class="pfp-blade-slice" id="pfp-nav-donate" data-nav="donate" data-title="Support runeaphobia" data-short="Support" data-glow="#fb7185" role="button" tabindex="0" aria-label="Support runeaphobia" style="--glow: #fb7185;">
-                <path class="blade-slice-bg" d="M 165.16 229.02 A 118.00 118.00 0 0 1 74.84 229.02 L 97.23 174.97 A 59.50 59.50 0 0 0 142.77 174.97 Z" fill="url(#grad-pfp-nav-donate)" />
-                <path class="blade-slice-shine" d="M 165.16 229.02 A 118.00 118.00 0 0 1 74.84 229.02 L 86.04 201.99 A 88.75 88.75 0 0 0 153.96 201.99 Z" fill="url(#blade-gloss-grad)" pointer-events="none" />
-                <foreignObject x="107.0" y="195.8" width="26" height="26" class="blade-fo">
-                    <div xmlns="http://www.w3.org/1999/xhtml" class="blade-icon-wrap">
-                        <i class="fa fa-heart"></i>
-                    </div>
-                </foreignObject>
-            </g>
-            <g class="pfp-blade-slice" id="pfp-nav-cs" data-nav="cs" data-title="CS Stats (CSRep / Leetify)" data-short="CS Stats" data-glow="#fb923c" role="button" tabindex="0" aria-label="CS Stats (CSRep / Leetify)" style="--glow: #fb923c;">
-                <path class="blade-slice-bg" d="M 74.84 229.02 A 118.00 118.00 0 0 1 10.98 165.16 L 65.03 142.77 A 59.50 59.50 0 0 0 97.23 174.97 Z" fill="url(#grad-pfp-nav-cs)" />
-                <path class="blade-slice-shine" d="M 74.84 229.02 A 118.00 118.00 0 0 1 10.98 165.16 L 38.01 153.96 A 88.75 88.75 0 0 0 86.04 201.99 Z" fill="url(#blade-gloss-grad)" pointer-events="none" />
-                <foreignObject x="44.2" y="169.8" width="26" height="26" class="blade-fo">
-                    <div xmlns="http://www.w3.org/1999/xhtml" class="blade-icon-wrap">
-                        <i class="fa fa-crosshairs"></i>
-                    </div>
-                </foreignObject>
-            </g>
-            <g class="pfp-blade-slice" id="pfp-nav-age" data-nav="age" data-title="Age Calculator" data-short="Age" data-glow="#4ade80" role="button" tabindex="0" aria-label="Age Calculator" style="--glow: #4ade80;">
-                <path class="blade-slice-bg" d="M 10.98 165.16 A 118.00 118.00 0 0 1 10.98 74.84 L 65.03 97.23 A 59.50 59.50 0 0 0 65.03 142.77 Z" fill="url(#grad-pfp-nav-age)" />
-                <path class="blade-slice-shine" d="M 10.98 165.16 A 118.00 118.00 0 0 1 10.98 74.84 L 38.01 86.04 A 88.75 88.75 0 0 0 38.01 153.96 Z" fill="url(#blade-gloss-grad)" pointer-events="none" />
-                <foreignObject x="18.2" y="107.0" width="26" height="26" class="blade-fo">
-                    <div xmlns="http://www.w3.org/1999/xhtml" class="blade-icon-wrap">
-                        <i class="fa fa-birthday-cake"></i>
-                    </div>
-                </foreignObject>
-            </g>
-            <g class="pfp-blade-slice" id="pfp-nav-cursed" data-nav="cursed" data-title="Cursed Obfuscator" data-short="Cursed" data-glow="#e879f9" role="link" tabindex="0" aria-label="Cursed Obfuscator" style="--glow: #e879f9;">
-                <path class="blade-slice-bg" d="M 10.98 74.84 A 118.00 118.00 0 0 1 74.84 10.98 L 97.23 65.03 A 59.50 59.50 0 0 0 65.03 97.23 Z" fill="url(#grad-pfp-nav-cursed)" />
-                <path class="blade-slice-shine" d="M 10.98 74.84 A 118.00 118.00 0 0 1 74.84 10.98 L 86.04 38.01 A 88.75 88.75 0 0 0 38.01 86.04 Z" fill="url(#blade-gloss-grad)" pointer-events="none" />
-                <foreignObject x="44.2" y="44.2" width="26" height="26" class="blade-fo">
-                    <div xmlns="http://www.w3.org/1999/xhtml" class="blade-icon-wrap">
-                        <img src="images/logos/cursed.png" alt="Cursed" class="cursed-nav-icon" onerror="this.style.display='none';this.parentElement.insertAdjacentHTML('beforeend','<i class=&quot;fa fa-shield&quot;></i>');" />
-                    </div>
-                </foreignObject>
-            </g>
+                        <g class="pfp-blade-slice" id="pfp-nav-chars" data-nav="characters" data-title="Characters • Reference Sheets" data-short="Characters" data-glow="#c084fc" role="button" tabindex="0" aria-label="Characters • Reference Sheets" style="--glow: #c084fc;">
+                            <path class="blade-slice-bg" d="M 74.84 10.98 A 118.00 118.00 0 0 1 165.16 10.98 L 142.77 65.03 A 59.50 59.50 0 0 0 97.23 65.03 Z" fill="url(#grad-pfp-nav-chars)" />
+                            <path class="blade-slice-shine" d="M 74.84 10.98 A 118.00 118.00 0 0 1 165.16 10.98 L 153.96 38.01 A 88.75 88.75 0 0 0 86.04 38.01 Z" fill="url(#blade-gloss-grad)" pointer-events="none" />
+                            <foreignObject x="107.0" y="18.2" width="26" height="26" class="blade-fo">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="blade-icon-wrap">
+                                    <i class="fa fa-paint-brush"></i>
+                                </div>
+                            </foreignObject>
+                        </g>
+                        <g class="pfp-blade-slice" id="pfp-nav-music" data-nav="music" data-title="Music Player" data-short="Music" data-glow="#fbbf24" role="button" tabindex="0" aria-label="Music Player" style="--glow: #fbbf24;">
+                            <path class="blade-slice-bg" d="M 165.16 10.98 A 118.00 118.00 0 0 1 229.02 74.84 L 174.97 97.23 A 59.50 59.50 0 0 0 142.77 65.03 Z" fill="url(#grad-pfp-nav-music)" />
+                            <path class="blade-slice-shine" d="M 165.16 10.98 A 118.00 118.00 0 0 1 229.02 74.84 L 201.99 86.04 A 88.75 88.75 0 0 0 153.96 38.01 Z" fill="url(#blade-gloss-grad)" pointer-events="none" />
+                            <foreignObject x="169.8" y="44.2" width="26" height="26" class="blade-fo">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="blade-icon-wrap">
+                                    <i class="fa fa-music"></i>
+                                </div>
+                            </foreignObject>
+                        </g>
+                        <g class="pfp-blade-slice" id="pfp-nav-about" data-nav="about" data-title="About runeaphobia" data-short="About" data-glow="#38bdf8" role="button" tabindex="0" aria-label="About runeaphobia" style="--glow: #38bdf8;">
+                            <path class="blade-slice-bg" d="M 229.02 74.84 A 118.00 118.00 0 0 1 229.02 165.16 L 174.97 142.77 A 59.50 59.50 0 0 0 174.97 97.23 Z" fill="url(#grad-pfp-nav-about)" />
+                            <path class="blade-slice-shine" d="M 229.02 74.84 A 118.00 118.00 0 0 1 229.02 165.16 L 201.99 153.96 A 88.75 88.75 0 0 0 201.99 86.04 Z" fill="url(#blade-gloss-grad)" pointer-events="none" />
+                            <foreignObject x="195.8" y="107.0" width="26" height="26" class="blade-fo">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="blade-icon-wrap">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                            </foreignObject>
+                        </g>
+                        <g class="pfp-blade-slice" id="pfp-nav-links" data-nav="links" data-title="Links & Socials" data-short="Links" data-glow="#818cf8" role="button" tabindex="0" aria-label="Links & Socials" style="--glow: #818cf8;">
+                            <path class="blade-slice-bg" d="M 229.02 165.16 A 118.00 118.00 0 0 1 165.16 229.02 L 142.77 174.97 A 59.50 59.50 0 0 0 174.97 142.77 Z" fill="url(#grad-pfp-nav-links)" />
+                            <path class="blade-slice-shine" d="M 229.02 165.16 A 118.00 118.00 0 0 1 165.16 229.02 L 153.96 201.99 A 88.75 88.75 0 0 0 201.99 153.96 Z" fill="url(#blade-gloss-grad)" pointer-events="none" />
+                            <foreignObject x="169.8" y="169.8" width="26" height="26" class="blade-fo">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="blade-icon-wrap">
+                                    <i class="fa fa-link"></i>
+                                </div>
+                            </foreignObject>
+                        </g>
+                        <g class="pfp-blade-slice" id="pfp-nav-donate" data-nav="donate" data-title="Support runeaphobia" data-short="Support" data-glow="#fb7185" role="button" tabindex="0" aria-label="Support runeaphobia" style="--glow: #fb7185;">
+                            <path class="blade-slice-bg" d="M 165.16 229.02 A 118.00 118.00 0 0 1 74.84 229.02 L 97.23 174.97 A 59.50 59.50 0 0 0 142.77 174.97 Z" fill="url(#grad-pfp-nav-donate)" />
+                            <path class="blade-slice-shine" d="M 165.16 229.02 A 118.00 118.00 0 0 1 74.84 229.02 L 86.04 201.99 A 88.75 88.75 0 0 0 153.96 201.99 Z" fill="url(#blade-gloss-grad)" pointer-events="none" />
+                            <foreignObject x="107.0" y="195.8" width="26" height="26" class="blade-fo">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="blade-icon-wrap">
+                                    <i class="fa fa-heart"></i>
+                                </div>
+                            </foreignObject>
+                        </g>
+                        <g class="pfp-blade-slice" id="pfp-nav-cs" data-nav="cs" data-title="CS Stats (CSRep / Leetify)" data-short="CS Stats" data-glow="#fb923c" role="button" tabindex="0" aria-label="CS Stats (CSRep / Leetify)" style="--glow: #fb923c;">
+                            <path class="blade-slice-bg" d="M 74.84 229.02 A 118.00 118.00 0 0 1 10.98 165.16 L 65.03 142.77 A 59.50 59.50 0 0 0 97.23 174.97 Z" fill="url(#grad-pfp-nav-cs)" />
+                            <path class="blade-slice-shine" d="M 74.84 229.02 A 118.00 118.00 0 0 1 10.98 165.16 L 38.01 153.96 A 88.75 88.75 0 0 0 86.04 201.99 Z" fill="url(#blade-gloss-grad)" pointer-events="none" />
+                            <foreignObject x="44.2" y="169.8" width="26" height="26" class="blade-fo">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="blade-icon-wrap">
+                                    <i class="fa fa-crosshairs"></i>
+                                </div>
+                            </foreignObject>
+                        </g>
+                        <g class="pfp-blade-slice" id="pfp-nav-age" data-nav="age" data-title="Age Calculator" data-short="Age" data-glow="#4ade80" role="button" tabindex="0" aria-label="Age Calculator" style="--glow: #4ade80;">
+                            <path class="blade-slice-bg" d="M 10.98 165.16 A 118.00 118.00 0 0 1 10.98 74.84 L 65.03 97.23 A 59.50 59.50 0 0 0 65.03 142.77 Z" fill="url(#grad-pfp-nav-age)" />
+                            <path class="blade-slice-shine" d="M 10.98 165.16 A 118.00 118.00 0 0 1 10.98 74.84 L 38.01 86.04 A 88.75 88.75 0 0 0 38.01 153.96 Z" fill="url(#blade-gloss-grad)" pointer-events="none" />
+                            <foreignObject x="18.2" y="107.0" width="26" height="26" class="blade-fo">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="blade-icon-wrap">
+                                    <i class="fa fa-birthday-cake"></i>
+                                </div>
+                            </foreignObject>
+                        </g>
+                        <g class="pfp-blade-slice" id="pfp-nav-cursed" data-nav="cursed" data-title="Cursed Obfuscator" data-short="Cursed" data-glow="#e879f9" role="link" tabindex="0" aria-label="Cursed Obfuscator" style="--glow: #e879f9;">
+                            <path class="blade-slice-bg" d="M 10.98 74.84 A 118.00 118.00 0 0 1 74.84 10.98 L 97.23 65.03 A 59.50 59.50 0 0 0 65.03 97.23 Z" fill="url(#grad-pfp-nav-cursed)" />
+                            <path class="blade-slice-shine" d="M 10.98 74.84 A 118.00 118.00 0 0 1 74.84 10.98 L 86.04 38.01 A 88.75 88.75 0 0 0 38.01 86.04 Z" fill="url(#blade-gloss-grad)" pointer-events="none" />
+                            <foreignObject x="44.2" y="44.2" width="26" height="26" class="blade-fo">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="blade-icon-wrap">
+                                    <img src="images/logos/cursed.png" alt="Cursed" class="cursed-nav-icon" onerror="this.style.display='none';this.parentElement.insertAdjacentHTML('beforeend','<i class=&quot;fa fa-shield&quot;></i>');" />
+                                </div>
+                            </foreignObject>
+                        </g>
                         <!-- Dividing spoke lines & concentric borders connecting directly to PFP -->
                         <g class="blade-spoke-grid" pointer-events="none">
                             <circle cx="120" cy="120" r="59.5" fill="none" stroke="rgba(255, 255, 255, 0.95)" stroke-width="2.4" />
@@ -3968,7 +3968,7 @@
             <i class="fa fa-times" style="font-size: 15px;"></i>
         </button>
     </div>
-    
+
     <div class="donate-xbox-body">
         <!-- Quick Tip Presets -->
         <div class="donate-presets" role="radiogroup" aria-label="Choose tip amount">
@@ -3997,7 +3997,7 @@
                 <span id="copy-cashtag-label">Copy</span>
             </button>
         </div>
-        
+
         <div class="donate-footnote">
             <i class="fa fa-shield"></i> Official Cash App • Instant &amp; Direct Support
         </div>
@@ -4163,14 +4163,14 @@
                 </div>
             </div>
             <div style="display: flex; align-items: center; gap: 10px; z-index: 2;">
-                
+
                 <button type="button" class="xbox-blade-close-btn close-modal" id="close-cs-modal" title="Close">
                     <i class="fa fa-times" style="font-size: 15px;"></i>
                 </button>
             </div>
         </div>
 
-        
+
 
         <!-- Xbox 360 Tab Navigation -->
         <div class="cs-xbox-tabs" role="tablist">
@@ -4187,13 +4187,13 @@
 
         <!-- Tab: CSRep Embed -->
         <div class="cs-dashboard-body" id="cs-tab-content-csrep-embed" style="display: flex; padding: 0; height: 550px; flex-direction: column;">
-            
+
             <iframe src="https://csrep.gg/player/76561199858563478" style="width: 100%; flex: 1; border: none; background: #0f1015;" title="CSRep Embed"></iframe>
         </div>
 
         <!-- Tab: Leetify -->
         <div class="cs-dashboard-body" id="cs-tab-content-leetify-embed" style="display: none; padding: 0; height: 550px; flex-direction: column;">
-            
+
             <iframe src="https://leetify.com/app/profile/76561199858563478" style="width: 100%; flex: 1; border: none; background: #0f1015;" title="Leetify"></iframe>
         </div>
 
@@ -4440,7 +4440,7 @@
                 <div id="game-stage-5-questionnaire" style="width: 100%;">
                     <h2 style="font-family: var(--font-serif); font-size: 1.8rem; color: #a78bfa; margin-bottom: 5px;">Verification of Oldness</h2>
                     <p style="margin-bottom: 12px; font-size: 12px; opacity: 0.85;">Prove you are a real adult to access this content for real for real</p>
-                    
+
                     <!-- Progress header -->
                     <div id="nyarch-progress-header" style="display: flex; justify-content: center; font-size: 11px; opacity: 0.8; margin-bottom: 12px;">
                         <span>Question <span id="nyarch-current-num">1</span> / 10</span>
@@ -4473,12 +4473,12 @@
                     <div class="spinner" style="border: 4px solid rgba(167,139,250,0.1); border-left-color: #8b5cf6; width: 50px; height: 50px; border-radius: 50%; margin: 0 auto 20px; animation: spin 1s linear infinite;"></div>
                     <h3 style="font-family: var(--font-serif); font-size: 1.5rem; color: #a78bfa; margin-bottom: 10px;">AI Age Analyzer v1.0</h3>
                     <p style="font-size: 13px; opacity: 0.8; margin-bottom: 15px;">Synthesizing dataset with your choices...</p>
-                    
+
                     <!-- Progress bar -->
                     <div style="background: rgba(255, 255, 255, 0.05); border-radius: 10px; height: 16px; width: 100%; border: 1px solid rgba(167, 139, 250, 0.2); overflow: hidden; margin-bottom: 15px;">
                         <div id="eval-progress" style="background: linear-gradient(90deg, #8b5cf6, #ec4899); height: 100%; width: 0%;"></div>
                     </div>
-                    
+
                     <!-- Subtitle -->
                     <div id="eval-subtitle" style="font-family: var(--font-mono); font-size: 13px; color: #fbbf24; font-weight: bold; min-height: 24px;">Analyzing profile...</div>
                 </div>
@@ -4486,11 +4486,11 @@
                 <!-- Result confirmation screen -->
                 <div id="game-stage-5-result" style="width: 100%; display: none; text-align: center; padding: 25px 15px; background: rgba(10, 10, 20, 0.95); border-radius: 20px; border: 1px solid rgba(167, 139, 250, 0.4);">
                     <h3 style="font-family: var(--font-serif); font-size: 1.6rem; color: #a78bfa; margin-bottom: 15px;">AI Diagnosis Complete</h3>
-                    
+
                     <div style="background: rgba(0,0,0,0.4); border-radius: 16px; border: 1px solid rgba(167,139,250,0.2); padding: 20px; margin-bottom: 20px;">
                         <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.75; margin-bottom: 5px;">Estimated Age</div>
                         <div id="result-estimated-age" style="font-size: 4rem; font-weight: 900; line-height: 1; color: #fbbf24; text-shadow: 0 0 15px rgba(251,191,36,0.4); margin-bottom: 10px;">24</div>
-                        
+
                         <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.75; margin-bottom: 5px;">Bracket Category</div>
                         <div id="result-bracket-label" style="font-size: 1.15rem; font-weight: bold; color: #f43f5e; line-height: 1.3;">Here you go welcome to Nyarch 😎</div>
                     </div>
@@ -4520,7 +4520,7 @@
                     <button class="age-btn no" id="back-to-passcode-btn-5" style="width: 100%;">Close</button>
                 </div>
             </div>
-    </div>
+        </div>
 
     </div>
 </div>
@@ -6595,15 +6595,15 @@
         const rect = pfpNavHub.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
-        
+
         const maxRange = Math.max(window.innerWidth, window.innerHeight) * 0.55;
         const dx = Math.max(-1, Math.min(1, (e.clientX - centerX) / maxRange));
         const dy = Math.max(-1, Math.min(1, (e.clientY - centerY) / maxRange));
-        
+
         const MAX_TILT_DEG = 15;
         _targetTiltX = -dy * MAX_TILT_DEG;
         _targetTiltY = dx * MAX_TILT_DEG;
-        
+
         if (!_tiltRafId) {
             _tiltRafId = requestAnimationFrame(_animateHubTilt);
         }
@@ -6709,7 +6709,7 @@
             }
             const nav = slice.getAttribute('data-nav');
             const href = slice.getAttribute('data-href');
-            
+
             playXbox360EnterSound();
             closePfpMenu({ silent: true });
 
@@ -7010,6 +7010,15 @@
     const VERIFY_API_URL = 'https://hollynttbackend.vercel.app/api/verify';
     const EVENT_API_URL = 'https://hollynttbackend.vercel.app/api/event';
     const DISCORD_AUTH_URL = 'https://hollynttbackend.vercel.app/api/discord-auth';
+    // Fallback signaling channel for the OAuth popup -> opener handoff.
+    // window.opener is unreliable here: Discord's authorize page sets a
+    // Cross-Origin-Opener-Policy header, and once the popup navigates there
+    // and back, Chrome/Firefox permanently null out window.opener even
+    // though the popup ends up back on our own origin. localStorage + the
+    // 'storage' event don't depend on window.opener at all, so they still
+    // work when that happens.
+    const DISCORD_POPUP_RESULT_KEY = '__rp_discord_popup_result';
+    const DISCORD_POPUP_WINDOW_NAME = 'rp_discord_oauth';
     const DIDIT_SESSION_API_URL = 'https://hollynttbackend.vercel.app/api/didit-session';
     const DIDIT_CLAIM_API_URL = 'https://hollynttbackend.vercel.app/api/didit-claim';
     const DIDIT_TOKEN_KEY = '__rp_age_didit_token'; // localStorage — persists across visits on purpose
@@ -7443,7 +7452,7 @@
 
         let popup = null;
         try {
-            popup = window.open(url, 'rp_discord_oauth', features);
+            popup = window.open(url, DISCORD_POPUP_WINDOW_NAME, features);
         } catch (_) {
             popup = null;
         }
@@ -7458,8 +7467,13 @@
         const origin = location.origin;
         let settled = false;
 
+        // Clear out any stale result from a previous run before we start
+        // waiting, so we don't react to an old value still sitting in storage.
+        try { localStorage.removeItem(DISCORD_POPUP_RESULT_KEY); } catch (_) {}
+
         function cleanup() {
             window.removeEventListener('message', onMessage);
+            window.removeEventListener('storage', onStorage);
             if (timer) clearInterval(timer);
         }
 
@@ -7467,15 +7481,13 @@
             if (settled) return;
             settled = true;
             cleanup();
+            try { localStorage.removeItem(DISCORD_POPUP_RESULT_KEY); } catch (_) {}
             try { if (popup && !popup.closed) popup.close(); } catch (_) {}
             if (onDone) onDone(ok, payload || null);
         }
 
-        function onMessage(ev) {
-            if (ev.origin !== origin) return;
-            const data = ev.data;
+        function handleResultPayload(data) {
             if (!data || data.type !== 'rp_discord_auth') return;
-
             if (data.ok && data.user && data.user.username) {
                 saveDiscordIdentity(
                     data.user.username,
@@ -7490,10 +7502,33 @@
             }
         }
 
-        window.addEventListener('message', onMessage);
+        function onMessage(ev) {
+            if (ev.origin !== origin) return;
+            handleResultPayload(ev.data);
+        }
 
-        // If user closes popup without finishing
+        // Fires in THIS window whenever the popup (same origin) writes to
+        // localStorage — works even when window.opener has been severed.
+        function onStorage(ev) {
+            if (ev.key !== DISCORD_POPUP_RESULT_KEY || !ev.newValue) return;
+            try {
+                handleResultPayload(JSON.parse(ev.newValue));
+            } catch (_) {}
+        }
+
+        window.addEventListener('message', onMessage);
+        window.addEventListener('storage', onStorage);
+
+        // If user closes popup without finishing. Also acts as a backstop
+        // poll of localStorage in case a 'storage' event was ever missed.
         const timer = setInterval(function () {
+            try {
+                const raw = localStorage.getItem(DISCORD_POPUP_RESULT_KEY);
+                if (raw) {
+                    handleResultPayload(JSON.parse(raw));
+                    if (settled) return;
+                }
+            } catch (_) {}
             try {
                 if (!popup || popup.closed) {
                     finish(false, { error: 'popup_closed' });
@@ -8708,7 +8743,7 @@
 
     const EVAL_DURATION_SEC = 12;
     const EVAL_SUBTITLE_INTERVAL_SEC = 4.5;
-    
+
     const EVAL_SUBTITLES = [
         "Doing linear racism...",
         "Brainrotting the neural net...",
@@ -8749,13 +8784,13 @@
             text: "Which number do you prefer?",
             options: [
                 {image: null, text: "67",       age: 5, weight: 0.8,
-                 transition: {message: "ha ha how funny.", image: "baby.jpg", sound: "among.mp3"}},
+                    transition: {message: "ha ha how funny.", image: "baby.jpg", sound: "among.mp3"}},
                 {image: null, text: "69",       age: 24, weight: 0.2,
-                 transition: {message: "Nice.", image: "nice.png", sound: "nice.mp3"}},
+                    transition: {message: "Nice.", image: "nice.png", sound: "nice.mp3"}},
                 {image: null, text: "gugugaga", age: 1,  weight: 1.0,
-                 transition: {message: "Interesting...", image: "baby.jpg", sound: "among.mp3"}},
+                    transition: {message: "Interesting...", image: "baby.jpg", sound: "among.mp3"}},
                 {image: null, text: "420",       age: 30, weight: 0.3,
-                 transition: {message: "Huh", image: "thinking.png", sound: "among.mp3"}},
+                    transition: {message: "Huh", image: "thinking.png", sound: "among.mp3"}},
             ],
         },
         {
@@ -8763,13 +8798,13 @@
             text: "Which meme do you prefer?",
             options: [
                 {image: "minion.jpg", text: "",    age: 60, weight: 1.0,
-                 transition: {message: "Yeah funny", image: "thumbup.png"}},
+                    transition: {message: "Yeah funny", image: "thumbup.png"}},
                 {image: "ae.png", text: "",     age: 24, weight: 0.6,
-                 transition: {message: "Not very popular, I see...", image: "thinking.png"}},
+                    transition: {message: "Not very popular, I see...", image: "thinking.png"}},
                 {image: "skibidi.jpg", text: "", age: 3, weight: 1.0,
-                 transition: {message: "Skibidi sigma.", image: "skibidi.jpg", sound: "skibidi.mp3"}},
+                    transition: {message: "Skibidi sigma.", image: "skibidi.jpg", sound: "skibidi.mp3"}},
                 {image: "firstememe.jpg", text: null, age: 100, weight: 1.0,
-                 transition: {message: "You must be an og", image: "granny.png"}},
+                    transition: {message: "You must be an og", image: "granny.png"}},
             ],
         },
         {
@@ -8777,13 +8812,13 @@
             text: "Which one of these photos looks more like you?",
             options: [
                 {image: "ajanokoji.jpg",    age: 12, weight: 3.0,
-                 transition: {message: "You must have learned dark psychology at a young age", image: "psy.jpg"}},
+                    transition: {message: "You must have learned dark psychology at a young age", image: "psy.jpg"}},
                 {image: "ryan.jpg", age: 30, weight: 2.0,
-                 transition: {message: "Literally me!!", image: "ryan.jpg"}},
+                    transition: {message: "Literally me!!", image: "ryan.jpg"}},
                 {image: "trump.jpg", text: null, age: 80, weight: 2.0,
-                 transition: {message: "Make america great again! (maybe)", image: "trump.jpg"}},
+                    transition: {message: "Make america great again! (maybe)", image: "trump.jpg"}},
                 {image: "baby.jpg", text: null,         age: 1,  weight: 3.0,
-                 transition: {message: "Ohhh so you look like that...", image: "thinking.png", sound: "sus.mp3"}},
+                    transition: {message: "Ohhh so you look like that...", image: "thinking.png", sound: "sus.mp3"}},
             ],
         },
         {
@@ -8791,13 +8826,13 @@
             text: "Which UI looks better?",
             options: [
                 {image: "macos.png",        age: 3, weight: 0.2,
-                 transition: {message: "Mhmm.", image: "thinking.png"}},
+                    transition: {message: "Mhmm.", image: "thinking.png"}},
                 {image: "nyarch.png", text: null,       age: 19, weight: 0.4,
-                 transition: {message: "I use Linux btw.", image: "nice.png"}},
+                    transition: {message: "I use Linux btw.", image: "nice.png"}},
                 {image: "lunduke.png", text: null,    age: 45, weight: 1.0,
-                 transition: {message: "Retro computing journalist energy.", image: "thinking.png", sound: "lund.mp3"}},
+                    transition: {message: "Retro computing journalist energy.", image: "thinking.png", sound: "lund.mp3"}},
                 {image: "winzoz.jpg", age: 30, weight: 1.0,
-                 transition: {message: "Aero Glass enjoyer.", image: "thinking.png"}},
+                    transition: {message: "Aero Glass enjoyer.", image: "thinking.png"}},
             ],
         },
         {
@@ -8805,13 +8840,13 @@
             text: "If you were to search something, what would you use?",
             options: [
                 {image: "google.png", text: "Google",       age: 30, weight: 0.3,
-                 transition: {message: "Reliable, boring, gets the job done.", image: "thinking.png"}},
+                    transition: {message: "Reliable, boring, gets the job done.", image: "thinking.png"}},
                 {image: "tiktok.png", text: "TikTok",       age: 15, weight: 1.5,
-                 transition: {message: "Damn you are brainrotted.", image: "thinking.png", sound: "sus.mp3"}},
+                    transition: {message: "Damn you are brainrotted.", image: "thinking.png", sound: "sus.mp3"}},
                 {image: "h.jpg", text: "The big HH",  age: 24, weight: 1.8,
-                 transition: {message: "A man/woman/something of culture, I see", sound: "ahh.mp3", image: "thinking.png"}},
+                    transition: {message: "A man/woman/something of culture, I see", sound: "ahh.mp3", image: "thinking.png"}},
                 {image: null, text: "Ask Mommy",    age: 6,  weight: 3.0,
-                 transition: {message: "MOMMY!!! WHERE'S THE IPAD?!", image: "baby.jpg", sound: "sus.mp3"}},
+                    transition: {message: "MOMMY!!! WHERE'S THE IPAD?!", image: "baby.jpg", sound: "sus.mp3"}},
             ],
         },
         {
@@ -8819,13 +8854,13 @@
             text: "How many books have you read in your life?",
             options: [
                 {image: null, text: "Between 2 and 5",  age: 18, weight: 0.5,
-                 transition: {message: "Ouch", image: "thinking.png"}},
+                    transition: {message: "Ouch", image: "thinking.png"}},
                 {image: null, text: "Big flat 0",       age: 3,  weight: 2.0,
-                 transition: {message: "I see, who needs books when there is brainrot", image: "thinking.png", sound: "sus.mp3"}},
+                    transition: {message: "I see, who needs books when there is brainrot", image: "thinking.png", sound: "sus.mp3"}},
                 {image: null, text: "Between 5 and 20", age: 28, weight: 1.0,
-                 transition: {message: "Bro the fuck just use the internet.", image: "thinking.png"}},
+                    transition: {message: "Bro the fuck just use the internet.", image: "thinking.png"}},
                 {image: null, text: "More than 20",     age: 55, weight: 2.0,
-                 transition: {message: "Dark romance doesn't count.", image: "thinking.png"}},
+                    transition: {message: "Dark romance doesn't count.", image: "thinking.png"}},
             ],
         },
         {
@@ -8833,13 +8868,13 @@
             text: "When did Covid happen?",
             options: [
                 {image: null, text: "idk I was not born", age: 4,  weight: 2.0,
-                 transition: {message: "You are fresh. So fresh.", image: "baby.jpg", sound: "sus.mp3"}},
+                    transition: {message: "You are fresh. So fresh.", image: "baby.jpg", sound: "sus.mp3"}},
                 {image: null, text: "2020",               age: 25, weight: 1.0,
-                 transition: {message: "Yeah makes sense", image: "thumbup.png"}},
+                    transition: {message: "Yeah makes sense", image: "thumbup.png"}},
                 {image: null, text: "2033 and 2020",      age: -23, weight: 8.0,
-                 transition: {message: "A time traveler duh", image: "thinking.png"}},
+                    transition: {message: "A time traveler duh", image: "thinking.png"}},
                 {image: null, text: "Never happened",     age: 70, weight: 1.0,
-                 transition: {message: "Yeah it was everything to put 5G in our veins", image: "thinking.png", sound: "sus.mp3"}},
+                    transition: {message: "Yeah it was everything to put 5G in our veins", image: "thinking.png", sound: "sus.mp3"}},
             ],
         },
         {
@@ -8847,13 +8882,13 @@
             text: "Which anime do you prefer?",
             options: [
                 {image: null, text: "Katsudō Shashin", age: 90, weight: 1.0,
-                 transition: {message: "Must have been fun times.", image: "granny.png"}},
+                    transition: {message: "Must have been fun times.", image: "granny.png"}},
                 {image: null, text: "JoJo",            age: 27, weight: 1.3,
-                 transition: {message: "You expected a transition screen but it was me, DIO!", image: "dio.jpg"}},
+                    transition: {message: "You expected a transition screen but it was me, DIO!", image: "dio.jpg"}},
                 {image: null, text: "Attack on Titan", age: 17, weight: 0.8,
-                 transition: {message: "Code Geass is better tbh", image: "thinking.png"}},
+                    transition: {message: "Code Geass is better tbh", image: "thinking.png"}},
                 {image: null, text: "Solo Leveling",   age: 10, weight: 2.0,
-                 transition: {message: "Aura > Plot apparently", image: "sololev.jpg", sound: "auraa.mp3"}},
+                    transition: {message: "Aura > Plot apparently", image: "sololev.jpg", sound: "auraa.mp3"}},
             ],
         },
         {
@@ -8861,13 +8896,13 @@
             text: "Which operating system do you prefer?",
             options: [
                 {image: null, text: "Linux",    age: 19, weight: 1.0,
-                 transition: {message: "I use Linux btw.", image: "nice.png"}},
+                    transition: {message: "I use Linux btw.", image: "nice.png"}},
                 {image: null, text: "iPadOS",    age: 4, weight: 2.0,
-                 transition: {message: "Huh I see, a nice screen to watch skibidi", image: null}},
+                    transition: {message: "Huh I see, a nice screen to watch skibidi", image: null}},
                 {image: null, text: "Windows 7", age: 40, weight: 2.0,
-                 transition: {message: "The last good Windows. We weep for it.", image: null}},
+                    transition: {message: "The last good Windows. We weep for it.", image: null}},
                 {image: null, text: "MS-DOS",    age: 75, weight: 1.0,
-                 transition: {message: "C:\\>_  You typed your first letter this way.", image: null}},
+                    transition: {message: "C:\\>_  You typed your first letter this way.", image: null}},
             ],
         },
         {
@@ -8875,13 +8910,13 @@
             text: "Which game do you prefer?",
             options: [
                 {image: null, text: "Minecraft",   age: 22, weight: 2.0,
-                 transition: {message: "Peakest game in history.", image: null}},
+                    transition: {message: "Peakest game in history.", image: null}},
                 {image: null, text: "Roblox",      age: 8, weight: 3.0,
-                 transition: {message: "Oof.", image: "roblox.jpg", sound: "oof.mp3"}},
+                    transition: {message: "Oof.", image: "roblox.jpg", sound: "oof.mp3"}},
                 {image: null, text: "Candy Crush", age: 60, weight: 3.0,
-                 transition: {message: "Just one more level, then bed. (Narrator: there were more.)", image: null}},
+                    transition: {message: "Just one more level, then bed. (Narrator: there were more.)", image: null}},
                 {image: null, text: "Hoop rolling", age: 85, weight: 3.0,
-                 transition: {message: "The best ones are the simplest", image: null}},
+                    transition: {message: "The best ones are the simplest", image: null}},
             ],
         },
     ];
@@ -8913,7 +8948,7 @@
             const AudioContext = window.AudioContext || window.webkitAudioContext;
             if (!AudioContext) return;
             const ctx = new AudioContext();
-            
+
             if (soundName === 'among.mp3') {
                 playBeep(ctx, 440, 0.1, 'triangle');
                 setTimeout(() => playBeep(ctx, 466.16, 0.1, 'triangle'), 150);
@@ -8967,13 +9002,13 @@
         currentNyarchIndex = 0;
         selectedOptions = [];
         activeStage6Questions = [...QUESTIONS].sort(() => Math.random() - 0.5);
-        
+
         const qContainer = document.getElementById('game-stage-5-questionnaire');
         const transDiv = document.getElementById('game-stage-5-transition');
         const evalDiv = document.getElementById('game-stage-5-evaluating');
         const resultDiv = document.getElementById('game-stage-5-result');
         const sDiv = document.getElementById('game-stage-5-success');
-        
+
         if (qContainer) qContainer.style.display = 'block';
         if (transDiv) transDiv.style.display = 'none';
         if (evalDiv) evalDiv.style.display = 'none';
@@ -8986,19 +9021,19 @@
     function renderAssetVisual(filename, containerId) {
         const container = document.getElementById(containerId);
         if (!container) return;
-        
+
         if (!filename) {
             container.style.display = 'none';
             return;
         }
-        
+
         container.style.display = 'flex';
         const asset = imageAssetMap[filename] || { emoji: "❓", title: filename };
-        
-        const mediaHtml = asset.url 
+
+        const mediaHtml = asset.url
             ? `<img src="${asset.url}" alt="${asset.title}" style="width: 100%; max-height: 90px; object-fit: cover; border-radius: 8px; margin-bottom: 6px; border: 1px solid rgba(255,255,255,0.1);" />`
             : `<span style="font-size: 32px; margin-bottom: 4px;">${asset.emoji}</span>`;
-        
+
         container.innerHTML = `
             <div class="asset-card" style="
                 display: flex;
@@ -9054,10 +9089,10 @@
         q.options.forEach((opt, idx) => {
             const btn = document.createElement('button');
             btn.className = 'nyarch-option-btn';
-            
+
             const letter = String.fromCharCode(65 + idx);
             let contentHtml = `<span style="font-size: 10px; opacity: 0.6; font-weight: bold; align-self: flex-start; margin-bottom: 2px;">Option ${letter}</span>`;
-            
+
             let labelText = opt.text;
             if (labelText === "" || labelText === null) {
                 labelText = "";
@@ -9065,7 +9100,7 @@
 
             if (opt.image) {
                 const asset = imageAssetMap[opt.image] || { emoji: "❓", title: opt.image };
-                const optionImgHtml = asset.url 
+                const optionImgHtml = asset.url
                     ? `<img src="${asset.url}" alt="${asset.title}" style="width: 100%; height: 75px; object-fit: cover; border-radius: 8px; margin-bottom: 6px; border: 1px solid rgba(255,255,255,0.1);" />`
                     : `<span style="font-size: 26px; margin-bottom: 2px;">${asset.emoji}</span>`;
                 contentHtml += optionImgHtml;
@@ -9077,7 +9112,7 @@
             } else {
                 contentHtml += `<span style="font-size: 12px; font-weight: 500; text-align: center; color: #f8fafc; line-height: 1.3;">${labelText}</span>`;
             }
-            
+
             btn.innerHTML = contentHtml;
             btn.onclick = () => handleNyarchChoice(opt);
             optionsContainer.appendChild(btn);
@@ -9086,7 +9121,7 @@
 
     function handleNyarchChoice(opt) {
         selectedOptions.push(opt);
-        
+
         if (opt.transition && opt.transition.sound) {
             playSynthesizedSound(opt.transition.sound);
         } else {
@@ -9095,16 +9130,16 @@
 
         const qContainer = document.getElementById('game-stage-5-questionnaire');
         const transDiv = document.getElementById('game-stage-5-transition');
-        
+
         if (qContainer) qContainer.style.display = 'none';
         if (transDiv) transDiv.style.display = 'block';
 
         const msgEl = document.getElementById('transition-msg');
         const emojiEl = document.getElementById('transition-emoji');
         const imgContainer = document.getElementById('transition-img-box');
-        
+
         if (msgEl) msgEl.textContent = opt.transition?.message || "Interesting...";
-        
+
         if (opt.transition?.image) {
             const asset = imageAssetMap[opt.transition.image] || { emoji: "🧠", title: opt.transition.image };
             if (emojiEl) emojiEl.textContent = asset.emoji;
@@ -9116,7 +9151,7 @@
 
         setTimeout(() => {
             if (transDiv) transDiv.style.display = 'none';
-            
+
             currentNyarchIndex++;
             if (currentNyarchIndex < activeStage6Questions.length) {
                 if (qContainer) qContainer.style.display = 'block';
@@ -9131,33 +9166,33 @@
         const qContainer = document.getElementById('game-stage-5-questionnaire');
         const transDiv = document.getElementById('game-stage-5-transition');
         const evalDiv = document.getElementById('game-stage-5-evaluating');
-        
+
         if (qContainer) qContainer.style.display = 'none';
         if (transDiv) transDiv.style.display = 'none';
         if (evalDiv) evalDiv.style.display = 'block';
-        
+
 
         const duration = EVAL_DURATION_SEC * 1000;
         const startTime = Date.now();
         const progressEl = document.getElementById('eval-progress');
         const subtitleEl = document.getElementById('eval-subtitle');
-        
+
         let subtitleIndex = 0;
         if (subtitleEl) subtitleEl.textContent = EVAL_SUBTITLES[0];
-        
+
         const subtitleInterval = setInterval(() => {
             subtitleIndex = (subtitleIndex + 1) % EVAL_SUBTITLES.length;
             if (subtitleEl) {
                 subtitleEl.textContent = EVAL_SUBTITLES[subtitleIndex];
             }
         }, EVAL_SUBTITLE_INTERVAL_SEC * 1000);
-        
+
         const progressInterval = setInterval(() => {
             const elapsed = Date.now() - startTime;
             const pct = Math.min(100, (elapsed / duration) * 100);
-            
+
             if (progressEl) progressEl.style.width = `${pct}%`;
-            
+
             if (elapsed >= duration) {
                 clearInterval(progressInterval);
                 clearInterval(subtitleInterval);
@@ -9169,20 +9204,20 @@
     function calculateEstimatedAge() {
         let weightedAgeSum = 0;
         let totalWeight = 0;
-        
+
         selectedOptions.forEach(opt => {
             weightedAgeSum += opt.age * opt.weight;
             totalWeight += opt.weight;
         });
-        
+
         let baseAge = 24;
         if (totalWeight > 0) {
             baseAge = weightedAgeSum / totalWeight;
         }
-        
+
         let finalAge = Math.round(baseAge);
         if (finalAge < 1) finalAge = 1;
-        
+
         return finalAge;
     }
 
@@ -9211,23 +9246,23 @@
     function showAIEvalResult() {
         const evalDiv = document.getElementById('game-stage-5-evaluating');
         const resultDiv = document.getElementById('game-stage-5-result');
-        
+
         if (evalDiv) evalDiv.style.display = 'none';
         if (resultDiv) resultDiv.style.display = 'block';
-        
+
         const estimatedAge = calculateEstimatedAge();
         lastEstimatedAge = estimatedAge;
         const bracketText = ageCategory(estimatedAge);
-        
+
         const ageValEl = document.getElementById('result-estimated-age');
         const bracketLabelEl = document.getElementById('result-bracket-label');
-        
+
         if (ageValEl) ageValEl.textContent = `${estimatedAge}`;
         if (bracketLabelEl) bracketLabelEl.textContent = bracketText;
-        
+
         const btnYes = document.getElementById('btn-confirm-age-yes');
         const btnNo = document.getElementById('btn-confirm-age-no');
-        
+
         if (btnYes) {
             btnYes.onclick = () => {
                 if (estimatedAge >= 18) {
@@ -9237,7 +9272,7 @@
                 }
             };
         }
-        
+
         if (btnNo) {
             btnNo.onclick = () => {
                 initStage5();
@@ -9249,11 +9284,11 @@
         const qContainer = document.getElementById('game-stage-5-questionnaire');
         const resultDiv = document.getElementById('game-stage-5-result');
         const sDiv = document.getElementById('game-stage-5-success');
-        
+
         if (qContainer) qContainer.style.display = 'none';
         if (resultDiv) resultDiv.style.display = 'none';
         if (sDiv) sDiv.style.display = 'block';
-        
+
         _stage5Cleared = true;   // private flag only
         const ageNum = (estimatedAge != null && Number.isFinite(estimatedAge))
             ? estimatedAge
@@ -9263,7 +9298,7 @@
             ? ('Stage 5 passed — estimated age ' + ageNum + ' / unlock')
             : 'Stage 5 passed — Age confirmed / unlock';
         try { reportSiteEvent('age_stage', ageLabel); } catch (_) {}
-        
+
         initStage5Success();
         // Request server token (if VERIFY_API_URL is set), then unlock
         (async function () {
@@ -9822,39 +9857,49 @@
         const params = new URLSearchParams(location.search || '');
         const discordError = params.get('discord_error');
         const extracted = extractDiscordAuthFromHash();
-        const isPopup = !!(window.opener && window.opener !== window);
+        // window.opener alone is NOT reliable here: Discord's authorize page
+        // sets Cross-Origin-Opener-Policy, which permanently nulls out
+        // window.opener once this popup navigates there and back, even
+        // though we land back on our own origin. window.name survives
+        // cross-origin navigation, so it's the source of truth for "am I
+        // the OAuth popup" — window.opener is only used opportunistically.
+        const isPopup = window.name === DISCORD_POPUP_WINDOW_NAME || !!(window.opener && window.opener !== window);
 
         if (isPopup) {
+            let resultPayload;
+            if (discordError) {
+                resultPayload = { type: 'rp_discord_auth', ok: false, error: discordError };
+            } else if (extracted && extracted.user) {
+                resultPayload = {
+                    type: 'rp_discord_auth',
+                    ok: true,
+                    user: extracted.user,
+                    refresh: extracted.refresh || ''
+                };
+            } else if (extracted && extracted.refresh) {
+                resultPayload = { type: 'rp_discord_auth', ok: false, error: 'expired', refresh: extracted.refresh };
+            } else {
+                resultPayload = { type: 'rp_discord_auth', ok: false, error: 'missing_token' };
+            }
+
+            // Primary channel: postMessage, when window.opener happens to
+            // still be intact.
             try {
-                if (discordError) {
-                    window.opener.postMessage(
-                        { type: 'rp_discord_auth', ok: false, error: discordError },
-                        location.origin
-                    );
-                } else if (extracted && extracted.user) {
-                    window.opener.postMessage(
-                        {
-                            type: 'rp_discord_auth',
-                            ok: true,
-                            user: extracted.user,
-                            refresh: extracted.refresh || ''
-                        },
-                        location.origin
-                    );
-                } else if (extracted && extracted.refresh) {
-                    window.opener.postMessage(
-                        { type: 'rp_discord_auth', ok: false, error: 'expired', refresh: extracted.refresh },
-                        location.origin
-                    );
-                } else {
-                    window.opener.postMessage(
-                        { type: 'rp_discord_auth', ok: false, error: 'missing_token' },
-                        location.origin
-                    );
+                if (window.opener) {
+                    window.opener.postMessage(resultPayload, location.origin);
                 }
             } catch (e) {
                 console.warn('popup postMessage failed', e);
             }
+            // Robust fallback: localStorage + the 'storage' event, which the
+            // opener listens for too. This works even when window.opener
+            // has been severed, since it doesn't depend on that reference.
+            try {
+                localStorage.setItem(DISCORD_POPUP_RESULT_KEY, JSON.stringify(resultPayload));
+            } catch (e) {
+                console.warn('popup localStorage signal failed', e);
+            }
+
             try { history.replaceState(null, '', location.pathname + location.search); } catch (_) {}
             try { window.close(); } catch (_) {}
             // If close is blocked, show a tiny done state
@@ -10178,7 +10223,7 @@
                     const _0x9f32 = hash[_0x2a9e("103")];
                     if (_0x221a < _0x9f32) {
                         const _0x7c21 = hash[_0x2a9e("104")](_0x221a);
-                        
+
                         const _0x54db = String[_0x2a9e("105")](~((~_0x7c21) - 3));
                         _0x4b7c += _0x54db;
                         _0x221a++;
@@ -10188,7 +10233,7 @@
                     break;
                 }
                 case 0x5e1a: {
-                    
+
                     if (typeof window === 'undefined' || typeof document === 'undefined') {
                         return _0x2a9e("102");
                     }
@@ -10407,7 +10452,7 @@
 
             const bubble = document.createElement('div');
             bubble.className = 'oc-bubble-slideshow';
-            
+
             const bubbleContent = document.createElement('div');
             bubbleContent.className = 'oc-bubble-content';
             bubble.appendChild(bubbleContent);
@@ -10516,8 +10561,8 @@
                 return file.path.substring(0, lastSlash) === era.path;
             });
             const isEra18 = era.displayName.toLowerCase().includes('18+') ||
-                            era.displayName.toLowerCase().includes('nsfw') ||
-                            eraFiles.some(f => f.path.toLowerCase().includes('nsfw') || f.path.toLowerCase().includes('18+'));
+                era.displayName.toLowerCase().includes('nsfw') ||
+                eraFiles.some(f => f.path.toLowerCase().includes('nsfw') || f.path.toLowerCase().includes('18+'));
 
             bubble.textContent = era.displayName;
             if (isEra18) {
@@ -10625,25 +10670,25 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-    const birthDate = '2005-01-15';
-    function calculateAge(birthDate) {
-        const today = new Date();
-        const birth = new Date(birthDate);
-        let age = today.getFullYear() - birth.getFullYear();
-        const m = today.getMonth() - birth.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
-            age--;
+        const birthDate = '2005-01-15';
+        function calculateAge(birthDate) {
+            const today = new Date();
+            const birth = new Date(birthDate);
+            let age = today.getFullYear() - birth.getFullYear();
+            const m = today.getMonth() - birth.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+                age--;
+            }
+            return age;
         }
-        return age;
-    }
 
-    function isBirthday(birthDate) {
-        const today = new Date();
-        const birth = new Date(birthDate);
-        return today.getMonth() === birth.getMonth() && today.getDate() === birth.getDate();
-    }
+        function isBirthday(birthDate) {
+            const today = new Date();
+            const birth = new Date(birthDate);
+            return today.getMonth() === birth.getMonth() && today.getDate() === birth.getDate();
+        }
 
-        
+
         const readmeContentEl = document.getElementById('readme-content');
 
         function loadReadme() {
@@ -10672,7 +10717,7 @@
                 });
         }
 
-        
+
         loadReadme();
 
         // Curved rotating Hollyn text around PFP circle
@@ -10829,7 +10874,7 @@
             });
         }
 
-                // Age Calculator Modal Setup
+        // Age Calculator Modal Setup
         (function setupAgeModal() {
             const modal = document.getElementById('age-modal');
             const closeBtn = document.getElementById('close-age-modal');
@@ -10859,7 +10904,7 @@
             });
         })();
 
-                // Cursed Obfuscator Modal Setup
+        // Cursed Obfuscator Modal Setup
         (function setupCursedModal() {
             const modal = document.getElementById('cursed-modal');
             const closeBtn = document.getElementById('close-cursed-modal');
@@ -10902,9 +10947,9 @@
             const modal = document.getElementById('cs-modal');
             const closeBtn = document.getElementById('close-cs-modal');
             const dockCs = document.getElementById('dock-cs-btn');
-            
-            
-            
+
+
+
             const webviewContainer = document.getElementById('cs-tab-content-webview');
             const tabs = document.querySelectorAll('.cs-xbox-tab, .cs-tab');
             const tabContents = {
@@ -10937,8 +10982,8 @@
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
                 switchTab(activeTab || 'csrep-embed');
-                
-                
+
+
             }
 
             function closeModal() {
@@ -11009,7 +11054,7 @@
                     document.body.removeChild(ta);
                 }
                 try { reportSiteEvent('button', 'Copied cashtag $runeaphobia'); } catch (_) {}
-                
+
                 // Micro celebratory burst
                 try {
                     if (typeof confetti === 'function') {
@@ -11068,7 +11113,7 @@
             });
         }
 
-        
+
         window.addEventListener('keydown', (e) => {
             if (e.shiftKey && e.key.toLowerCase() === 'd') {
                 window._app_x_mode = !window._app_x_mode;
@@ -11077,18 +11122,18 @@
         });
 
 
-            let isLocked = false;
+        let isLocked = false;
 
-            function triggerTamperLockout() {
-                if (window._app_x_mode || isLocked) return;
-                isLocked = true;
+        function triggerTamperLockout() {
+            if (window._app_x_mode || isLocked) return;
+            isLocked = true;
 
-                if (widget) {
-                    try { widget.pause(); } catch(e) {}
-                }
-                if (typeof stopReadyLoop === "function") stopReadyLoop();
+            if (widget) {
+                try { widget.pause(); } catch(e) {}
+            }
+            if (typeof stopReadyLoop === "function") stopReadyLoop();
 
-                document.body.innerHTML = `
+            document.body.innerHTML = `
           <div style="position:fixed;inset:0;background:#050505;color:#f87171;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Inter', sans-serif;z-index:99999999;text-align:center;padding:40px;user-select:none;">
             <div style="width:80px;height:80px;background:rgba(239,68,68,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:24px;border:1px solid rgba(239,68,68,0.2);box-shadow:0 0 30px rgba(239,68,68,0.1);">
               <i class="fa fa-ban" style="font-size:36px;color:#ef4444;"></i>
@@ -11105,7 +11150,7 @@
             </p>
           </div>
         `;
-            }
+        }
 
         document.addEventListener('visibilitychange', () => {
             document.body.classList.toggle('tab-hidden', document.hidden);

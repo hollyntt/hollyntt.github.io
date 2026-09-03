@@ -2290,7 +2290,7 @@ setTimeout(runAudit, 100);
                     }
                 }, 50);
             };`;
-            
+
             innerDefenses += `
             var __CURSED_MONITOR = {
                 score: 0,
@@ -2392,7 +2392,7 @@ setTimeout(runAudit, 100);
                 const hostnameVar = getVarName('current_hostname', symbolRandomization);
                 const isLocalVar = getVarName('is_local_host', symbolRandomization);
                 const errorMsgVar = getVarName('containment_error', symbolRandomization);
-                
+
                 let expectedText = 'Dynamic (Auto-Detect)';
                 let checkLogicStr = '';
 
@@ -2492,7 +2492,7 @@ setTimeout(runAudit, 100);
                 // Reliable open-DevTools detection belongs on the separate
                 // "DevTools Timing Detector" / "Timer-Debugger Delay" options.
                 const windowSizeFn = getVarName('check_window_size', symbolRandomization);
-                
+
                 innerDefenses += `
                 if (typeof console !== "undefined") {
                     try {
@@ -2669,7 +2669,7 @@ setTimeout(runAudit, 100);
                 const globalProxyCheck = getVarName('shield_proxy_audit', symbolRandomization);
                 const apiTrapCheck = getVarName('shield_override_audit', symbolRandomization);
                 const scriptDetector = getVarName('shield_tampermonkey_scan', symbolRandomization);
-                
+
                 innerDefenses += `
                 var ${globalProxyCheck} = function() {
                     try {
@@ -2786,7 +2786,7 @@ setTimeout(runAudit, 100);
                 const initConnType = getVarName('net_init_conn_type', symbolRandomization);
                 const initRtt = getVarName('net_init_rtt', symbolRandomization);
                 const netCheckFn = getVarName('net_anomaly_audit', symbolRandomization);
-                
+
                 innerDefenses += `
                 var ${initOnLine} = navigator.onLine;
                 var ${initConnType} = "";
@@ -2828,7 +2828,7 @@ setTimeout(runAudit, 100);
                 const mutationKey = getVarName('mutation_key', symbolRandomization);
                 const mutationPool = getVarName('mutation_pool', symbolRandomization);
                 const mutateEngine = getVarName('self_mutation_engine', symbolRandomization);
-                
+
                 innerDefenses += `
                 var ${mutationKey} = 0x57;
                 var ${mutationPool} = [102, 117, 110, 99, 116, 105, 111, 110, 32, 109, 117, 116, 97, 116, 105];
@@ -2854,7 +2854,7 @@ setTimeout(runAudit, 100);
             if (antiVm) {
                 const vmCheckFn = getVarName('detect_virtual_machine', symbolRandomization);
                 const userActiveVar = getVarName('user_interaction_detected', symbolRandomization);
-                
+
                 innerDefenses += `
                 var ${userActiveVar} = false;
                 var vm_detect_events = ["mousemove", "keydown", "click", "touchstart", "wheel"];
@@ -2990,7 +2990,7 @@ setTimeout(runAudit, 100);
                 `;
             }
 
-            
+
             if (fingerprintObf) {
                 const fpFn = getVarName('fp_obfuscate_engine', symbolRandomization);
                 innerDefenses += `
@@ -3125,7 +3125,7 @@ setTimeout(runAudit, 100);
             const runFnName = getVarName('initialize_defenses', symbolRandomization);
             // Strip // line-comments and collapse safely so advanced minification cannot
             // comment-out the rest of the script when newlines are removed.
-                        const safeDefensesBody = minifyJs(
+            const safeDefensesBody = minifyJs(
                 '(function(){function ' + runFnName + '(){' + innerDefenses +
                 '}if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",' + runFnName +
                 ');}else{' + runFnName + '();}})();'
@@ -3151,7 +3151,7 @@ setTimeout(runAudit, 100);
             paddingComment = `\n<!-- METADATA COMPILATION INTEGRITY: ${generateRandomBase64(randLen)} -->`;
         }
 
-                let mobileHelper = '';
+        let mobileHelper = '';
         if (mobileSupport) {
             mobileHelper = '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">' +
                 '<meta name="mobile-web-app-capable" content="yes">' +
@@ -3159,7 +3159,7 @@ setTimeout(runAudit, 100);
                 '<style id="cursed-mobile-support">html{-webkit-text-size-adjust:100%;touch-action:manipulation;}body{-webkit-tap-highlight-color:transparent;}@media (pointer:coarse){button,a,[role="button"]{min-height:44px;min-width:44px;}}</style>';
         }
 
-let finalOutput = '';
+        let finalOutput = '';
         if (method === 'html-entities-random') {
             finalOutput = githubPagesHelper + mobileHelper + shimScript + defensesScript + obfuscatedBody + paddingComment;
         } else {
@@ -3945,7 +3945,7 @@ let finalOutput = '';
             setTimeout(() => toast.remove(), 300);
         }, 3000);
     }
-    
+
     function updateSandboxView() {
         clearSandboxConsole();
         const iframe = document.getElementById('sandbox-iframe');
@@ -4736,42 +4736,42 @@ let finalOutput = '';
     }
 </script>
 
-    <div id="toast-container" class="fixed bottom-4 right-4 z-[9999] flex flex-col gap-2 pointer-events-none"></div>
-    <script>
-        const chartData = Array(60).fill(0);
-        const container = document.getElementById('entropy-chart-container');
-        const svg = d3.select("#entropy-chart-container")
-            .append("svg")
-            .attr("width", "100%")
-            .attr("height", "100%");
+<div id="toast-container" class="fixed bottom-4 right-4 z-[9999] flex flex-col gap-2 pointer-events-none"></div>
+<script>
+    const chartData = Array(60).fill(0);
+    const container = document.getElementById('entropy-chart-container');
+    const svg = d3.select("#entropy-chart-container")
+        .append("svg")
+        .attr("width", "100%")
+        .attr("height", "100%");
 
-        const line = d3.line()
-            .x((d, i) => (i / 59) * container.clientWidth)
-            .y(d => (1 - d / 100) * container.clientHeight)
-            .curve(d3.curveBasis);
+    const line = d3.line()
+        .x((d, i) => (i / 59) * container.clientWidth)
+        .y(d => (1 - d / 100) * container.clientHeight)
+        .curve(d3.curveBasis);
 
-        const path = svg.append("path")
-            .datum(chartData)
-            .attr("fill", "none")
-            .attr("stroke", "#34d399")
-            .attr("stroke-width", 2);
+    const path = svg.append("path")
+        .datum(chartData)
+        .attr("fill", "none")
+        .attr("stroke", "#34d399")
+        .attr("stroke-width", 2);
 
-        function updateChart() {
-            const entropyText = document.getElementById('stat-entropy').textContent;
-            const entropy = parseInt(entropyText) || 0;
-            chartData.push(entropy);
-            chartData.shift();
+    function updateChart() {
+        const entropyText = document.getElementById('stat-entropy').textContent;
+        const entropy = parseInt(entropyText) || 0;
+        chartData.push(entropy);
+        chartData.shift();
 
-            path.attr("d", line);
-        }
-        setInterval(updateChart, 1000);
+        path.attr("d", line);
+    }
+    setInterval(updateChart, 1000);
 
-        new ResizeObserver(() => {
-            line.x((d, i) => (i / 59) * container.clientWidth)
-                .y(d => (1 - d / 100) * container.clientHeight);
-            path.attr("d", line);
-        }).observe(container);
+    new ResizeObserver(() => {
+        line.x((d, i) => (i / 59) * container.clientWidth)
+            .y(d => (1 - d / 100) * container.clientHeight);
+        path.attr("d", line);
+    }).observe(container);
 
-    </script>
+</script>
 </body>
 </html>

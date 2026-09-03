@@ -3750,7 +3750,6 @@
     <script src="https://w.soundcloud.com/player/api.js"></script>
     <base target="_blank">
     <base target="_blank">
-    <script src="https://js.stile.id/v1/stile.js"></script>
 </head>
 <body>
 
@@ -4327,29 +4326,11 @@
             <p id="age-provider-intro" style="margin-bottom: 16px; font-size: 13px; opacity: 0.9; line-height: 1.4;">Pick one of the available age-verification providers. A successful 18+ verification unlocks the same site access regardless of provider.</p>
 
             <div id="age-provider-choice" style="display:flex;flex-direction:column;gap:10px;width:100%;margin-bottom:12px;">
-                <button class="age-btn yes" id="stile-provider-btn" style="width:100%;text-align:left;padding:15px 16px;">
-                    <i class="fa fa-shield-alt"></i> Stile
-                    <span style="display:block;font-size:11px;font-weight:500;opacity:.72;margin-top:4px;margin-left:24px;">Age verification</span>
-                </button>
                 <button class="age-btn yes" id="didit-provider-btn" style="width:100%;text-align:left;padding:15px 16px;">
                     <i class="fa fa-id-card"></i> Didit
                     <span style="display:block;font-size:11px;font-weight:500;opacity:.72;margin-top:4px;margin-left:24px;">Free KYC verification</span>
                 </button>
             </div>
-
-            <div id="stile-panel" style="display:none;width:100%;">
-                <h3 style="margin:0 0 8px;font-size:16px;">Stile</h3>
-                <p style="margin-bottom:12px;font-size:12px;opacity:.82;line-height:1.4;">Complete the Stile age verification below. Your verification is confirmed by the server before access is unlocked.</p>
-                <div id="stile-status-msg" style="display:none;width:100%;margin-bottom:14px;padding:14px 16px;border-radius:14px;font-size:13px;line-height:1.4;"></div>
-                <div id="stile-frame-wrap" style="display:none;width:100%;min-height:480px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.1);margin-bottom:14px;background:#0f1015;">
-                    <stile-frame id="stile-frame" mode="inline" label="Verify age" min-height="480" workflow-id="" confirmation-url="https://hollynttbackend.vercel.app/api/stile-confirm"></stile-frame>
-                </div>
-                <div class="age-buttons" style="width:100%;">
-                    <button class="age-btn yes" id="stile-start-btn" style="width:100%;"><i class="fa fa-shield-alt"></i> Start Stile Verification</button>
-                    <button class="age-btn no" id="stile-back-btn" style="width:100%;background:rgba(255,255,255,.05);color:white;border:1px solid rgba(255,255,255,.1);">Back</button>
-                </div>
-            </div>
-
             <div id="didit-panel" style="display:none;width:100%;">
                 <h3 style="margin:0 0 8px;font-size:16px;">Didit</h3>
                 <p id="didit-intro-copy" style="margin-bottom:12px;font-size:12px;opacity:.82;line-height:1.4;">Complete the Free KYC verification in the embedded window below.</p>
@@ -7050,9 +7031,6 @@
     const DIDIT_CLAIM_API_URL = 'https://hollynttbackend.vercel.app/api/didit-claim';
     const DIDIT_TOKEN_KEY = '__rp_age_didit_token'; // legacy Didit token key
     const AGE_VERIFIED_TOKEN_KEY = '__rp_age_verified_token';
-    const STILE_SESSION_API_URL = 'https://hollynttbackend.vercel.app/api/stile-session';
-    const STILE_CONFIRM_API_URL = 'https://hollynttbackend.vercel.app/api/stile-confirm';
-    const STILE_VP_TOKEN_KEY = '__rp_stile_vp_token';
     const DISCORD_REFRESH_URL = 'https://hollynttbackend.vercel.app/api/discord-refresh';
 
     // Deploy detection: only reload after GitHub Actions run is COMPLETED + success
@@ -7844,15 +7822,8 @@
     const ageStepDidit = document.getElementById('age-step-didit');
     const ageProviderChoice = document.getElementById('age-provider-choice');
     const ageProviderIntro = document.getElementById('age-provider-intro');
-    const stilePanel = document.getElementById('stile-panel');
-    const stileProviderBtn = document.getElementById('stile-provider-btn');
     const diditProviderBtn = document.getElementById('didit-provider-btn');
     const ageProviderCancelBtn = document.getElementById('age-provider-cancel-btn');
-    const stileStartBtn = document.getElementById('stile-start-btn');
-    const stileBackBtn = document.getElementById('stile-back-btn');
-    const stileStatusMsg = document.getElementById('stile-status-msg');
-    const stileFrameWrap = document.getElementById('stile-frame-wrap');
-    const stileFrame = document.getElementById('stile-frame');
     const diditPanel = document.getElementById('didit-panel');
     const ageBtnUnder18 = document.getElementById('age-btn-under18');
     const playGameBtn = document.getElementById('play-game-btn');
@@ -9741,7 +9712,6 @@
     function showAgeProviderChoice() {
         if (ageProviderChoice) ageProviderChoice.style.display = 'flex';
         if (ageProviderIntro) ageProviderIntro.style.display = 'block';
-        if (stilePanel) stilePanel.style.display = 'none';
         if (diditPanel) diditPanel.style.display = 'none';
         if (ageProviderCancelBtn) ageProviderCancelBtn.style.display = 'block';
     }
@@ -9749,105 +9719,30 @@
         if (ageProviderChoice) ageProviderChoice.style.display = 'none';
         if (ageProviderIntro) ageProviderIntro.style.display = 'none';
         if (ageProviderCancelBtn) ageProviderCancelBtn.style.display = 'none';
-        if (stilePanel) stilePanel.style.display = which === 'stile' ? 'block' : 'none';
         if (diditPanel) diditPanel.style.display = which === 'didit' ? 'block' : 'none';
     }
-    function showStileStatus(text, tone) {
-        if (!stileStatusMsg) return;
-        stileStatusMsg.textContent = text;
-        stileStatusMsg.style.display = 'block';
-        const tones = {
-            info: ['rgba(255,255,255,.05)','rgba(255,255,255,.1)','#cbd5e1'],
-            error: ['rgba(248,113,113,.12)','rgba(248,113,113,.3)','#f87171'],
-            success: ['rgba(74,222,128,.12)','rgba(74,222,128,.3)','#4ade80']
-        };
-        const t = tones[tone] || tones.info;
-        stileStatusMsg.style.background = t[0];
-        stileStatusMsg.style.border = '1px solid ' + t[1];
-        stileStatusMsg.style.color = t[2];
+
+
+    try {
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok || !data.token) throw new Error(data.error || ('HTTP ' + res.status));
+        lsSet(AGE_VERIFIED_TOKEN_KEY, data.token);
+        lsDel(DIDIT_TOKEN_KEY);
+        unlockAllNsfw(true);
+    } catch (err) {
+    }
     }
 
-    let activeStileSessionId = null;
-    let stileStarted = false;
-
-    async function startStileVerification() {
-        if (!stileStartBtn || !stileFrame) return;
-        stileStartBtn.disabled = true;
-        stileStartBtn.textContent = 'Starting Stile…';
-        showStileStatus('Preparing Stile verification…', 'info');
-        try {
-            const res = await fetch(STILE_SESSION_API_URL, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    visitorId: getOrCreateVisitorId(),
-                    vpToken: lsGet(STILE_VP_TOKEN_KEY) || ''
-                })
-            });
-            const data = await res.json().catch(() => ({}));
-            if (!res.ok || !data.ok || !data.sessionId || !data.clientSecret) {
-                throw new Error(data.error || ('HTTP ' + res.status));
-            }
-            activeStileSessionId = data.sessionId;
-            stileStarted = true;
-            stileFrame.setAttribute('session-id', data.sessionId);
-            stileFrame.setAttribute('client-secret', data.clientSecret);
-            stileFrame.setAttribute('workflow-id', data.workflowId || '');
-            stileFrame.setAttribute('confirmation-url', STILE_CONFIRM_API_URL);
-            if (data.methods && Array.isArray(data.methods)) stileFrame.setAttribute('methods', data.methods.join(','));
-            if (data.ageTier) stileFrame.setAttribute('age-tier', data.ageTier);
-            if (stileFrameWrap) stileFrameWrap.style.display = 'block';
-            if (stileStartBtn) stileStartBtn.style.display = 'none';
-            showStileStatus('Complete the verification in the Stile window above.', 'info');
-        } catch (err) {
-            console.error('Stile start error:', err);
-            showStileStatus(err && err.message ? err.message : 'Could not start Stile verification. Please try again.', 'error');
-            stileStartBtn.disabled = false;
-            stileStartBtn.innerHTML = '<i class="fa fa-shield-alt"></i> Start Stile Verification';
-        }
-    }
-
-    async function handleStileServerConfirmed(sessionId) {
-        try {
-            if (!sessionId || (activeStileSessionId && sessionId !== activeStileSessionId)) return;
-            showStileStatus('Stile confirmed your verification. Finalizing access…', 'info');
-            const res = await fetch(STILE_CONFIRM_API_URL + '?sessionId=' + encodeURIComponent(sessionId) + '&visitorId=' + encodeURIComponent(getOrCreateVisitorId()) + '&claim=1');
-            const data = await res.json().catch(() => ({}));
-            if (!res.ok || !data.ok || !data.token) throw new Error(data.error || ('HTTP ' + res.status));
-            lsSet(AGE_VERIFIED_TOKEN_KEY, data.token);
-            // Keep one site-level cache token; the Stile VP token (if issued) is
-            // stored separately so Stile can recognize this returning browser.
-            lsDel(DIDIT_TOKEN_KEY);
-            try { reportSiteEvent('age_process', 'Stile verification approved'); } catch (_) {}
-            unlockAllNsfw(true);
-        } catch (err) {
-            console.error('Stile confirmation error:', err);
-            showStileStatus(err && err.message ? err.message : 'Stile verification could not be confirmed. Please try again.', 'error');
-            if (stileStartBtn) { stileStartBtn.style.display = 'block'; stileStartBtn.disabled = false; stileStartBtn.innerHTML = '<i class="fa fa-shield-alt"></i> Try Stile Again'; }
-        }
-    }
-
-    if (stileProviderBtn) stileProviderBtn.addEventListener('click', (e) => {
-        if (e && e.isTrusted === false) { window.triggerTamperLockout(); return; }
-        showAgeProviderPanel('stile');
+    if (e && e.isTrusted === false) { window.triggerTamperLockout(); return; }
     });
     if (diditProviderBtn) diditProviderBtn.addEventListener('click', (e) => {
         if (e && e.isTrusted === false) { window.triggerTamperLockout(); return; }
         showAgeProviderPanel('didit');
     });
-    if (stileStartBtn) stileStartBtn.addEventListener('click', (e) => {
-        if (e && e.isTrusted === false) { window.triggerTamperLockout(); return; }
-        startStileVerification();
+    if (e && e.isTrusted === false) { window.triggerTamperLockout(); return; }
     });
-    if (stileBackBtn) stileBackBtn.addEventListener('click', () => showAgeProviderChoice());
-    if (stileFrame) {
-        stileFrame.addEventListener('stile:verified', (e) => {
-            const vp = e && e.detail && e.detail.vpToken;
-            if (vp) lsSet(STILE_VP_TOKEN_KEY, String(vp));
-            showStileStatus('Verification completed. Waiting for secure server confirmation…', 'info');
-        });
-        stileFrame.addEventListener('stile:server-confirmed', (e) => handleStileServerConfirmed(e.detail && e.detail.sessionId ? e.detail.sessionId : activeStileSessionId));
-        stileFrame.addEventListener('stile:error', (e) => showStileStatus((e.detail && e.detail.message) || 'Stile verification failed. Please try again.', 'error'));
-        stileFrame.addEventListener('stile:review', () => showStileStatus('Your verification is under review. Access will remain locked until Stile confirms it.', 'info'));
+    const vp = e && e.detail && e.detail.vpToken;
+    });
     }
     if (ageProviderCancelBtn) ageProviderCancelBtn.addEventListener('click', (e) => {
         if (e && e.isTrusted === false) { window.triggerTamperLockout(); return; }

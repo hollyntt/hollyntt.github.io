@@ -7011,11 +7011,9 @@
        - Passcode is random per page load and never printed after the quiz.
        - No window.unlockAllNsfw / easy stage5Passed exposure.
        - Manual passcode entry still works for people who already have the current session value.
-       - When VERIFY_API_URL is set, unlock requires a short-lived token from your Vercel function.
-       - Leave VERIFY_API_URL empty to keep pure client-side behavior.
+    - Unlock requires a valid token issued by the Didit claim endpoint.
     */
     // Vercel age-unlock backend (project: hollynttbackend)
-    const VERIFY_API_URL = 'https://hollynttbackend.vercel.app/api/verify';
     const EVENT_API_URL = 'https://hollynttbackend.vercel.app/api/event';
     const DISCORD_AUTH_URL = 'https://hollynttbackend.vercel.app/api/discord-auth';
     // Fallback signaling channel for the OAuth popup -> opener handoff.
@@ -7154,7 +7152,7 @@
      * Age-gate events only → /api/event → Discord WEB_H.
      * Site enter, button clicks, socials, characters are local/private (not sent).
      * Allowed: age_start | age_process | age_stage | age_strike
-     * Unlock still goes through /api/verify (separate).
+    * Unlock still requires a backend-issued Didit token.
      */
     function reportSiteEvent(type, label) {
         if (!EVENT_API_URL) return;
@@ -7263,9 +7261,15 @@
         const keys = [AGE_VERIFIED_TOKEN_KEY, DIDIT_TOKEN_KEY];
         for (const key of keys) {
             const token = lsGet(key);
-            if (!token || token.indexOf('.') === -1) continue;
-            const payload = b64urlDecodeJson(token.split('.')[0]);
-            if (payload && payload.exp && Date.now() < payload.exp && payload.verifiedAge) return payload;
+            if (!token) continue;
+            const parts = String(token).split('.');
+            const payload = parts.length === 3 ? b64urlDecodeJson(parts[1]) : null;
+            const exp = payload && Number(payload.exp);
+            const expiresAt = Number.isFinite(exp) ? (exp < 1e12 ? exp * 1000 : exp) : 0;
+            if (payload && payload.verifiedAge === true && expiresAt > Date.now()) {
+                return { token: String(token), payload: payload };
+            }
+            lsDel(key);
         }
         return null;
     }
@@ -7750,46 +7754,7 @@
     }
 
     async function requestUnlockToken(source, claim) {
-        // Renew Discord identity via OAuth2 refresh if near expiry
-        await ensureDiscordIdentity();
-        const identity = getDiscordIdentity();
-        if (!identity.username) {
-            return { ok: false, error: 'Discord connection required' };
-        }
-        if (!VERIFY_API_URL) {
-            // No backend configured — fall back to client-only unlock path
-            return { ok: true, token: 'local-' + Date.now().toString(36), expiresAt: Date.now() + 86400000 };
-        }
-        try {
-            const accountAgeDays = discordAccountAgeDays(identity.id);
-            const durationMs = ageProcessStartedAt ? Math.max(0, Date.now() - ageProcessStartedAt) : null;
-            const body = {
-                source: source || 'quiz',
-                claim: claim || undefined,
-                discordUsername: identity.username,
-                discordId: identity.id || undefined,
-                discordAvatar: identity.avatar || undefined,
-                accountAgeDays: accountAgeDays != null ? accountAgeDays : undefined,
-                durationMs: durationMs != null ? durationMs : undefined,
-                strikes: getAgeStrikes(),
-                quizFails: ageQuizFailCount || 0
-            };
-            if (lastEstimatedAge != null && Number.isFinite(lastEstimatedAge)) {
-                body.estimatedAge = lastEstimatedAge;
-            }
-            const res = await fetch(VERIFY_API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-            });
-            const data = await res.json().catch(() => ({}));
-            if (!res.ok || !data.ok || !data.token) {
-                return { ok: false, error: (data && data.error) || ('HTTP ' + res.status) };
-            }
-            return data;
-        } catch (err) {
-            return { ok: false, error: (err && err.message) || 'Network error' };
-        }
+        return { ok: false, error: 'Didit verification required' };
     }
 
     // Stronger property trap — ignore external writes, never grant unlock from a setter
@@ -9326,17 +9291,12 @@
         try { reportSiteEvent('age_stage', ageLabel); } catch (_) {}
 
         initStage5Success();
-        // Request server token (if VERIFY_API_URL is set), then unlock
+        // Quiz completion cannot replace backend-issued Didit verification.
         (async function () {
             const result = await requestUnlockToken('quiz');
             if (!result.ok) {
                 console.warn('Unlock API failed:', result.error);
-                // Don't hard-block quiz success if Netlify is down
-                _sessionUnlockToken = 'local-fallback-' + Date.now().toString(36);
-            } else {
-                _sessionUnlockToken = result.token;
             }
-            try { ssSet('__rp_session_ok', _sessionUnlockToken); } catch (e) {}
             unlockAllNsfw(true);
         })();
     }
@@ -9726,6 +9686,15 @@
         if (diditPanel) diditPanel.style.display = which === 'didit' ? 'block' : 'none';
     }
 
+    if (diditProviderBtn) {
+        diditProviderBtn.addEventListener('click', (e) => {
+            if (e && e.isTrusted === false) {
+                window.triggerTamperLockout();
+                return;
+            }
+            showAgeProviderPanel('didit');
+        });
+    }
 
     let activeDiditSessionForDiscord = null;
 
@@ -10074,26 +10043,12 @@
     }
 
     function unlockAllNsfw(fromQuiz) {
-        // fromQuiz === true  → called after successful Stage 5 (trusted path)
-        // otherwise require either:
-        //   - correct current-session passcode in the input, or
-        //   - private _stage5Cleared flag, or
-        //   - dev mode
-        if (!window._app_x_mode && !fromQuiz && !_stage5Cleared) {
-            const inputVal = agePasscodeInput ? agePasscodeInput.value.trim().toLowerCase() : '';
-            const expected = (__getSessionKey() || '').toLowerCase();
-            if (!inputVal || inputVal !== expected) {
-                // Do not hard-lockout on a simple wrong guess from the form —
-                // only reject and show the error. Hard lockout is reserved for
-                // synthetic / untrusted events.
-                if (passcodeErrorMsg) passcodeErrorMsg.style.display = 'block';
-                return;
-            }
-        }
+        const persisted = getValidAgeUnlockToken();
+        if (!persisted) return false;
 
         isAgeVerified = true;
         _stage5Cleared = true;
-        _sessionUnlockToken = 'ok-' + Date.now().toString(36);
+        _sessionUnlockToken = persisted.token;
 
         try {
             ssSet('__rp_session_ok', _sessionUnlockToken);
@@ -10146,6 +10101,7 @@
             try { reportSiteEvent('button', 'Went to ' + label); } catch (_) {}
             window.open(url, '_blank');
         }
+        return true;
     }
     // Intentionally NOT assigned to window — prevents one-liner console bypasses
 
@@ -10200,22 +10156,17 @@
                 updateDiscordUI();
                 return;
             }
-            // Server unreachable / misconfigured — still unlock for this session
+            // Didit is the only provider allowed to unlock the site.
             console.warn('Unlock API failed:', result.error);
             if (passcodeErrorMsg) {
-                passcodeErrorMsg.textContent = 'Server offline — unlocked locally';
+                passcodeErrorMsg.textContent = 'Complete Didit verification first.';
                 passcodeErrorMsg.style.display = 'block';
             }
-            _sessionUnlockToken = 'local-fallback-' + Date.now().toString(36);
-            try { ssSet('__rp_session_ok', _sessionUnlockToken); } catch (e) {}
-            unlockAllNsfw(false);
             return;
         }
 
-        _sessionUnlockToken = result.token;
-        ssSet('__rp_session_ok', result.token);
-        try { reportSiteEvent('age_process', 'Unlocked via passcode'); } catch (_) {}
-        unlockAllNsfw(false);
+        // A token from any non-Didit path is not accepted or persisted.
+        console.warn('Ignoring non-Didit unlock token');
     }
 
     if (btnAgeYes) {
@@ -10750,7 +10701,7 @@
     (function tryPersistedDiditUnlock() {
         try {
             const payload = getValidAgeUnlockToken();
-            if (payload && payload.verifiedAge) {
+            if (payload && payload.payload && payload.payload.verifiedAge === true) {
                 unlockAllNsfw(true);
             }
         } catch (err) {

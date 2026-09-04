@@ -9686,6 +9686,15 @@
         if (diditPanel) diditPanel.style.display = which === 'didit' ? 'block' : 'none';
     }
 
+    if (diditProviderBtn) {
+        diditProviderBtn.addEventListener('click', (e) => {
+            if (e && e.isTrusted === false) {
+                window.triggerTamperLockout();
+                return;
+            }
+            showAgeProviderPanel('didit');
+        });
+    }
 
     let activeDiditSessionForDiscord = null;
 

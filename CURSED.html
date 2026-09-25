@@ -2923,7 +2923,16 @@ setTimeout(runAudit, 100);
             if (inputSink) {
                 innerDefenses += `
                 document.addEventListener('keydown', function(e) {
-                    if (e.key === 'PrintScreen' || e.metaKey || e.ctrlKey) {
+                    // Only the genuine exfiltration-risk keys — not every Ctrl/Cmd press.
+                    // Blocking bare modifier keydowns (and stopping their propagation)
+                    // was catching normal Ctrl/Cmd+click and any script that coordinates
+                    // click/nav behavior through keydown, plus it never recovered if a
+                    // modifier got stuck "held" after an Alt-Tab away and back.
+                    var k = e.key;
+                    var isPrintScreen = k === 'PrintScreen';
+                    var isPrintShortcut = (e.ctrlKey || e.metaKey) && (k === 'p' || k === 'P');
+                    var isSaveShortcut = (e.ctrlKey || e.metaKey) && (k === 's' || k === 'S');
+                    if (isPrintScreen || isPrintShortcut || isSaveShortcut) {
                         e.preventDefault();
                         e.stopPropagation();
                     }

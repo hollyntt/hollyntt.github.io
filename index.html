@@ -93,6 +93,9 @@
             opacity: 0 !important;
             visibility: hidden !important;
         }
+        body:not(.entered) .scanline {
+            display: none !important;
+        }
 
         .bg-text-item {
             position: absolute;
@@ -161,7 +164,7 @@
 
         body:not(.entered) #visual {
             z-index: 999998;
-            opacity: 0.7;
+            opacity: 0.25; /* was 0.7 — high opacity made particle streaks read as lines on the rings */
         }
 
         #pre-load.hidden {
@@ -229,20 +232,23 @@
 
         #pre-load .loader-inner .box {
             position: absolute;
-            background: var(--loader-background);
+            background: transparent;
             border-radius: 50%;
-            border: 1px solid rgba(176, 125, 125, 0.35);
-            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(5px);
+            /* Full ring only — no border-top / shadow offsets that read as a cross */
+            border: 1.5px solid rgba(212, 140, 93, 0.35);
+            box-shadow: none;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
             animation: ripple 2s infinite ease-in-out;
-            transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: border-color 0.6s ease, opacity 0.6s ease;
+            pointer-events: none;
         }
 
         #pre-load.ready-to-enter .loader-inner .box {
-            animation: portal-out 2s infinite linear !important;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 0 50px rgba(212, 140, 93, 0.2);
-            background: rgba(255, 255, 255, 0.02);
+            animation: portal-out 2.4s infinite ease-out !important;
+            border: 1.5px solid rgba(245, 230, 211, 0.45);
+            box-shadow: 0 0 24px rgba(212, 140, 93, 0.15);
+            background: transparent;
         }
 
         #pre-load.ready-to-enter .loader-inner .box:nth-child(1) { animation-delay: 0s !important; }
@@ -253,14 +259,14 @@
 
         @keyframes portal-out {
             0% {
-                transform: scale(0.4);
+                transform: scale(0.55);
                 opacity: 0;
             }
-            10% {
-                opacity: 1;
+            12% {
+                opacity: 0.85;
             }
             100% {
-                transform: scale(12);
+                transform: scale(4.5);
                 opacity: 0;
             }
         }
@@ -353,10 +359,11 @@
             transform: translate(-50%, -50%) scale(5);
             width: 100%;
             height: 100%;
-            border-top: 1px solid rgba(176, 125, 125, 0.6);
-            background: var(--loader-background);
-            backdrop-filter: blur(5px);
-            box-shadow: rgba(0, 0, 0, .2) 0 10px 10px 0;
+            border: 1.5px solid rgba(212, 140, 93, 0.4);
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            box-shadow: none;
             border-radius: 50%;
             pointer-events: none;
             z-index: 500;
@@ -4335,7 +4342,7 @@
 
         <div id="age-step-didit" class="age-step" style="display: none; flex-direction: column; align-items: center; text-align: center; width: 100%;">
             <h2>Didit age verification</h2>
-            <p id="age-provider-intro" style="margin-bottom: 16px; font-size: 13px; opacity: 0.9; line-height: 1.4;">Complete Didit verification, then connect Discord to finish the 18+ unlock.</p>
+            <p id="age-provider-intro" style="margin-bottom: 16px; font-size: 13px; opacity: 0.9; line-height: 1.4;">Complete Didit verification to unlock 18+ content. No Discord required.</p>
 
             <div id="age-provider-choice" style="display:flex;flex-direction:column;gap:10px;width:100%;margin-bottom:12px;">
                 <button class="age-btn yes" id="didit-provider-btn" style="width:100%;text-align:left;padding:15px 16px;">
@@ -5334,22 +5341,19 @@
         const pulseCycle = (now % 2000) / 2000;
         const isEntering = entryScreen && entryScreen.classList.contains('entering');
 
-        if (entryScreen && entryScreen.classList.contains('ready-to-enter') && !entryScreen.classList.contains('hidden')) {
-            const shouldEmit = isEntering || ((pulseCycle % 0.25) < 0.05);
-            if (shouldEmit && particles.length < 60 && Math.random() > (isEntering ? 0.55 : 0.7)) {
-                const batchSize = isEntering ? 2 : 1;
-                const speedMultiplier = isEntering ? 32 : 5;
+        // Only burst particles on the actual enter click — continuous ready-state
+        // emission from the center looked like rays/crosses tracking the rings.
+        if (isEntering && entryScreen && !entryScreen.classList.contains('hidden')) {
+            if (particles.length < 50 && Math.random() > 0.5) {
                 const centerX = w / 2;
                 const centerY = h / 2;
                 const portalColors = ['#d48c5d', '#b07d7d', '#f5e6d3'];
-                for (let i = 0; i < batchSize; i++) {
-                    const color = portalColors[(Math.random() * portalColors.length) | 0];
-                    const p = new Particle(centerX, centerY, true, color);
-                    p.speedX = (Math.random() - 0.5) * speedMultiplier;
-                    p.speedY = (Math.random() - 0.5) * speedMultiplier;
-                    if (isEntering) p.life = 120;
-                    particles.push(p);
-                }
+                const color = portalColors[(Math.random() * portalColors.length) | 0];
+                const p = new Particle(centerX, centerY, true, color);
+                p.speedX = (Math.random() - 0.5) * 18;
+                p.speedY = (Math.random() - 0.5) * 18;
+                p.life = 90;
+                particles.push(p);
             }
         }
 
@@ -9838,14 +9842,17 @@
                     lsSet(AGE_VERIFIED_TOKEN_KEY, data.token);
                     if (frameWrap) frameWrap.style.display = 'none';
                     if (frame) frame.src = 'about:blank';
-                    showStatus("You're verified — connect Discord to finish.", 'success');
+                    showStatus("You're verified — unlocking…", 'success');
                     try { reportSiteEvent('age_process', 'Didit verification approved'); } catch (_) {}
-                    const discordStep = document.getElementById('age-step-discord');
-                    if (discordStep) {
-                        discordStep.style.display = 'flex';
-                        const err = document.getElementById('discord-error-msg');
-                        if (err) err.style.display = 'none';
-                        updateDiscordUI();
+                    // Discord no longer required — Didit alone is enough
+                    try {
+                        if (ageStepDidit) ageStepDidit.style.display = 'none';
+                        const discordStep = document.getElementById('age-step-discord');
+                        if (discordStep) discordStep.style.display = 'none';
+                        if (ageVerificationOverlay) ageVerificationOverlay.classList.remove('active');
+                    } catch (_) {}
+                    try { unlockAllNsfw(true); } catch (err) {
+                        console.warn('Didit unlock failed:', err);
                     }
                     return;
                 }

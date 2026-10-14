@@ -88,10 +88,14 @@
         body.entered .bg-text-inner {
             opacity: 0.22;
         }
-        /* Hide sweeping lines during intro — they read as a cross over the rings */
+        /* Intro: keep the pulsing sweep lines visible (that was intentional) */
         body:not(.entered) .bg-text-overlay {
-            opacity: 0 !important;
-            visibility: hidden !important;
+            opacity: 1;
+            visibility: visible;
+            z-index: 999997; /* above black pre-load bg, below logo/rings (999999) */
+        }
+        body:not(.entered) .bg-text-inner {
+            opacity: 0.28;
         }
         body:not(.entered) .scanline {
             display: none !important;
@@ -127,6 +131,16 @@
         /* Pause background scroll animation while the tab is hidden to save CPU/battery */
         body.tab-hidden .bg-text-item {
             animation-play-state: paused;
+        }
+        /* Soft pulse on each sweep line */
+        body:not(.entered) .bg-text-item {
+            animation-name: slideLinesRight, bgLinePulse;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+        }
+        @keyframes bgLinePulse {
+            0%, 100% { opacity: 0.35; filter: drop-shadow(0 0 8px rgba(212, 140, 93, 0.35)); }
+            50% { opacity: 0.85; filter: drop-shadow(0 0 16px rgba(245, 176, 131, 0.7)); }
         }
 
         @keyframes slideLinesRight {
@@ -232,23 +246,27 @@
 
         #pre-load .loader-inner .box {
             position: absolute;
-            background: transparent;
             border-radius: 50%;
-            /* Full ring only — no border-top / shadow offsets that read as a cross */
-            border: 1.5px solid rgba(212, 140, 93, 0.35);
-            box-shadow: none;
+            /* Soft filled rings (like before) — full border, no offset shadow that made a cross */
+            background: radial-gradient(circle, rgba(212, 140, 93, 0.06) 0%, rgba(176, 125, 125, 0.12) 55%, rgba(212, 140, 93, 0.04) 100%);
+            border: 1.5px solid rgba(212, 140, 93, 0.42);
+            box-shadow:
+                0 0 18px rgba(212, 140, 93, 0.12),
+                inset 0 0 22px rgba(245, 230, 211, 0.06);
             backdrop-filter: none;
             -webkit-backdrop-filter: none;
-            animation: ripple 2s infinite ease-in-out;
-            transition: border-color 0.6s ease, opacity 0.6s ease;
+            animation: ripple 2.2s infinite ease-in-out;
+            transition: border-color 0.6s ease, opacity 0.6s ease, box-shadow 0.6s ease;
             pointer-events: none;
         }
 
         #pre-load.ready-to-enter .loader-inner .box {
-            animation: portal-out 2.4s infinite ease-out !important;
-            border: 1.5px solid rgba(245, 230, 211, 0.45);
-            box-shadow: 0 0 24px rgba(212, 140, 93, 0.15);
-            background: transparent;
+            animation: portal-out 2.2s infinite ease-out !important;
+            border-color: rgba(245, 230, 211, 0.55);
+            background: radial-gradient(circle, rgba(245, 230, 211, 0.05) 0%, rgba(212, 140, 93, 0.1) 60%, transparent 100%);
+            box-shadow:
+                0 0 28px rgba(212, 140, 93, 0.22),
+                inset 0 0 18px rgba(245, 230, 211, 0.08);
         }
 
         #pre-load.ready-to-enter .loader-inner .box:nth-child(1) { animation-delay: 0s !important; }
@@ -259,65 +277,66 @@
 
         @keyframes portal-out {
             0% {
-                transform: scale(0.55);
+                transform: scale(0.5);
                 opacity: 0;
             }
-            12% {
-                opacity: 0.85;
+            15% {
+                opacity: 0.9;
             }
             100% {
-                transform: scale(4.5);
+                transform: scale(6.5);
                 opacity: 0;
             }
         }
 
+        /* Concentric rings — all centered via inset so none look "missing" */
         #pre-load .loader-inner .box:nth-child(1) {
-            width: 25%;
-            aspect-ratio: 1/1;
+            inset: 38%;
             z-index: 99;
-            border-color: rgba(176, 125, 125, 0.8);
+            border-color: rgba(212, 140, 93, 0.75);
+            animation-delay: 0s;
         }
 
         #pre-load .loader-inner .box:nth-child(2) {
-            inset: 30%;
+            inset: 28%;
             z-index: 98;
-            border-color: rgba(176, 125, 125, 0.6);
+            border-color: rgba(212, 140, 93, 0.55);
             animation-delay: .2s;
         }
 
         #pre-load .loader-inner .box:nth-child(3) {
-            inset: 20%;
+            inset: 18%;
             z-index: 97;
-            border-color: rgba(176, 125, 125, 0.4);
+            border-color: rgba(212, 140, 93, 0.4);
             animation-delay: .4s;
         }
 
         #pre-load .loader-inner .box:nth-child(4) {
-            inset: 10%;
+            inset: 8%;
             z-index: 96;
-            border-color: rgba(176, 125, 125, 0.3);
+            border-color: rgba(212, 140, 93, 0.28);
             animation-delay: .6s;
         }
 
         #pre-load .loader-inner .box:nth-child(5) {
             inset: 0;
             z-index: 95;
-            border-color: rgba(176, 125, 125, 0.2);
+            border-color: rgba(212, 140, 93, 0.18);
             animation-delay: .8s;
         }
 
         @keyframes ripple {
             0% {
-                transform: scale(0.8);
-                opacity: 0.3;
+                transform: scale(0.88);
+                opacity: 0.35;
             }
             50% {
-                transform: scale(1.1);
-                opacity: 0.6;
+                transform: scale(1.08);
+                opacity: 0.85;
             }
             100% {
-                transform: scale(0.8);
-                opacity: 0.3;
+                transform: scale(0.88);
+                opacity: 0.35;
             }
         }
 

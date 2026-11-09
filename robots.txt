@@ -83,3 +83,5 @@ Content-Usage: /images/ train-ai=n
 Content-Usage: /videos/ train-ai=n
 Content-Usage: /audio/ train-ai=n
 Allow: /
+
+Sitemap: https://hollyntt.github.io/sitemap.xml

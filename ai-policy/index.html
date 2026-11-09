@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noarchive">
+<meta name="bingbot" content="noarchive">
+<title>AI policy — rune</title>
+<style>
+  :root { color-scheme: dark; --bg: #15161a; --panel: #1f2125; --text: #f5e6d3; --muted: #c8b9aa; --accent: #f5b083; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; background: linear-gradient(150deg, #2c2e33, var(--bg)); color: var(--text); font: 1rem/1.7 system-ui, sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 64px 24px 96px; }
+  h1 { line-height: 1.2; }
+  h2 { margin-top: 2.5rem; line-height: 1.3; }
+  a { color: var(--accent); }
+  .card { padding: 20px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); border-radius: 12px; }
+  li { margin: .75rem 0; }
+  footer { margin-top: 3rem; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>AI policy — rune</h1>
+  <div class="card">
+    <p>AI may read, quote and train on your page text. It may not train on your pictures, video or audio.</p>
+    <p>The works on this site are © 2026 rune. Images, video and audio may not be used to train, fine-tune or build datasets for machine learning without a written license. This is a reservation of rights, including for text and data mining, under Article 4(3) of Directive (EU) 2019/790, and the terms and conditions for use of these works under 17 U.S.C. § 1202.</p>
+  </div>
+  <h2>How it is stated</h2>
+  <p>This policy is stated through <a href="/robots.txt">robots.txt</a> (Content-Signal and Content-Usage lines), <a href="/.well-known/tdmrep.json">/.well-known/tdmrep.json</a>, and the IPTC Data Mining field inside each image file.</p>
+  <p>Search engines and AI assistants are welcome to index, quote, summarize and link.</p>
+  <h2>Licensing</h2>
+  <p>Contact the artist for licensing.</p>
+  <h2>What this does not do</h2>
+  <ul>
+    <li>robots.txt is a request. A US court called it “precatory.” Only a blocking rule at the edge, such as Cloudflare’s bot blocking, or on a server, turns a crawler away.</li>
+    <li>Google’s AI Overviews use Google’s search crawler, so robots.txt cannot refuse them without leaving Google search. Google-Extended covers training only. Bing’s <code>noarchive</code> tag keeps a page out of Copilot answers while it stays in Bing search.</li>
+    <li>GitHub Pages cannot send custom headers: the noai image header and the TDM headers are not possible there. The meta tags and <code>/.well-known/tdmrep.json</code> still work.</li>
+    <li>Microsoft publishes no image-only training control; Bing image training is not refusable by this preset.</li>
+    <li>No major AI company has published that it reads the TDM reservation or the in-file IPTC field; their published controls are robots.txt and, for Microsoft, a page tag (<code>noarchive</code> or <code>nocache</code>). This is not legal advice.</li>
+  </ul>
+  <footer><a href="/">Return to rune</a></footer>
+</main>
+</body>
+</html>

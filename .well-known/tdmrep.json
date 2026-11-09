@@ -16,7 +16,6 @@
  },
  {
   "location": "/",
-  "tdm-reservation": 1,
-  "tdm-policy": "https://hollyntt.github.io/tos.html"
+  "tdm-reservation": 0
  }
 ]

@@ -1,0 +1,21 @@
+[
+ {
+  "location": "/images/",
+  "tdm-reservation": 1,
+  "tdm-policy": "https://hollyntt.github.io/tos.html"
+ },
+ {
+  "location": "/videos/",
+  "tdm-reservation": 1,
+  "tdm-policy": "https://hollyntt.github.io/tos.html"
+ },
+ {
+  "location": "/audio/",
+  "tdm-reservation": 1,
+  "tdm-policy": "https://hollyntt.github.io/tos.html"
+ },
+ {
+  "location": "/",
+  "tdm-reservation": 0
+ }
+]
